@@ -1,0 +1,78 @@
+{
+ "debris_falling": [
+  "amb_terminal_debris_01",
+  "amb_terminal_debris_02",
+  "amb_terminal_debris_03",
+  "amb_terminal_debris_04",
+  "amb_terminal_debris_05",
+  "amb_terminal_debris_06",
+  "amb_terminal_debris_07",
+  "amb_terminal_debris_08"
+ ],
+ "explosion_with_big_debris": [
+  "amb_terminal_occluded_explosion_close_with_derbis"
+ ],
+ "After_1.2_Scav_Speech_SoundBank_01": [
+  "after_1.2_scav_voices_05"
+ ],
+ "After_1.2_Scav_Speech_SoundBank_02": [
+  "after_1.2_scav_voices_06"
+ ],
+ "After_1.2_Scav_Speech_SoundBank_03": [
+  "after_1.2_scav_voices_07"
+ ],
+ "After_1.2_Scav_Speech_SoundBank_04": [
+  "after_1.2_scav_voices_08"
+ ],
+ "After_1.2_VSRF_Speech_SoundBank_01": [
+  "after_1.2_vsrf_voices_01"
+ ],
+ "After_1.2_VSRF_Speech_SoundBank_02": [
+  "after_1.2_vsrf_voices_02"
+ ],
+ "After_1.2_VSRF_Speech_SoundBank_03": [
+  "after_1.2_vsrf_voices_03"
+ ],
+ "After_1.2_VSRF_Speech_SoundBank_04": [
+  "after_1.2_vsrf_voices_04"
+ ],
+ "Pre_1.2_Far_Explosions_SoundBank_01": [
+  "pre_1.2_explosion_06",
+  "pre_1.2_explosion_05",
+  "pre_1.2_explosion_04",
+  "pre_1.2_explosion_03"
+ ],
+ "Pre_1.2_Far_Shots_SoundBank_01": [
+  "rfb_fire_far",
+  "sako_fire_outdoor_far",
+  "sako_fire_outdoor_distant"
+ ],
+ "Pre_1.2_Footsteps_SoundBank_01": [
+  "pre_1.2_footsteps_1"
+ ],
+ "Pre_1.2_Footsteps_SoundBank_02": [
+  "pre_1.2_footsteps_2"
+ ],
+ "Pre_1.2_Speech_SoundBank_01": [
+  "pre_1.2_voices_01"
+ ],
+ "Pre_1.2_Speech_SoundBank_02": [
+  "pre_1.2_voices_02"
+ ],
+ "Pre_1.2_Speech_SoundBank_03": [
+  "pre_1.2_vsrf_voices_3"
+ ],
+ "Pre_1.2_Speech_SoundBank_04": [
+  "pre_1.2_vsrf_voices_4"
+ ],
+ "far_shoots": [
+  "arena_far_fight2_1",
+  "arena_far_fight2_2",
+  "arena_far_fight2_3",
+  "arena_far_fight2_4",
+  "arena_far_fight2_5",
+  "arena_far_fight2_6",
+  "arena_far_fight2_7",
+  "arena_far_fight2_8"
+ ]
+}

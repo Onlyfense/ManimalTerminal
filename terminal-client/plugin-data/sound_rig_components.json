@@ -1,0 +1,5704 @@
+[
+ {
+  "cls": "Audio.AmbientSubsystem.OneShotAmbientSoundPlayer",
+  "path": "SOUND/AmbAfter2Cutscene/AmbientGroup/StepsAndShouts/SplinePathMoverEmitter (1)/GroupedEmitter/FootstepPlayer",
+  "fields": {
+   "_volume": 0.15000000596046448,
+   "_deltaVolume": 0.0,
+   "_randomPitchRange": {
+    "x": 0.8999999761581421,
+    "y": 0.8999999761581421
+   },
+   "_fadeInDurationSec": 0.0,
+   "_fadeOutDurationSec": 5.0,
+   "_mixerGroup": null,
+   "ForceSetMixerGroup": 0,
+   "_playOnAwake": 0,
+   "_spread": 1.0,
+   "_spatialBlend": 1.0,
+   "_minDistance": 1.0,
+   "_maxDistance": 150.0,
+   "_rolloffCurve": {
+    "m_Curve": [
+     {
+      "time": 0.0,
+      "value": 1.0,
+      "inSlope": 0.0,
+      "outSlope": -1.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     },
+     {
+      "time": 1.0,
+      "value": 0.0,
+      "inSlope": -1.0,
+      "outSlope": 0.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     }
+    ],
+    "m_PreInfinity": 2,
+    "m_PostInfinity": 2,
+    "m_RotationOrder": 4
+   },
+   "_startPlayingDelay": {
+    "x": 0.0,
+    "y": 0.0
+   },
+   "_spreadCurve": {
+    "m_Curve": [
+     {
+      "time": 0.0,
+      "value": 0.0,
+      "inSlope": 0.0,
+      "outSlope": 1.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     },
+     {
+      "time": 1.0,
+      "value": 1.0,
+      "inSlope": 1.0,
+      "outSlope": 0.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     }
+    ],
+    "m_PreInfinity": 2,
+    "m_PostInfinity": 2,
+    "m_RotationOrder": 4
+   },
+   "_useCustomSpreadCurve": 0,
+   "_soundBank": {
+    "$asset:SoundBank": "Pre_1.2_Footsteps_SoundBank_02"
+   }
+  }
+ },
+ {
+  "cls": "Audio.AmbientSubsystem.AmbientSoundPlayer",
+  "path": "SOUND/AmbAfter2Cutscene/AmbientGroup/StepsAndShouts/SplinePathMoverEmitter (1)/GroupedEmitter/ShootPlayer",
+  "fields": {
+   "_volume": 0.6000000238418579,
+   "_deltaVolume": 0.0,
+   "_randomPitchRange": {
+    "x": 0.8999999761581421,
+    "y": 1.100000023841858
+   },
+   "_fadeInDurationSec": 0.0,
+   "_fadeOutDurationSec": 0.0,
+   "_mixerGroup": null,
+   "ForceSetMixerGroup": 0,
+   "_playOnAwake": 0,
+   "_spread": 1.0,
+   "_spatialBlend": 1.0,
+   "_minDistance": 1.0,
+   "_maxDistance": 120.0,
+   "_rolloffCurve": {
+    "m_Curve": [
+     {
+      "time": 0.0,
+      "value": 1.0,
+      "inSlope": 0.0,
+      "outSlope": -1.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     },
+     {
+      "time": 1.0,
+      "value": 0.0,
+      "inSlope": -1.0,
+      "outSlope": 0.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     }
+    ],
+    "m_PreInfinity": 2,
+    "m_PostInfinity": 2,
+    "m_RotationOrder": 4
+   },
+   "_startPlayingDelay": {
+    "x": 0.0,
+    "y": 0.0
+   },
+   "_spreadCurve": {
+    "m_Curve": [
+     {
+      "time": 0.0,
+      "value": 0.0,
+      "inSlope": 0.0,
+      "outSlope": 1.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     },
+     {
+      "time": 1.0,
+      "value": 1.0,
+      "inSlope": 1.0,
+      "outSlope": 0.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     }
+    ],
+    "m_PreInfinity": 2,
+    "m_PostInfinity": 2,
+    "m_RotationOrder": 4
+   },
+   "_useCustomSpreadCurve": 0,
+   "_randomTimeRange": {
+    "x": 1.0,
+    "y": 5.0
+   },
+   "_ambientBank": {
+    "$asset:SoundBank": "far_shoots"
+   }
+  }
+ },
+ {
+  "cls": "Audio.AmbientSubsystem.OneShotAmbientSoundPlayer",
+  "path": "SOUND/AmbAfter2Cutscene/AmbientGroup/Explosions/Explosion_08",
+  "fields": {
+   "_volume": 0.30000001192092896,
+   "_deltaVolume": 0.029999999329447746,
+   "_randomPitchRange": {
+    "x": 0.8999999761581421,
+    "y": 1.100000023841858
+   },
+   "_fadeInDurationSec": 0.0,
+   "_fadeOutDurationSec": 5.0,
+   "_mixerGroup": null,
+   "ForceSetMixerGroup": 0,
+   "_playOnAwake": 0,
+   "_spread": 1.0,
+   "_spatialBlend": 1.0,
+   "_minDistance": 1.0,
+   "_maxDistance": 500.0,
+   "_rolloffCurve": {
+    "m_Curve": [
+     {
+      "time": -0.00119781494140625,
+      "value": 1.0,
+      "inSlope": -1.61217200756073,
+      "outSlope": -1.61217200756073,
+      "weightedMode": 0,
+      "inWeight": 0.3333333432674408,
+      "outWeight": 0.11500422656536102
+     },
+     {
+      "time": 0.2907211482524872,
+      "value": 0.4567343294620514,
+      "inSlope": -1.8492268323898315,
+      "outSlope": -1.8492268323898315,
+      "weightedMode": 0,
+      "inWeight": 0.3333333432674408,
+      "outWeight": 0.3333333432674408
+     },
+     {
+      "time": 1.0,
+      "value": 0.0,
+      "inSlope": -0.1361192911863327,
+      "outSlope": -0.1361192911863327,
+      "weightedMode": 0,
+      "inWeight": 0.3333333432674408,
+      "outWeight": 0.3333333432674408
+     }
+    ],
+    "m_PreInfinity": 2,
+    "m_PostInfinity": 2,
+    "m_RotationOrder": 4
+   },
+   "_startPlayingDelay": {
+    "x": 15.0,
+    "y": 15.0
+   },
+   "_spreadCurve": {
+    "m_Curve": [
+     {
+      "time": 0.0,
+      "value": 0.0,
+      "inSlope": 0.0,
+      "outSlope": 1.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     },
+     {
+      "time": 1.0,
+      "value": 1.0,
+      "inSlope": 1.0,
+      "outSlope": 0.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     }
+    ],
+    "m_PreInfinity": 2,
+    "m_PostInfinity": 2,
+    "m_RotationOrder": 4
+   },
+   "_useCustomSpreadCurve": 0,
+   "_soundBank": {
+    "$asset:SoundBank": "Pre_1.2_Far_Explosions_SoundBank_01"
+   }
+  }
+ },
+ {
+  "cls": "Audio.AmbientSubsystem.AmbientSplineEmitter.SplineSoundEmitter.AmbientPlayerGroupSplineEmitter",
+  "path": "SOUND/AmbAfter2Cutscene/AmbientGroup/StepsAndShouts/SplinePathMoverEmitter (1)/GroupedEmitter",
+  "fields": {
+   "_configs": [
+    {
+     "soundPlayer": {
+      "$ref": "SOUND/AmbAfter2Cutscene/AmbientGroup/StepsAndShouts/SplinePathMoverEmitter (1)/GroupedEmitter/FootstepPlayer"
+     },
+     "spreadRange": {
+      "x": 0.0,
+      "y": 1.0
+     }
+    },
+    {
+     "soundPlayer": {
+      "$ref": "SOUND/AmbAfter2Cutscene/AmbientGroup/StepsAndShouts/SplinePathMoverEmitter (1)/GroupedEmitter/SpeechPlayer"
+     },
+     "spreadRange": {
+      "x": 0.0,
+      "y": 1.0
+     }
+    },
+    {
+     "soundPlayer": {
+      "$ref": "SOUND/AmbAfter2Cutscene/AmbientGroup/StepsAndShouts/SplinePathMoverEmitter (1)/GroupedEmitter/SpeechPlayer (1)"
+     },
+     "spreadRange": {
+      "x": 0.0,
+      "y": 1.0
+     }
+    },
+    {
+     "soundPlayer": {
+      "$ref": "SOUND/AmbAfter2Cutscene/AmbientGroup/StepsAndShouts/SplinePathMoverEmitter (1)/GroupedEmitter/ShootPlayer"
+     },
+     "spreadRange": {
+      "x": 0.0,
+      "y": 1.0
+     }
+    }
+   ]
+  }
+ },
+ {
+  "cls": "Audio.AmbientSubsystem.OneShotAmbientSoundPlayer",
+  "path": "SOUND/AmbAfter2Cutscene/AmbientGroup/Explosions/Explosion_03",
+  "fields": {
+   "_volume": 0.30000001192092896,
+   "_deltaVolume": 0.029999999329447746,
+   "_randomPitchRange": {
+    "x": 0.8999999761581421,
+    "y": 1.100000023841858
+   },
+   "_fadeInDurationSec": 0.0,
+   "_fadeOutDurationSec": 5.0,
+   "_mixerGroup": null,
+   "ForceSetMixerGroup": 0,
+   "_playOnAwake": 0,
+   "_spread": 1.0,
+   "_spatialBlend": 1.0,
+   "_minDistance": 1.0,
+   "_maxDistance": 500.0,
+   "_rolloffCurve": {
+    "m_Curve": [
+     {
+      "time": -0.00119781494140625,
+      "value": 1.0,
+      "inSlope": -1.61217200756073,
+      "outSlope": -1.61217200756073,
+      "weightedMode": 0,
+      "inWeight": 0.3333333432674408,
+      "outWeight": 0.11500422656536102
+     },
+     {
+      "time": 0.2907211482524872,
+      "value": 0.4567343294620514,
+      "inSlope": -1.8492268323898315,
+      "outSlope": -1.8492268323898315,
+      "weightedMode": 0,
+      "inWeight": 0.3333333432674408,
+      "outWeight": 0.3333333432674408
+     },
+     {
+      "time": 1.0,
+      "value": 0.0,
+      "inSlope": -0.1361192911863327,
+      "outSlope": -0.1361192911863327,
+      "weightedMode": 0,
+      "inWeight": 0.3333333432674408,
+      "outWeight": 0.3333333432674408
+     }
+    ],
+    "m_PreInfinity": 2,
+    "m_PostInfinity": 2,
+    "m_RotationOrder": 4
+   },
+   "_startPlayingDelay": {
+    "x": 4.0,
+    "y": 4.0
+   },
+   "_spreadCurve": {
+    "m_Curve": [
+     {
+      "time": 0.0,
+      "value": 0.0,
+      "inSlope": 0.0,
+      "outSlope": 1.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     },
+     {
+      "time": 1.0,
+      "value": 1.0,
+      "inSlope": 1.0,
+      "outSlope": 0.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     }
+    ],
+    "m_PreInfinity": 2,
+    "m_PostInfinity": 2,
+    "m_RotationOrder": 4
+   },
+   "_useCustomSpreadCurve": 0,
+   "_soundBank": {
+    "$asset:SoundBank": "Pre_1.2_Far_Explosions_SoundBank_01"
+   }
+  }
+ },
+ {
+  "cls": "Audio.AmbientSubsystem.OneShotAmbientSoundPlayer",
+  "path": "SOUND/AmbAfter2Cutscene/AmbientGroup/StepsAndShouts/SplinePathMoverEmitter/GroupedEmitter/SpeechPlayer (1)",
+  "fields": {
+   "_volume": 0.30000001192092896,
+   "_deltaVolume": 0.0,
+   "_randomPitchRange": {
+    "x": 1.0,
+    "y": 1.0
+   },
+   "_fadeInDurationSec": 0.0,
+   "_fadeOutDurationSec": 5.0,
+   "_mixerGroup": null,
+   "ForceSetMixerGroup": 0,
+   "_playOnAwake": 0,
+   "_spread": 1.0,
+   "_spatialBlend": 1.0,
+   "_minDistance": 1.0,
+   "_maxDistance": 150.0,
+   "_rolloffCurve": {
+    "m_Curve": [
+     {
+      "time": 0.0,
+      "value": 1.0,
+      "inSlope": 0.0,
+      "outSlope": -1.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     },
+     {
+      "time": 1.0,
+      "value": 0.0,
+      "inSlope": -1.0,
+      "outSlope": 0.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     }
+    ],
+    "m_PreInfinity": 2,
+    "m_PostInfinity": 2,
+    "m_RotationOrder": 4
+   },
+   "_startPlayingDelay": {
+    "x": 0.0,
+    "y": 0.0
+   },
+   "_spreadCurve": {
+    "m_Curve": [
+     {
+      "time": 0.0,
+      "value": 0.0,
+      "inSlope": 0.0,
+      "outSlope": 1.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     },
+     {
+      "time": 1.0,
+      "value": 1.0,
+      "inSlope": 1.0,
+      "outSlope": 0.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     }
+    ],
+    "m_PreInfinity": 2,
+    "m_PostInfinity": 2,
+    "m_RotationOrder": 4
+   },
+   "_useCustomSpreadCurve": 0,
+   "_soundBank": {
+    "$asset:SoundBank": "After_1.2_VSRF_Speech_SoundBank_02"
+   }
+  }
+ },
+ {
+  "cls": "Audio.AmbientSubsystem.OneShotAmbientSoundPlayer",
+  "path": "SOUND/AmbBetween1And2Cutscenes/AmbientGroup/Explosions/Explosion_03",
+  "fields": {
+   "_volume": 0.30000001192092896,
+   "_deltaVolume": 0.029999999329447746,
+   "_randomPitchRange": {
+    "x": 0.8999999761581421,
+    "y": 1.100000023841858
+   },
+   "_fadeInDurationSec": 0.0,
+   "_fadeOutDurationSec": 5.0,
+   "_mixerGroup": null,
+   "ForceSetMixerGroup": 0,
+   "_playOnAwake": 0,
+   "_spread": 1.0,
+   "_spatialBlend": 1.0,
+   "_minDistance": 1.0,
+   "_maxDistance": 500.0,
+   "_rolloffCurve": {
+    "m_Curve": [
+     {
+      "time": -0.00119781494140625,
+      "value": 1.0,
+      "inSlope": -1.61217200756073,
+      "outSlope": -1.61217200756073,
+      "weightedMode": 0,
+      "inWeight": 0.3333333432674408,
+      "outWeight": 0.11500422656536102
+     },
+     {
+      "time": 0.2907211482524872,
+      "value": 0.4567343294620514,
+      "inSlope": -1.8492268323898315,
+      "outSlope": -1.8492268323898315,
+      "weightedMode": 0,
+      "inWeight": 0.3333333432674408,
+      "outWeight": 0.3333333432674408
+     },
+     {
+      "time": 1.0,
+      "value": 0.0,
+      "inSlope": -0.1361192911863327,
+      "outSlope": -0.1361192911863327,
+      "weightedMode": 0,
+      "inWeight": 0.3333333432674408,
+      "outWeight": 0.3333333432674408
+     }
+    ],
+    "m_PreInfinity": 2,
+    "m_PostInfinity": 2,
+    "m_RotationOrder": 4
+   },
+   "_startPlayingDelay": {
+    "x": 17.0,
+    "y": 17.0
+   },
+   "_spreadCurve": {
+    "m_Curve": [
+     {
+      "time": 0.0,
+      "value": 0.0,
+      "inSlope": 0.0,
+      "outSlope": 1.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     },
+     {
+      "time": 1.0,
+      "value": 1.0,
+      "inSlope": 1.0,
+      "outSlope": 0.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     }
+    ],
+    "m_PreInfinity": 2,
+    "m_PostInfinity": 2,
+    "m_RotationOrder": 4
+   },
+   "_useCustomSpreadCurve": 0,
+   "_soundBank": {
+    "$asset:SoundBank": "Pre_1.2_Far_Explosions_SoundBank_01"
+   }
+  }
+ },
+ {
+  "cls": "Audio.AmbientSubsystem.OneShotAmbientSoundPlayer",
+  "path": "SOUND/AmbBetween1And2Cutscenes/AmbientGroup/StepsAndShouts/SplinePathMoverEmitter/GroupedEmitter/FootstepPlayer",
+  "fields": {
+   "_volume": 0.20000000298023224,
+   "_deltaVolume": 0.0,
+   "_randomPitchRange": {
+    "x": 1.0,
+    "y": 1.0
+   },
+   "_fadeInDurationSec": 0.0,
+   "_fadeOutDurationSec": 5.0,
+   "_mixerGroup": null,
+   "ForceSetMixerGroup": 0,
+   "_playOnAwake": 0,
+   "_spread": 1.0,
+   "_spatialBlend": 1.0,
+   "_minDistance": 1.0,
+   "_maxDistance": 150.0,
+   "_rolloffCurve": {
+    "m_Curve": [
+     {
+      "time": 0.0,
+      "value": 1.0,
+      "inSlope": 0.0,
+      "outSlope": -1.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     },
+     {
+      "time": 1.0,
+      "value": 0.0,
+      "inSlope": -1.0,
+      "outSlope": 0.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     }
+    ],
+    "m_PreInfinity": 2,
+    "m_PostInfinity": 2,
+    "m_RotationOrder": 4
+   },
+   "_startPlayingDelay": {
+    "x": 12.0,
+    "y": 12.0
+   },
+   "_spreadCurve": {
+    "m_Curve": [
+     {
+      "time": 0.0,
+      "value": 0.0,
+      "inSlope": 0.0,
+      "outSlope": 1.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     },
+     {
+      "time": 1.0,
+      "value": 1.0,
+      "inSlope": 1.0,
+      "outSlope": 0.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     }
+    ],
+    "m_PreInfinity": 2,
+    "m_PostInfinity": 2,
+    "m_RotationOrder": 4
+   },
+   "_useCustomSpreadCurve": 0,
+   "_soundBank": {
+    "$asset:SoundBank": "Pre_1.2_Footsteps_SoundBank_01"
+   }
+  }
+ },
+ {
+  "cls": "Audio.AmbientSubsystem.OneShotAmbientSoundPlayer",
+  "path": "SOUND/AmbBetween1And2Cutscenes/AmbientGroup/Shots/Shot_04",
+  "fields": {
+   "_volume": 0.699999988079071,
+   "_deltaVolume": 0.029999999329447746,
+   "_randomPitchRange": {
+    "x": 0.8999999761581421,
+    "y": 1.100000023841858
+   },
+   "_fadeInDurationSec": 0.0,
+   "_fadeOutDurationSec": 5.0,
+   "_mixerGroup": null,
+   "ForceSetMixerGroup": 1,
+   "_playOnAwake": 0,
+   "_spread": 1.0,
+   "_spatialBlend": 1.0,
+   "_minDistance": 1.0,
+   "_maxDistance": 500.0,
+   "_rolloffCurve": {
+    "m_Curve": [
+     {
+      "time": -0.00119781494140625,
+      "value": 1.0,
+      "inSlope": -1.61217200756073,
+      "outSlope": -1.61217200756073,
+      "weightedMode": 0,
+      "inWeight": 0.3333333432674408,
+      "outWeight": 0.11500422656536102
+     },
+     {
+      "time": 0.2907211482524872,
+      "value": 0.4567343294620514,
+      "inSlope": -1.8492268323898315,
+      "outSlope": -1.8492268323898315,
+      "weightedMode": 0,
+      "inWeight": 0.3333333432674408,
+      "outWeight": 0.3333333432674408
+     },
+     {
+      "time": 1.0,
+      "value": 0.0,
+      "inSlope": -0.1361192911863327,
+      "outSlope": -0.1361192911863327,
+      "weightedMode": 0,
+      "inWeight": 0.3333333432674408,
+      "outWeight": 0.3333333432674408
+     }
+    ],
+    "m_PreInfinity": 2,
+    "m_PostInfinity": 2,
+    "m_RotationOrder": 4
+   },
+   "_startPlayingDelay": {
+    "x": 35.0,
+    "y": 35.0
+   },
+   "_spreadCurve": {
+    "m_Curve": [
+     {
+      "time": 0.0,
+      "value": 0.0,
+      "inSlope": 0.0,
+      "outSlope": 1.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     },
+     {
+      "time": 1.0,
+      "value": 1.0,
+      "inSlope": 1.0,
+      "outSlope": 0.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     }
+    ],
+    "m_PreInfinity": 2,
+    "m_PostInfinity": 2,
+    "m_RotationOrder": 4
+   },
+   "_useCustomSpreadCurve": 0,
+   "_soundBank": {
+    "$asset:SoundBank": "Pre_1.2_Far_Shots_SoundBank_01"
+   }
+  }
+ },
+ {
+  "cls": "Audio.AmbientSubsystem.OneShotAmbientSoundPlayer",
+  "path": "SOUND/AmbAfter2Cutscene/AmbientGroup/StepsAndShouts/SplinePathMoverEmitter (1)/GroupedEmitter/SpeechPlayer (1)",
+  "fields": {
+   "_volume": 0.30000001192092896,
+   "_deltaVolume": 0.0,
+   "_randomPitchRange": {
+    "x": 1.0,
+    "y": 1.0
+   },
+   "_fadeInDurationSec": 0.0,
+   "_fadeOutDurationSec": 5.0,
+   "_mixerGroup": null,
+   "ForceSetMixerGroup": 0,
+   "_playOnAwake": 0,
+   "_spread": 1.0,
+   "_spatialBlend": 1.0,
+   "_minDistance": 1.0,
+   "_maxDistance": 150.0,
+   "_rolloffCurve": {
+    "m_Curve": [
+     {
+      "time": 0.0,
+      "value": 1.0,
+      "inSlope": 0.0,
+      "outSlope": -1.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     },
+     {
+      "time": 1.0,
+      "value": 0.0,
+      "inSlope": -1.0,
+      "outSlope": 0.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     }
+    ],
+    "m_PreInfinity": 2,
+    "m_PostInfinity": 2,
+    "m_RotationOrder": 4
+   },
+   "_startPlayingDelay": {
+    "x": 0.0,
+    "y": 0.0
+   },
+   "_spreadCurve": {
+    "m_Curve": [
+     {
+      "time": 0.0,
+      "value": 0.0,
+      "inSlope": 0.0,
+      "outSlope": 1.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     },
+     {
+      "time": 1.0,
+      "value": 1.0,
+      "inSlope": 1.0,
+      "outSlope": 0.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     }
+    ],
+    "m_PreInfinity": 2,
+    "m_PostInfinity": 2,
+    "m_RotationOrder": 4
+   },
+   "_useCustomSpreadCurve": 0,
+   "_soundBank": {
+    "$asset:SoundBank": "After_1.2_VSRF_Speech_SoundBank_04"
+   }
+  }
+ },
+ {
+  "cls": "BezierSplineTools.BezierSpline",
+  "path": "SOUND/AmbAfter2Cutscene/AmbientGroup/StepsAndShouts/SplinePathMoverEmitter (3)/Spline",
+  "fields": {
+   "points": [
+    {
+     "x": -86.17193603515625,
+     "y": -2.2803268432617188,
+     "z": -58.09912109375
+    },
+    {
+     "x": -86.65838623046875,
+     "y": 0.01120758056640625,
+     "z": -58.09912109375
+    },
+    {
+     "x": -13.111968994140625,
+     "y": 7.62939453125e-06,
+     "z": -8.72467041015625
+    },
+    {
+     "x": -13.495269775390625,
+     "y": 7.62939453125e-06,
+     "z": -8.72467041015625
+    },
+    {
+     "x": -12.114349365234375,
+     "y": 7.62939453125e-06,
+     "z": -6.770751953125
+    },
+    {
+     "x": -6.250640869140625,
+     "y": -1.6317863464355469,
+     "z": -3.753692626953125
+    },
+    {
+     "x": -6.574859619140625,
+     "y": -1.6317863464355469,
+     "z": -3.753692626953125
+    },
+    {
+     "x": -2.416473388671875,
+     "y": -2.586780548095703,
+     "z": 0.3685302734375
+    },
+    {
+     "x": -0.5836334228515625,
+     "y": -1.9684677124023438,
+     "z": 1.202392578125
+    },
+    {
+     "x": -0.7628326416015625,
+     "y": -1.9684677124023438,
+     "z": 1.202392578125
+    },
+    {
+     "x": -0.8744659423828125,
+     "y": -1.9684677124023438,
+     "z": 1.202392578125
+    },
+    {
+     "x": 22.520416259765625,
+     "y": -1.7834587097167969,
+     "z": 10.1656494140625
+    },
+    {
+     "x": 22.707916259765625,
+     "y": -1.7834587097167969,
+     "z": 10.1656494140625
+    }
+   ],
+   "modes": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "loop": 0
+  }
+ },
+ {
+  "cls": "Audio.AmbientSubsystem.OneShotAmbientSoundPlayer",
+  "path": "SOUND/AmbBetween1And2Cutscenes/AmbientGroup/Explosions/Explosion_10",
+  "fields": {
+   "_volume": 0.30000001192092896,
+   "_deltaVolume": 0.029999999329447746,
+   "_randomPitchRange": {
+    "x": 0.8999999761581421,
+    "y": 1.100000023841858
+   },
+   "_fadeInDurationSec": 0.0,
+   "_fadeOutDurationSec": 5.0,
+   "_mixerGroup": null,
+   "ForceSetMixerGroup": 0,
+   "_playOnAwake": 0,
+   "_spread": 1.0,
+   "_spatialBlend": 1.0,
+   "_minDistance": 1.0,
+   "_maxDistance": 500.0,
+   "_rolloffCurve": {
+    "m_Curve": [
+     {
+      "time": -0.00119781494140625,
+      "value": 1.0,
+      "inSlope": -1.61217200756073,
+      "outSlope": -1.61217200756073,
+      "weightedMode": 0,
+      "inWeight": 0.3333333432674408,
+      "outWeight": 0.11500422656536102
+     },
+     {
+      "time": 0.2907211482524872,
+      "value": 0.4567343294620514,
+      "inSlope": -1.8492268323898315,
+      "outSlope": -1.8492268323898315,
+      "weightedMode": 0,
+      "inWeight": 0.3333333432674408,
+      "outWeight": 0.3333333432674408
+     },
+     {
+      "time": 1.0,
+      "value": 0.0,
+      "inSlope": -0.1361192911863327,
+      "outSlope": -0.1361192911863327,
+      "weightedMode": 0,
+      "inWeight": 0.3333333432674408,
+      "outWeight": 0.3333333432674408
+     }
+    ],
+    "m_PreInfinity": 2,
+    "m_PostInfinity": 2,
+    "m_RotationOrder": 4
+   },
+   "_startPlayingDelay": {
+    "x": 32.0,
+    "y": 32.0
+   },
+   "_spreadCurve": {
+    "m_Curve": [
+     {
+      "time": 0.0,
+      "value": 0.0,
+      "inSlope": 0.0,
+      "outSlope": 1.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     },
+     {
+      "time": 1.0,
+      "value": 1.0,
+      "inSlope": 1.0,
+      "outSlope": 0.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     }
+    ],
+    "m_PreInfinity": 2,
+    "m_PostInfinity": 2,
+    "m_RotationOrder": 4
+   },
+   "_useCustomSpreadCurve": 0,
+   "_soundBank": {
+    "$asset:SoundBank": "Pre_1.2_Far_Explosions_SoundBank_01"
+   }
+  }
+ },
+ {
+  "cls": "Audio.AmbientSubsystem.AmbientSplineEmitter.SplineSoundEmitter.SoundPlayerSplineTrigger",
+  "path": "SOUND/AmbBetween1And2Cutscenes/AmbientGroup/Debris/Debris",
+  "fields": {
+   "_triggerChance": 40,
+   "_cooldown": 0.0,
+   "_triggerOnce": 0,
+   "_ambientSoundPlayer": {
+    "$ref": "SOUND/AmbBetween1And2Cutscenes/AmbientGroup/Debris/Debris"
+   }
+  }
+ },
+ {
+  "cls": "Audio.AmbientSubsystem.OneShotAmbientSoundPlayer",
+  "path": "SOUND/AmbBetween1And2Cutscenes/AmbientGroup/Debris/Debris",
+  "fields": {
+   "_volume": 0.30000001192092896,
+   "_deltaVolume": 0.027000000700354576,
+   "_randomPitchRange": {
+    "x": 0.8999999761581421,
+    "y": 1.100000023841858
+   },
+   "_fadeInDurationSec": 0.0,
+   "_fadeOutDurationSec": 0.0,
+   "_mixerGroup": null,
+   "ForceSetMixerGroup": 1,
+   "_playOnAwake": 0,
+   "_spread": 1.0,
+   "_spatialBlend": 1.0,
+   "_minDistance": 0.5,
+   "_maxDistance": 15.0,
+   "_rolloffCurve": {
+    "m_Curve": [
+     {
+      "time": 0.0,
+      "value": 1.0,
+      "inSlope": -0.3469701111316681,
+      "outSlope": -0.3469701111316681,
+      "weightedMode": 0,
+      "inWeight": 0.3333333432674408,
+      "outWeight": 0.13463367521762848
+     },
+     {
+      "time": 0.4930075407028198,
+      "value": 0.6564537882804871,
+      "inSlope": -1.4346222877502441,
+      "outSlope": -1.4346222877502441,
+      "weightedMode": 0,
+      "inWeight": 0.15218564867973328,
+      "outWeight": 0.2286125123500824
+     },
+     {
+      "time": 0.6151975393295288,
+      "value": 0.4811009168624878,
+      "inSlope": -1.5474307537078857,
+      "outSlope": -1.5474307537078857,
+      "weightedMode": 0,
+      "inWeight": 0.3333333432674408,
+      "outWeight": 0.4460785388946533
+     },
+     {
+      "time": 0.7586607933044434,
+      "value": 0.27358001470565796,
+      "inSlope": -1.272645354270935,
+      "outSlope": -1.272645354270935,
+      "weightedMode": 0,
+      "inWeight": 0.04074617102742195,
+      "outWeight": 0.06756456196308136
+     },
+     {
+      "time": 0.9993896484375,
+      "value": 0.0,
+      "inSlope": -0.47896626591682434,
+      "outSlope": -0.47896626591682434,
+      "weightedMode": 0,
+      "inWeight": 0.08487462252378464,
+      "outWeight": 0.3333333432674408
+     }
+    ],
+    "m_PreInfinity": 2,
+    "m_PostInfinity": 2,
+    "m_RotationOrder": 4
+   },
+   "_startPlayingDelay": {
+    "x": 9.0,
+    "y": 9.0
+   },
+   "_spreadCurve": {
+    "m_Curve": [
+     {
+      "time": 0.0,
+      "value": 0.0,
+      "inSlope": 0.5281265377998352,
+      "outSlope": 0.5281265377998352,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.03257142752408981
+     },
+     {
+      "time": 1.0,
+      "value": 0.20000000298023224,
+      "inSlope": 0.5976046323776245,
+      "outSlope": 0.5976046323776245,
+      "weightedMode": 0,
+      "inWeight": 0.02571427822113037,
+      "outWeight": 0.0
+     }
+    ],
+    "m_PreInfinity": 2,
+    "m_PostInfinity": 2,
+    "m_RotationOrder": 4
+   },
+   "_useCustomSpreadCurve": 1,
+   "_soundBank": {
+    "$asset:SoundBank": "debris_falling"
+   }
+  }
+ },
+ {
+  "cls": "Audio.AmbientSubsystem.OneShotAmbientSoundPlayer",
+  "path": "SOUND/AmbAfter2Cutscene/AmbientGroup/StepsAndShouts/SplinePathMoverEmitter (1)/GroupedEmitter/SpeechPlayer",
+  "fields": {
+   "_volume": 0.30000001192092896,
+   "_deltaVolume": 0.0,
+   "_randomPitchRange": {
+    "x": 1.0,
+    "y": 1.0
+   },
+   "_fadeInDurationSec": 0.0,
+   "_fadeOutDurationSec": 5.0,
+   "_mixerGroup": null,
+   "ForceSetMixerGroup": 0,
+   "_playOnAwake": 0,
+   "_spread": 1.0,
+   "_spatialBlend": 1.0,
+   "_minDistance": 1.0,
+   "_maxDistance": 150.0,
+   "_rolloffCurve": {
+    "m_Curve": [
+     {
+      "time": 0.0,
+      "value": 1.0,
+      "inSlope": 0.0,
+      "outSlope": -1.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     },
+     {
+      "time": 1.0,
+      "value": 0.0,
+      "inSlope": -1.0,
+      "outSlope": 0.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     }
+    ],
+    "m_PreInfinity": 2,
+    "m_PostInfinity": 2,
+    "m_RotationOrder": 4
+   },
+   "_startPlayingDelay": {
+    "x": 0.0,
+    "y": 0.0
+   },
+   "_spreadCurve": {
+    "m_Curve": [
+     {
+      "time": 0.0,
+      "value": 0.0,
+      "inSlope": 0.0,
+      "outSlope": 1.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     },
+     {
+      "time": 1.0,
+      "value": 1.0,
+      "inSlope": 1.0,
+      "outSlope": 0.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     }
+    ],
+    "m_PreInfinity": 2,
+    "m_PostInfinity": 2,
+    "m_RotationOrder": 4
+   },
+   "_useCustomSpreadCurve": 0,
+   "_soundBank": {
+    "$asset:SoundBank": "After_1.2_VSRF_Speech_SoundBank_03"
+   }
+  }
+ },
+ {
+  "cls": "Audio.AmbientSubsystem.AmbientSplineEmitter.SplineSoundEmitter.AmbientPlayerGroupSplineEmitter",
+  "path": "SOUND/AmbAfter2Cutscene/AmbientGroup/StepsAndShouts/SplinePathMoverEmitter/GroupedEmitter",
+  "fields": {
+   "_configs": [
+    {
+     "soundPlayer": {
+      "$ref": "SOUND/AmbAfter2Cutscene/AmbientGroup/StepsAndShouts/SplinePathMoverEmitter/GroupedEmitter/FootstepPlayer"
+     },
+     "spreadRange": {
+      "x": 0.0,
+      "y": 1.0
+     }
+    },
+    {
+     "soundPlayer": {
+      "$ref": "SOUND/AmbAfter2Cutscene/AmbientGroup/StepsAndShouts/SplinePathMoverEmitter/GroupedEmitter/SpeechPlayer"
+     },
+     "spreadRange": {
+      "x": 0.0,
+      "y": 1.0
+     }
+    },
+    {
+     "soundPlayer": {
+      "$ref": "SOUND/AmbAfter2Cutscene/AmbientGroup/StepsAndShouts/SplinePathMoverEmitter/GroupedEmitter/SpeechPlayer (1)"
+     },
+     "spreadRange": {
+      "x": 0.0,
+      "y": 1.0
+     }
+    },
+    {
+     "soundPlayer": {
+      "$ref": "SOUND/AmbAfter2Cutscene/AmbientGroup/StepsAndShouts/SplinePathMoverEmitter/GroupedEmitter/ShootPlayer"
+     },
+     "spreadRange": {
+      "x": 0.0,
+      "y": 1.0
+     }
+    }
+   ]
+  }
+ },
+ {
+  "cls": "Audio.AmbientSubsystem.OneShotAmbientSoundPlayer",
+  "path": "SOUND/AmbBetween1And2Cutscenes/AmbientGroup/Explosions/Explosion_06",
+  "fields": {
+   "_volume": 0.30000001192092896,
+   "_deltaVolume": 0.029999999329447746,
+   "_randomPitchRange": {
+    "x": 0.8999999761581421,
+    "y": 1.100000023841858
+   },
+   "_fadeInDurationSec": 0.0,
+   "_fadeOutDurationSec": 5.0,
+   "_mixerGroup": null,
+   "ForceSetMixerGroup": 0,
+   "_playOnAwake": 0,
+   "_spread": 1.0,
+   "_spatialBlend": 1.0,
+   "_minDistance": 1.0,
+   "_maxDistance": 500.0,
+   "_rolloffCurve": {
+    "m_Curve": [
+     {
+      "time": -0.00119781494140625,
+      "value": 1.0,
+      "inSlope": -1.61217200756073,
+      "outSlope": -1.61217200756073,
+      "weightedMode": 0,
+      "inWeight": 0.3333333432674408,
+      "outWeight": 0.11500422656536102
+     },
+     {
+      "time": 0.2907211482524872,
+      "value": 0.4567343294620514,
+      "inSlope": -1.8492268323898315,
+      "outSlope": -1.8492268323898315,
+      "weightedMode": 0,
+      "inWeight": 0.3333333432674408,
+      "outWeight": 0.3333333432674408
+     },
+     {
+      "time": 1.0,
+      "value": 0.0,
+      "inSlope": -0.1361192911863327,
+      "outSlope": -0.1361192911863327,
+      "weightedMode": 0,
+      "inWeight": 0.3333333432674408,
+      "outWeight": 0.3333333432674408
+     }
+    ],
+    "m_PreInfinity": 2,
+    "m_PostInfinity": 2,
+    "m_RotationOrder": 4
+   },
+   "_startPlayingDelay": {
+    "x": 40.0,
+    "y": 40.0
+   },
+   "_spreadCurve": {
+    "m_Curve": [
+     {
+      "time": 0.0,
+      "value": 0.0,
+      "inSlope": 0.0,
+      "outSlope": 1.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     },
+     {
+      "time": 1.0,
+      "value": 1.0,
+      "inSlope": 1.0,
+      "outSlope": 0.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     }
+    ],
+    "m_PreInfinity": 2,
+    "m_PostInfinity": 2,
+    "m_RotationOrder": 4
+   },
+   "_useCustomSpreadCurve": 0,
+   "_soundBank": {
+    "$asset:SoundBank": "Pre_1.2_Far_Explosions_SoundBank_01"
+   }
+  }
+ },
+ {
+  "cls": "Audio.AmbientSubsystem.AmbientSplineEmitter.SplineEmitterPathMover",
+  "path": "SOUND/AmbAfter2Cutscene/AmbientGroup/StepsAndShouts/SplinePathMoverEmitter",
+  "fields": {
+   "_splineEmitter": {
+    "$ref": "SOUND/AmbAfter2Cutscene/AmbientGroup/StepsAndShouts/SplinePathMoverEmitter/GroupedEmitter"
+   },
+   "_spline": {
+    "$ref": "SOUND/AmbAfter2Cutscene/AmbientGroup/StepsAndShouts/SplinePathMoverEmitter/Spline"
+   },
+   "_resolution": 85,
+   "_calculationRadius": 151.0,
+   "MovementStrategy": 0,
+   "_movementActionOnCompleted": 0,
+   "_startMovementRandomDelayRange": {
+    "x": 0.0,
+    "y": 0.0
+   },
+   "_movementSpeed": 0.03999999910593033,
+   "_resetPositionOnMovementEnd": 0,
+   "_fadeEmitter": 1
+  }
+ },
+ {
+  "cls": "Audio.AmbientSubsystem.AmbientSplineEmitter.AmbientSplineEmitterController",
+  "path": "SOUND/AmbAfter2Cutscene/AmbientGroup",
+  "fields": {}
+ },
+ {
+  "cls": "Audio.AmbientSubsystem.AmbientSoundPlayerGroup",
+  "path": "SOUND/AmbAfter2Cutscene/AmbientGroup",
+  "fields": {
+   "_outputMixerGroup": null,
+   "_soundPlayers": [
+    {
+     "$ref": "SOUND/AmbAfter2Cutscene/AmbientGroup/StepsAndShouts/SplinePathMoverEmitter/GroupedEmitter/FootstepPlayer"
+    },
+    {
+     "$ref": "SOUND/AmbAfter2Cutscene/AmbientGroup/StepsAndShouts/SplinePathMoverEmitter/GroupedEmitter/SpeechPlayer"
+    },
+    {
+     "$ref": "SOUND/AmbAfter2Cutscene/AmbientGroup/StepsAndShouts/SplinePathMoverEmitter/GroupedEmitter/SpeechPlayer (1)"
+    },
+    {
+     "$ref": "SOUND/AmbAfter2Cutscene/AmbientGroup/StepsAndShouts/SplinePathMoverEmitter/GroupedEmitter/ShootPlayer"
+    },
+    {
+     "$ref": "SOUND/AmbAfter2Cutscene/AmbientGroup/StepsAndShouts/SplinePathMoverEmitter (2)/GroupedEmitter/FootstepPlayer"
+    },
+    {
+     "$ref": "SOUND/AmbAfter2Cutscene/AmbientGroup/StepsAndShouts/SplinePathMoverEmitter (2)/GroupedEmitter/SpeechPlayer"
+    },
+    {
+     "$ref": "SOUND/AmbAfter2Cutscene/AmbientGroup/StepsAndShouts/SplinePathMoverEmitter (2)/GroupedEmitter/SpeechPlayer (1)"
+    },
+    {
+     "$ref": "SOUND/AmbAfter2Cutscene/AmbientGroup/StepsAndShouts/SplinePathMoverEmitter (2)/GroupedEmitter/ShootPlayer"
+    },
+    {
+     "$ref": "SOUND/AmbAfter2Cutscene/AmbientGroup/StepsAndShouts/SplinePathMoverEmitter (1)/GroupedEmitter/FootstepPlayer"
+    },
+    {
+     "$ref": "SOUND/AmbAfter2Cutscene/AmbientGroup/StepsAndShouts/SplinePathMoverEmitter (1)/GroupedEmitter/SpeechPlayer"
+    },
+    {
+     "$ref": "SOUND/AmbAfter2Cutscene/AmbientGroup/StepsAndShouts/SplinePathMoverEmitter (1)/GroupedEmitter/SpeechPlayer (1)"
+    },
+    {
+     "$ref": "SOUND/AmbAfter2Cutscene/AmbientGroup/StepsAndShouts/SplinePathMoverEmitter (1)/GroupedEmitter/ShootPlayer"
+    },
+    {
+     "$ref": "SOUND/AmbAfter2Cutscene/AmbientGroup/StepsAndShouts/SplinePathMoverEmitter (3)/GroupedEmitter/FootstepPlayer"
+    },
+    {
+     "$ref": "SOUND/AmbAfter2Cutscene/AmbientGroup/StepsAndShouts/SplinePathMoverEmitter (3)/GroupedEmitter/SpeechPlayer"
+    },
+    {
+     "$ref": "SOUND/AmbAfter2Cutscene/AmbientGroup/StepsAndShouts/SplinePathMoverEmitter (3)/GroupedEmitter/SpeechPlayer (1)"
+    },
+    {
+     "$ref": "SOUND/AmbAfter2Cutscene/AmbientGroup/StepsAndShouts/SplinePathMoverEmitter (3)/GroupedEmitter/ShootPlayer"
+    },
+    {
+     "$ref": "SOUND/AmbAfter2Cutscene/AmbientGroup/Shots/Shot_03"
+    },
+    {
+     "$ref": "SOUND/AmbAfter2Cutscene/AmbientGroup/Shots/Shot_01"
+    },
+    {
+     "$ref": "SOUND/AmbAfter2Cutscene/AmbientGroup/Shots/Shot_02"
+    },
+    {
+     "$ref": "SOUND/AmbAfter2Cutscene/AmbientGroup/Shots/Shot_04"
+    },
+    {
+     "$ref": "SOUND/AmbAfter2Cutscene/AmbientGroup/Explosions/Explosion_For_Cam_Shake_03"
+    },
+    {
+     "$ref": "SOUND/AmbAfter2Cutscene/AmbientGroup/Explosions/Explosion_02"
+    },
+    {
+     "$ref": "SOUND/AmbAfter2Cutscene/AmbientGroup/Explosions/Explosion_03"
+    },
+    {
+     "$ref": "SOUND/AmbAfter2Cutscene/AmbientGroup/Explosions/Explosion_04"
+    },
+    {
+     "$ref": "SOUND/AmbAfter2Cutscene/AmbientGroup/Explosions/Explosion_05"
+    },
+    {
+     "$ref": "SOUND/AmbAfter2Cutscene/AmbientGroup/Explosions/Explosion_06"
+    },
+    {
+     "$ref": "SOUND/AmbAfter2Cutscene/AmbientGroup/Explosions/Explosion_08"
+    },
+    {
+     "$ref": "SOUND/AmbAfter2Cutscene/AmbientGroup/Explosions/Explosion_09"
+    },
+    {
+     "$ref": "SOUND/AmbAfter2Cutscene/AmbientGroup/Explosions/Explosion_10"
+    }
+   ]
+  }
+ },
+ {
+  "cls": "Audio.AmbientSubsystem.AmbientSplineEmitter.SplineEmitterPathMover",
+  "path": "SOUND/AmbAfter2Cutscene/AmbientGroup/StepsAndShouts/SplinePathMoverEmitter (1)",
+  "fields": {
+   "_splineEmitter": {
+    "$ref": "SOUND/AmbAfter2Cutscene/AmbientGroup/StepsAndShouts/SplinePathMoverEmitter (1)/GroupedEmitter"
+   },
+   "_spline": {
+    "$ref": "SOUND/AmbAfter2Cutscene/AmbientGroup/StepsAndShouts/SplinePathMoverEmitter (1)/Spline"
+   },
+   "_resolution": 85,
+   "_calculationRadius": 151.0,
+   "MovementStrategy": 0,
+   "_movementActionOnCompleted": 0,
+   "_startMovementRandomDelayRange": {
+    "x": 0.0,
+    "y": 0.0
+   },
+   "_movementSpeed": 0.03999999910593033,
+   "_resetPositionOnMovementEnd": 0,
+   "_fadeEmitter": 1
+  }
+ },
+ {
+  "cls": "Audio.AmbientSubsystem.OneShotAmbientSoundPlayer",
+  "path": "SOUND/AmbBetween1And2Cutscenes/AmbientGroup/Shots/Shot_04 (2)",
+  "fields": {
+   "_volume": 0.699999988079071,
+   "_deltaVolume": 0.029999999329447746,
+   "_randomPitchRange": {
+    "x": 0.8999999761581421,
+    "y": 1.100000023841858
+   },
+   "_fadeInDurationSec": 0.0,
+   "_fadeOutDurationSec": 5.0,
+   "_mixerGroup": null,
+   "ForceSetMixerGroup": 1,
+   "_playOnAwake": 0,
+   "_spread": 1.0,
+   "_spatialBlend": 1.0,
+   "_minDistance": 1.0,
+   "_maxDistance": 500.0,
+   "_rolloffCurve": {
+    "m_Curve": [
+     {
+      "time": -0.00119781494140625,
+      "value": 1.0,
+      "inSlope": -1.61217200756073,
+      "outSlope": -1.61217200756073,
+      "weightedMode": 0,
+      "inWeight": 0.3333333432674408,
+      "outWeight": 0.11500422656536102
+     },
+     {
+      "time": 0.2907211482524872,
+      "value": 0.4567343294620514,
+      "inSlope": -1.8492268323898315,
+      "outSlope": -1.8492268323898315,
+      "weightedMode": 0,
+      "inWeight": 0.3333333432674408,
+      "outWeight": 0.3333333432674408
+     },
+     {
+      "time": 1.0,
+      "value": 0.0,
+      "inSlope": -0.1361192911863327,
+      "outSlope": -0.1361192911863327,
+      "weightedMode": 0,
+      "inWeight": 0.3333333432674408,
+      "outWeight": 0.3333333432674408
+     }
+    ],
+    "m_PreInfinity": 2,
+    "m_PostInfinity": 2,
+    "m_RotationOrder": 4
+   },
+   "_startPlayingDelay": {
+    "x": 38.0,
+    "y": 38.0
+   },
+   "_spreadCurve": {
+    "m_Curve": [
+     {
+      "time": 0.0,
+      "value": 0.0,
+      "inSlope": 0.0,
+      "outSlope": 1.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     },
+     {
+      "time": 1.0,
+      "value": 1.0,
+      "inSlope": 1.0,
+      "outSlope": 0.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     }
+    ],
+    "m_PreInfinity": 2,
+    "m_PostInfinity": 2,
+    "m_RotationOrder": 4
+   },
+   "_useCustomSpreadCurve": 0,
+   "_soundBank": {
+    "$asset:SoundBank": "far_shoots"
+   }
+  }
+ },
+ {
+  "cls": "Audio.AmbientSubsystem.AmbientSplineEmitter.SplineSoundEmitter.AmbientPlayerGroupSplineEmitter",
+  "path": "SOUND/AmbBetween1And2Cutscenes/AmbientGroup/StepsAndShouts/SplinePathMoverEmitter/GroupedEmitter",
+  "fields": {
+   "_configs": [
+    {
+     "soundPlayer": {
+      "$ref": "SOUND/AmbBetween1And2Cutscenes/AmbientGroup/StepsAndShouts/SplinePathMoverEmitter/GroupedEmitter/FootstepPlayer"
+     },
+     "spreadRange": {
+      "x": 0.0,
+      "y": 1.0
+     }
+    },
+    {
+     "soundPlayer": {
+      "$ref": "SOUND/AmbBetween1And2Cutscenes/AmbientGroup/StepsAndShouts/SplinePathMoverEmitter/GroupedEmitter/SpeechPlayer"
+     },
+     "spreadRange": {
+      "x": 0.0,
+      "y": 1.0
+     }
+    },
+    {
+     "soundPlayer": {
+      "$ref": "SOUND/AmbBetween1And2Cutscenes/AmbientGroup/StepsAndShouts/SplinePathMoverEmitter/GroupedEmitter/SpeechPlayer (1)"
+     },
+     "spreadRange": {
+      "x": 0.0,
+      "y": 1.0
+     }
+    }
+   ]
+  }
+ },
+ {
+  "cls": "Audio.AmbientSubsystem.AmbientSplineEmitter.SplineSoundEmitter.SoundPlayerSplineTrigger",
+  "path": "SOUND/AmbBetween1And2Cutscenes/AmbientGroup/Debris/Debris (2)",
+  "fields": {
+   "_triggerChance": 40,
+   "_cooldown": 0.0,
+   "_triggerOnce": 0,
+   "_ambientSoundPlayer": {
+    "$ref": "SOUND/AmbBetween1And2Cutscenes/AmbientGroup/Debris/Debris (2)"
+   }
+  }
+ },
+ {
+  "cls": "Audio.AmbientSubsystem.OneShotAmbientSoundPlayer",
+  "path": "SOUND/AmbBetween1And2Cutscenes/AmbientGroup/Debris/Debris (2)",
+  "fields": {
+   "_volume": 0.30000001192092896,
+   "_deltaVolume": 0.027000000700354576,
+   "_randomPitchRange": {
+    "x": 0.8999999761581421,
+    "y": 1.100000023841858
+   },
+   "_fadeInDurationSec": 0.0,
+   "_fadeOutDurationSec": 0.0,
+   "_mixerGroup": null,
+   "ForceSetMixerGroup": 1,
+   "_playOnAwake": 0,
+   "_spread": 1.0,
+   "_spatialBlend": 1.0,
+   "_minDistance": 0.5,
+   "_maxDistance": 15.0,
+   "_rolloffCurve": {
+    "m_Curve": [
+     {
+      "time": 0.0,
+      "value": 1.0,
+      "inSlope": -0.3469701111316681,
+      "outSlope": -0.3469701111316681,
+      "weightedMode": 0,
+      "inWeight": 0.3333333432674408,
+      "outWeight": 0.13463367521762848
+     },
+     {
+      "time": 0.4930075407028198,
+      "value": 0.6564537882804871,
+      "inSlope": -1.4346222877502441,
+      "outSlope": -1.4346222877502441,
+      "weightedMode": 0,
+      "inWeight": 0.15218564867973328,
+      "outWeight": 0.2286125123500824
+     },
+     {
+      "time": 0.6151975393295288,
+      "value": 0.4811009168624878,
+      "inSlope": -1.5474307537078857,
+      "outSlope": -1.5474307537078857,
+      "weightedMode": 0,
+      "inWeight": 0.3333333432674408,
+      "outWeight": 0.4460785388946533
+     },
+     {
+      "time": 0.7586607933044434,
+      "value": 0.27358001470565796,
+      "inSlope": -1.272645354270935,
+      "outSlope": -1.272645354270935,
+      "weightedMode": 0,
+      "inWeight": 0.04074617102742195,
+      "outWeight": 0.06756456196308136
+     },
+     {
+      "time": 0.9993896484375,
+      "value": 0.0,
+      "inSlope": -0.47896626591682434,
+      "outSlope": -0.47896626591682434,
+      "weightedMode": 0,
+      "inWeight": 0.08487462252378464,
+      "outWeight": 0.3333333432674408
+     }
+    ],
+    "m_PreInfinity": 2,
+    "m_PostInfinity": 2,
+    "m_RotationOrder": 4
+   },
+   "_startPlayingDelay": {
+    "x": 18.0,
+    "y": 18.0
+   },
+   "_spreadCurve": {
+    "m_Curve": [
+     {
+      "time": 0.0,
+      "value": 0.0,
+      "inSlope": 0.5281265377998352,
+      "outSlope": 0.5281265377998352,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.03257142752408981
+     },
+     {
+      "time": 1.0,
+      "value": 0.20000000298023224,
+      "inSlope": 0.5976046323776245,
+      "outSlope": 0.5976046323776245,
+      "weightedMode": 0,
+      "inWeight": 0.02571427822113037,
+      "outWeight": 0.0
+     }
+    ],
+    "m_PreInfinity": 2,
+    "m_PostInfinity": 2,
+    "m_RotationOrder": 4
+   },
+   "_useCustomSpreadCurve": 1,
+   "_soundBank": {
+    "$asset:SoundBank": "debris_falling"
+   }
+  }
+ },
+ {
+  "cls": "BezierSplineTools.BezierSpline",
+  "path": "SOUND/AmbAfter2Cutscene/AmbientGroup/StepsAndShouts/SplinePathMoverEmitter (2)/Spline",
+  "fields": {
+   "points": [
+    {
+     "x": 34.2879638671875,
+     "y": -2.2803268432617188,
+     "z": -63.15435791015625
+    },
+    {
+     "x": 33.801513671875,
+     "y": 0.01120758056640625,
+     "z": -63.15435791015625
+    },
+    {
+     "x": -1.2915191650390625,
+     "y": 7.62939453125e-06,
+     "z": -6.725128173828125
+    },
+    {
+     "x": -1.6748199462890625,
+     "y": 7.62939453125e-06,
+     "z": -6.725128173828125
+    },
+    {
+     "x": -1.5269927978515625,
+     "y": 7.62939453125e-06,
+     "z": -6.725128173828125
+    },
+    {
+     "x": 0.3249359130859375,
+     "y": -1.6317863464355469,
+     "z": -4.826904296875
+    },
+    {
+     "x": 0.0007171630859375,
+     "y": -1.6317863464355469,
+     "z": -4.826904296875
+    },
+    {
+     "x": 0.536712646484375,
+     "y": -2.586780548095703,
+     "z": -3.532745361328125
+    },
+    {
+     "x": -0.5836334228515625,
+     "y": -1.9684677124023438,
+     "z": 1.202392578125
+    },
+    {
+     "x": -0.7628326416015625,
+     "y": -1.9684677124023438,
+     "z": 1.202392578125
+    },
+    {
+     "x": -0.8744659423828125,
+     "y": -1.9684677124023438,
+     "z": 1.202392578125
+    },
+    {
+     "x": -1.0819854736328125,
+     "y": -1.7834587097167969,
+     "z": 3.13873291015625
+    },
+    {
+     "x": -0.8944854736328125,
+     "y": -1.7834587097167969,
+     "z": 3.13873291015625
+    }
+   ],
+   "modes": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "loop": 0
+  }
+ },
+ {
+  "cls": "Audio.AmbientSubsystem.AmbientSplineEmitter.AmbientSplineEmitterController",
+  "path": "SOUND/AmbBetween1And2Cutscenes/AmbientGroup",
+  "fields": {}
+ },
+ {
+  "cls": "Audio.AmbientSubsystem.AmbientSoundPlayerGroup",
+  "path": "SOUND/AmbBetween1And2Cutscenes/AmbientGroup",
+  "fields": {
+   "_outputMixerGroup": null,
+   "_soundPlayers": [
+    {
+     "$ref": "SOUND/AmbBetween1And2Cutscenes/AmbientGroup/StepsAndShouts/SplinePathMoverEmitter/GroupedEmitter/FootstepPlayer"
+    },
+    {
+     "$ref": "SOUND/AmbBetween1And2Cutscenes/AmbientGroup/StepsAndShouts/SplinePathMoverEmitter/GroupedEmitter/SpeechPlayer"
+    },
+    {
+     "$ref": "SOUND/AmbBetween1And2Cutscenes/AmbientGroup/StepsAndShouts/SplinePathMoverEmitter/GroupedEmitter/SpeechPlayer (1)"
+    },
+    {
+     "$ref": "SOUND/AmbBetween1And2Cutscenes/AmbientGroup/StepsAndShouts/SplinePathMoverEmitter (1)/GroupedEmitter/FootstepPlayer"
+    },
+    {
+     "$ref": "SOUND/AmbBetween1And2Cutscenes/AmbientGroup/StepsAndShouts/SplinePathMoverEmitter (1)/GroupedEmitter/SpeechPlayer"
+    },
+    {
+     "$ref": "SOUND/AmbBetween1And2Cutscenes/AmbientGroup/StepsAndShouts/SplinePathMoverEmitter (1)/GroupedEmitter/SpeechPlayer (1)"
+    },
+    {
+     "$ref": "SOUND/AmbBetween1And2Cutscenes/AmbientGroup/Debris/Debris"
+    },
+    {
+     "$ref": "SOUND/AmbBetween1And2Cutscenes/AmbientGroup/Debris/Debris (1)"
+    },
+    {
+     "$ref": "SOUND/AmbBetween1And2Cutscenes/AmbientGroup/Debris/Debris (2)"
+    },
+    {
+     "$ref": "SOUND/AmbBetween1And2Cutscenes/AmbientGroup/Explosions/Explosion_For_Cam_Shake_01"
+    },
+    {
+     "$ref": "SOUND/AmbBetween1And2Cutscenes/AmbientGroup/Explosions/Explosion_For_Cam_Shake_02"
+    },
+    {
+     "$ref": "SOUND/AmbBetween1And2Cutscenes/AmbientGroup/Explosions/Explosion_02"
+    },
+    {
+     "$ref": "SOUND/AmbBetween1And2Cutscenes/AmbientGroup/Explosions/Explosion_03"
+    },
+    {
+     "$ref": "SOUND/AmbBetween1And2Cutscenes/AmbientGroup/Explosions/Explosion_04"
+    },
+    {
+     "$ref": "SOUND/AmbBetween1And2Cutscenes/AmbientGroup/Explosions/Explosion_05"
+    },
+    {
+     "$ref": "SOUND/AmbBetween1And2Cutscenes/AmbientGroup/Explosions/Explosion_06"
+    },
+    {
+     "$ref": "SOUND/AmbBetween1And2Cutscenes/AmbientGroup/Explosions/Explosion_07"
+    },
+    {
+     "$ref": "SOUND/AmbBetween1And2Cutscenes/AmbientGroup/Explosions/Explosion_09"
+    },
+    {
+     "$ref": "SOUND/AmbBetween1And2Cutscenes/AmbientGroup/Explosions/Explosion_10"
+    }
+   ]
+  }
+ },
+ {
+  "cls": "Audio.AmbientSubsystem.OneShotAmbientSoundPlayer",
+  "path": "SOUND/AmbAfter2Cutscene/AmbientGroup/StepsAndShouts/SplinePathMoverEmitter (3)/GroupedEmitter/FootstepPlayer",
+  "fields": {
+   "_volume": 0.15000000596046448,
+   "_deltaVolume": 0.0,
+   "_randomPitchRange": {
+    "x": 1.0,
+    "y": 1.0
+   },
+   "_fadeInDurationSec": 0.0,
+   "_fadeOutDurationSec": 5.0,
+   "_mixerGroup": null,
+   "ForceSetMixerGroup": 0,
+   "_playOnAwake": 0,
+   "_spread": 1.0,
+   "_spatialBlend": 1.0,
+   "_minDistance": 1.0,
+   "_maxDistance": 150.0,
+   "_rolloffCurve": {
+    "m_Curve": [
+     {
+      "time": 0.0,
+      "value": 1.0,
+      "inSlope": 0.0,
+      "outSlope": -1.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     },
+     {
+      "time": 1.0,
+      "value": 0.0,
+      "inSlope": -1.0,
+      "outSlope": 0.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     }
+    ],
+    "m_PreInfinity": 2,
+    "m_PostInfinity": 2,
+    "m_RotationOrder": 4
+   },
+   "_startPlayingDelay": {
+    "x": 1.0,
+    "y": 1.0
+   },
+   "_spreadCurve": {
+    "m_Curve": [
+     {
+      "time": 0.0,
+      "value": 0.0,
+      "inSlope": 0.0,
+      "outSlope": 1.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     },
+     {
+      "time": 1.0,
+      "value": 1.0,
+      "inSlope": 1.0,
+      "outSlope": 0.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     }
+    ],
+    "m_PreInfinity": 2,
+    "m_PostInfinity": 2,
+    "m_RotationOrder": 4
+   },
+   "_useCustomSpreadCurve": 0,
+   "_soundBank": {
+    "$asset:SoundBank": "Pre_1.2_Footsteps_SoundBank_02"
+   }
+  }
+ },
+ {
+  "cls": "Audio.AmbientSubsystem.OneShotAmbientSoundPlayer",
+  "path": "SOUND/AmbBetween1And2Cutscenes/AmbientGroup/Shots/Shot_01",
+  "fields": {
+   "_volume": 0.699999988079071,
+   "_deltaVolume": 0.029999999329447746,
+   "_randomPitchRange": {
+    "x": 0.8999999761581421,
+    "y": 1.100000023841858
+   },
+   "_fadeInDurationSec": 0.0,
+   "_fadeOutDurationSec": 5.0,
+   "_mixerGroup": null,
+   "ForceSetMixerGroup": 1,
+   "_playOnAwake": 0,
+   "_spread": 1.0,
+   "_spatialBlend": 1.0,
+   "_minDistance": 1.0,
+   "_maxDistance": 500.0,
+   "_rolloffCurve": {
+    "m_Curve": [
+     {
+      "time": -0.00119781494140625,
+      "value": 1.0,
+      "inSlope": -1.61217200756073,
+      "outSlope": -1.61217200756073,
+      "weightedMode": 0,
+      "inWeight": 0.3333333432674408,
+      "outWeight": 0.11500422656536102
+     },
+     {
+      "time": 0.2907211482524872,
+      "value": 0.4567343294620514,
+      "inSlope": -1.8492268323898315,
+      "outSlope": -1.8492268323898315,
+      "weightedMode": 0,
+      "inWeight": 0.3333333432674408,
+      "outWeight": 0.3333333432674408
+     },
+     {
+      "time": 1.0,
+      "value": 0.0,
+      "inSlope": -0.1361192911863327,
+      "outSlope": -0.1361192911863327,
+      "weightedMode": 0,
+      "inWeight": 0.3333333432674408,
+      "outWeight": 0.3333333432674408
+     }
+    ],
+    "m_PreInfinity": 2,
+    "m_PostInfinity": 2,
+    "m_RotationOrder": 4
+   },
+   "_startPlayingDelay": {
+    "x": 17.0,
+    "y": 17.0
+   },
+   "_spreadCurve": {
+    "m_Curve": [
+     {
+      "time": 0.0,
+      "value": 0.0,
+      "inSlope": 0.0,
+      "outSlope": 1.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     },
+     {
+      "time": 1.0,
+      "value": 1.0,
+      "inSlope": 1.0,
+      "outSlope": 0.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     }
+    ],
+    "m_PreInfinity": 2,
+    "m_PostInfinity": 2,
+    "m_RotationOrder": 4
+   },
+   "_useCustomSpreadCurve": 0,
+   "_soundBank": {
+    "$asset:SoundBank": "Pre_1.2_Far_Shots_SoundBank_01"
+   }
+  }
+ },
+ {
+  "cls": "Audio.AmbientSubsystem.OneShotAmbientSoundPlayer",
+  "path": "SOUND/AmbAfter2Cutscene/AmbientGroup/Explosions/Explosion_For_Cam_Shake_03",
+  "fields": {
+   "_volume": 0.699999988079071,
+   "_deltaVolume": 0.029999999329447746,
+   "_randomPitchRange": {
+    "x": 0.8999999761581421,
+    "y": 1.100000023841858
+   },
+   "_fadeInDurationSec": 0.0,
+   "_fadeOutDurationSec": 5.0,
+   "_mixerGroup": null,
+   "ForceSetMixerGroup": 0,
+   "_playOnAwake": 0,
+   "_spread": 1.0,
+   "_spatialBlend": 1.0,
+   "_minDistance": 1.0,
+   "_maxDistance": 500.0,
+   "_rolloffCurve": {
+    "m_Curve": [
+     {
+      "time": -0.00119781494140625,
+      "value": 1.0,
+      "inSlope": -1.61217200756073,
+      "outSlope": -1.61217200756073,
+      "weightedMode": 0,
+      "inWeight": 0.3333333432674408,
+      "outWeight": 0.11500422656536102
+     },
+     {
+      "time": 0.2907211482524872,
+      "value": 0.4567343294620514,
+      "inSlope": -1.8492268323898315,
+      "outSlope": -1.8492268323898315,
+      "weightedMode": 0,
+      "inWeight": 0.3333333432674408,
+      "outWeight": 0.3333333432674408
+     },
+     {
+      "time": 1.0,
+      "value": 0.0,
+      "inSlope": -0.1361192911863327,
+      "outSlope": -0.1361192911863327,
+      "weightedMode": 0,
+      "inWeight": 0.3333333432674408,
+      "outWeight": 0.3333333432674408
+     }
+    ],
+    "m_PreInfinity": 2,
+    "m_PostInfinity": 2,
+    "m_RotationOrder": 4
+   },
+   "_startPlayingDelay": {
+    "x": 2.0,
+    "y": 2.0
+   },
+   "_spreadCurve": {
+    "m_Curve": [
+     {
+      "time": 0.0,
+      "value": 0.0,
+      "inSlope": 0.0,
+      "outSlope": 1.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     },
+     {
+      "time": 1.0,
+      "value": 1.0,
+      "inSlope": 1.0,
+      "outSlope": 0.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     }
+    ],
+    "m_PreInfinity": 2,
+    "m_PostInfinity": 2,
+    "m_RotationOrder": 4
+   },
+   "_useCustomSpreadCurve": 0,
+   "_soundBank": {
+    "$asset:SoundBank": "explosion_with_big_debris"
+   }
+  }
+ },
+ {
+  "cls": "Audio.AmbientSubsystem.AmbientSoundPlayer",
+  "path": "SOUND/AmbAfter2Cutscene/AmbientGroup/StepsAndShouts/SplinePathMoverEmitter/GroupedEmitter/ShootPlayer",
+  "fields": {
+   "_volume": 0.699999988079071,
+   "_deltaVolume": 0.0,
+   "_randomPitchRange": {
+    "x": 0.8999999761581421,
+    "y": 1.100000023841858
+   },
+   "_fadeInDurationSec": 0.0,
+   "_fadeOutDurationSec": 0.0,
+   "_mixerGroup": null,
+   "ForceSetMixerGroup": 0,
+   "_playOnAwake": 0,
+   "_spread": 1.0,
+   "_spatialBlend": 1.0,
+   "_minDistance": 1.0,
+   "_maxDistance": 120.0,
+   "_rolloffCurve": {
+    "m_Curve": [
+     {
+      "time": 0.0,
+      "value": 1.0,
+      "inSlope": 0.0,
+      "outSlope": -1.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     },
+     {
+      "time": 1.0,
+      "value": 0.0,
+      "inSlope": -1.0,
+      "outSlope": 0.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     }
+    ],
+    "m_PreInfinity": 2,
+    "m_PostInfinity": 2,
+    "m_RotationOrder": 4
+   },
+   "_startPlayingDelay": {
+    "x": 0.0,
+    "y": 0.0
+   },
+   "_spreadCurve": {
+    "m_Curve": [
+     {
+      "time": 0.0,
+      "value": 0.0,
+      "inSlope": 0.0,
+      "outSlope": 1.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     },
+     {
+      "time": 1.0,
+      "value": 1.0,
+      "inSlope": 1.0,
+      "outSlope": 0.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     }
+    ],
+    "m_PreInfinity": 2,
+    "m_PostInfinity": 2,
+    "m_RotationOrder": 4
+   },
+   "_useCustomSpreadCurve": 0,
+   "_randomTimeRange": {
+    "x": 1.0,
+    "y": 5.0
+   },
+   "_ambientBank": {
+    "$asset:SoundBank": "far_shoots"
+   }
+  }
+ },
+ {
+  "cls": "Audio.AmbientSubsystem.OneShotAmbientSoundPlayer",
+  "path": "SOUND/AmbAfter2Cutscene/AmbientGroup/StepsAndShouts/SplinePathMoverEmitter (3)/GroupedEmitter/SpeechPlayer (1)",
+  "fields": {
+   "_volume": 0.30000001192092896,
+   "_deltaVolume": 0.0,
+   "_randomPitchRange": {
+    "x": 1.0,
+    "y": 1.0
+   },
+   "_fadeInDurationSec": 0.0,
+   "_fadeOutDurationSec": 5.0,
+   "_mixerGroup": null,
+   "ForceSetMixerGroup": 0,
+   "_playOnAwake": 0,
+   "_spread": 1.0,
+   "_spatialBlend": 1.0,
+   "_minDistance": 1.0,
+   "_maxDistance": 150.0,
+   "_rolloffCurve": {
+    "m_Curve": [
+     {
+      "time": 0.0,
+      "value": 1.0,
+      "inSlope": 0.0,
+      "outSlope": -1.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     },
+     {
+      "time": 1.0,
+      "value": 0.0,
+      "inSlope": -1.0,
+      "outSlope": 0.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     }
+    ],
+    "m_PreInfinity": 2,
+    "m_PostInfinity": 2,
+    "m_RotationOrder": 4
+   },
+   "_startPlayingDelay": {
+    "x": 1.0,
+    "y": 1.0
+   },
+   "_spreadCurve": {
+    "m_Curve": [
+     {
+      "time": 0.0,
+      "value": 0.0,
+      "inSlope": 0.0,
+      "outSlope": 1.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     },
+     {
+      "time": 1.0,
+      "value": 1.0,
+      "inSlope": 1.0,
+      "outSlope": 0.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     }
+    ],
+    "m_PreInfinity": 2,
+    "m_PostInfinity": 2,
+    "m_RotationOrder": 4
+   },
+   "_useCustomSpreadCurve": 0,
+   "_soundBank": {
+    "$asset:SoundBank": "After_1.2_Scav_Speech_SoundBank_04"
+   }
+  }
+ },
+ {
+  "cls": "Audio.AmbientSubsystem.OneShotAmbientSoundPlayer",
+  "path": "SOUND/AmbBetween1And2Cutscenes/AmbientGroup/Explosions/Explosion_05",
+  "fields": {
+   "_volume": 0.30000001192092896,
+   "_deltaVolume": 0.029999999329447746,
+   "_randomPitchRange": {
+    "x": 0.8999999761581421,
+    "y": 1.100000023841858
+   },
+   "_fadeInDurationSec": 0.0,
+   "_fadeOutDurationSec": 5.0,
+   "_mixerGroup": null,
+   "ForceSetMixerGroup": 0,
+   "_playOnAwake": 0,
+   "_spread": 1.0,
+   "_spatialBlend": 1.0,
+   "_minDistance": 1.0,
+   "_maxDistance": 500.0,
+   "_rolloffCurve": {
+    "m_Curve": [
+     {
+      "time": -0.00119781494140625,
+      "value": 1.0,
+      "inSlope": -1.61217200756073,
+      "outSlope": -1.61217200756073,
+      "weightedMode": 0,
+      "inWeight": 0.3333333432674408,
+      "outWeight": 0.11500422656536102
+     },
+     {
+      "time": 0.2907211482524872,
+      "value": 0.4567343294620514,
+      "inSlope": -1.8492268323898315,
+      "outSlope": -1.8492268323898315,
+      "weightedMode": 0,
+      "inWeight": 0.3333333432674408,
+      "outWeight": 0.3333333432674408
+     },
+     {
+      "time": 1.0,
+      "value": 0.0,
+      "inSlope": -0.1361192911863327,
+      "outSlope": -0.1361192911863327,
+      "weightedMode": 0,
+      "inWeight": 0.3333333432674408,
+      "outWeight": 0.3333333432674408
+     }
+    ],
+    "m_PreInfinity": 2,
+    "m_PostInfinity": 2,
+    "m_RotationOrder": 4
+   },
+   "_startPlayingDelay": {
+    "x": 27.0,
+    "y": 27.0
+   },
+   "_spreadCurve": {
+    "m_Curve": [
+     {
+      "time": 0.0,
+      "value": 0.0,
+      "inSlope": 0.0,
+      "outSlope": 1.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     },
+     {
+      "time": 1.0,
+      "value": 1.0,
+      "inSlope": 1.0,
+      "outSlope": 0.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     }
+    ],
+    "m_PreInfinity": 2,
+    "m_PostInfinity": 2,
+    "m_RotationOrder": 4
+   },
+   "_useCustomSpreadCurve": 0,
+   "_soundBank": {
+    "$asset:SoundBank": "Pre_1.2_Far_Explosions_SoundBank_01"
+   }
+  }
+ },
+ {
+  "cls": "Audio.AmbientSubsystem.AmbientSplineEmitter.SplineSoundEmitter.AmbientPlayerGroupSplineEmitter",
+  "path": "SOUND/AmbBetween1And2Cutscenes/AmbientGroup/StepsAndShouts/SplinePathMoverEmitter (1)/GroupedEmitter",
+  "fields": {
+   "_configs": [
+    {
+     "soundPlayer": {
+      "$ref": "SOUND/AmbBetween1And2Cutscenes/AmbientGroup/StepsAndShouts/SplinePathMoverEmitter (1)/GroupedEmitter/FootstepPlayer"
+     },
+     "spreadRange": {
+      "x": 0.0,
+      "y": 1.0
+     }
+    },
+    {
+     "soundPlayer": {
+      "$ref": "SOUND/AmbBetween1And2Cutscenes/AmbientGroup/StepsAndShouts/SplinePathMoverEmitter (1)/GroupedEmitter/SpeechPlayer"
+     },
+     "spreadRange": {
+      "x": 0.0,
+      "y": 1.0
+     }
+    },
+    {
+     "soundPlayer": {
+      "$ref": "SOUND/AmbBetween1And2Cutscenes/AmbientGroup/StepsAndShouts/SplinePathMoverEmitter (1)/GroupedEmitter/SpeechPlayer (1)"
+     },
+     "spreadRange": {
+      "x": 0.0,
+      "y": 1.0
+     }
+    }
+   ]
+  }
+ },
+ {
+  "cls": "Audio.AmbientSubsystem.OneShotAmbientSoundPlayer",
+  "path": "SOUND/AmbAfter2Cutscene/AmbientGroup/Shots/Shot_01",
+  "fields": {
+   "_volume": 0.699999988079071,
+   "_deltaVolume": 0.029999999329447746,
+   "_randomPitchRange": {
+    "x": 0.8999999761581421,
+    "y": 1.100000023841858
+   },
+   "_fadeInDurationSec": 0.0,
+   "_fadeOutDurationSec": 5.0,
+   "_mixerGroup": null,
+   "ForceSetMixerGroup": 1,
+   "_playOnAwake": 0,
+   "_spread": 1.0,
+   "_spatialBlend": 1.0,
+   "_minDistance": 1.0,
+   "_maxDistance": 500.0,
+   "_rolloffCurve": {
+    "m_Curve": [
+     {
+      "time": -0.00119781494140625,
+      "value": 1.0,
+      "inSlope": -1.61217200756073,
+      "outSlope": -1.61217200756073,
+      "weightedMode": 0,
+      "inWeight": 0.3333333432674408,
+      "outWeight": 0.11500422656536102
+     },
+     {
+      "time": 0.2907211482524872,
+      "value": 0.4567343294620514,
+      "inSlope": -1.8492268323898315,
+      "outSlope": -1.8492268323898315,
+      "weightedMode": 0,
+      "inWeight": 0.3333333432674408,
+      "outWeight": 0.3333333432674408
+     },
+     {
+      "time": 1.0,
+      "value": 0.0,
+      "inSlope": -0.1361192911863327,
+      "outSlope": -0.1361192911863327,
+      "weightedMode": 0,
+      "inWeight": 0.3333333432674408,
+      "outWeight": 0.3333333432674408
+     }
+    ],
+    "m_PreInfinity": 2,
+    "m_PostInfinity": 2,
+    "m_RotationOrder": 4
+   },
+   "_startPlayingDelay": {
+    "x": 3.0,
+    "y": 3.0
+   },
+   "_spreadCurve": {
+    "m_Curve": [
+     {
+      "time": 0.0,
+      "value": 0.0,
+      "inSlope": 0.0,
+      "outSlope": 1.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     },
+     {
+      "time": 1.0,
+      "value": 1.0,
+      "inSlope": 1.0,
+      "outSlope": 0.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     }
+    ],
+    "m_PreInfinity": 2,
+    "m_PostInfinity": 2,
+    "m_RotationOrder": 4
+   },
+   "_useCustomSpreadCurve": 0,
+   "_soundBank": {
+    "$asset:SoundBank": "Pre_1.2_Far_Shots_SoundBank_01"
+   }
+  }
+ },
+ {
+  "cls": "Audio.AmbientSubsystem.OneShotAmbientSoundPlayer",
+  "path": "SOUND/AmbBetween1And2Cutscenes/AmbientGroup/Shots/Shot_02",
+  "fields": {
+   "_volume": 0.699999988079071,
+   "_deltaVolume": 0.029999999329447746,
+   "_randomPitchRange": {
+    "x": 0.8999999761581421,
+    "y": 1.100000023841858
+   },
+   "_fadeInDurationSec": 0.0,
+   "_fadeOutDurationSec": 5.0,
+   "_mixerGroup": null,
+   "ForceSetMixerGroup": 1,
+   "_playOnAwake": 0,
+   "_spread": 1.0,
+   "_spatialBlend": 1.0,
+   "_minDistance": 1.0,
+   "_maxDistance": 500.0,
+   "_rolloffCurve": {
+    "m_Curve": [
+     {
+      "time": -0.00119781494140625,
+      "value": 1.0,
+      "inSlope": -1.61217200756073,
+      "outSlope": -1.61217200756073,
+      "weightedMode": 0,
+      "inWeight": 0.3333333432674408,
+      "outWeight": 0.11500422656536102
+     },
+     {
+      "time": 0.2907211482524872,
+      "value": 0.4567343294620514,
+      "inSlope": -1.8492268323898315,
+      "outSlope": -1.8492268323898315,
+      "weightedMode": 0,
+      "inWeight": 0.3333333432674408,
+      "outWeight": 0.3333333432674408
+     },
+     {
+      "time": 1.0,
+      "value": 0.0,
+      "inSlope": -0.1361192911863327,
+      "outSlope": -0.1361192911863327,
+      "weightedMode": 0,
+      "inWeight": 0.3333333432674408,
+      "outWeight": 0.3333333432674408
+     }
+    ],
+    "m_PreInfinity": 2,
+    "m_PostInfinity": 2,
+    "m_RotationOrder": 4
+   },
+   "_startPlayingDelay": {
+    "x": 25.0,
+    "y": 25.0
+   },
+   "_spreadCurve": {
+    "m_Curve": [
+     {
+      "time": 0.0,
+      "value": 0.0,
+      "inSlope": 0.0,
+      "outSlope": 1.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     },
+     {
+      "time": 1.0,
+      "value": 1.0,
+      "inSlope": 1.0,
+      "outSlope": 0.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     }
+    ],
+    "m_PreInfinity": 2,
+    "m_PostInfinity": 2,
+    "m_RotationOrder": 4
+   },
+   "_useCustomSpreadCurve": 0,
+   "_soundBank": {
+    "$asset:SoundBank": "Pre_1.2_Far_Shots_SoundBank_01"
+   }
+  }
+ },
+ {
+  "cls": "Audio.AmbientSubsystem.OneShotAmbientSoundPlayer",
+  "path": "SOUND/AmbBetween1And2Cutscenes/AmbientGroup/StepsAndShouts/SplinePathMoverEmitter/GroupedEmitter/SpeechPlayer (1)",
+  "fields": {
+   "_volume": 0.699999988079071,
+   "_deltaVolume": 0.0,
+   "_randomPitchRange": {
+    "x": 1.0,
+    "y": 1.0
+   },
+   "_fadeInDurationSec": 0.0,
+   "_fadeOutDurationSec": 5.0,
+   "_mixerGroup": null,
+   "ForceSetMixerGroup": 0,
+   "_playOnAwake": 0,
+   "_spread": 1.0,
+   "_spatialBlend": 1.0,
+   "_minDistance": 1.0,
+   "_maxDistance": 150.0,
+   "_rolloffCurve": {
+    "m_Curve": [
+     {
+      "time": 0.0,
+      "value": 1.0,
+      "inSlope": 0.0,
+      "outSlope": -1.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     },
+     {
+      "time": 1.0,
+      "value": 0.0,
+      "inSlope": -1.0,
+      "outSlope": 0.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     }
+    ],
+    "m_PreInfinity": 2,
+    "m_PostInfinity": 2,
+    "m_RotationOrder": 4
+   },
+   "_startPlayingDelay": {
+    "x": 9.0,
+    "y": 9.0
+   },
+   "_spreadCurve": {
+    "m_Curve": [
+     {
+      "time": 0.0,
+      "value": 0.0,
+      "inSlope": 0.0,
+      "outSlope": 1.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     },
+     {
+      "time": 1.0,
+      "value": 1.0,
+      "inSlope": 1.0,
+      "outSlope": 0.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     }
+    ],
+    "m_PreInfinity": 2,
+    "m_PostInfinity": 2,
+    "m_RotationOrder": 4
+   },
+   "_useCustomSpreadCurve": 0,
+   "_soundBank": {
+    "$asset:SoundBank": "Pre_1.2_Speech_SoundBank_03"
+   }
+  }
+ },
+ {
+  "cls": "Audio.AmbientSubsystem.OneShotAmbientSoundPlayer",
+  "path": "SOUND/AmbAfter2Cutscene/AmbientGroup/StepsAndShouts/SplinePathMoverEmitter (3)/GroupedEmitter/SpeechPlayer",
+  "fields": {
+   "_volume": 0.30000001192092896,
+   "_deltaVolume": 0.0,
+   "_randomPitchRange": {
+    "x": 1.0,
+    "y": 1.0
+   },
+   "_fadeInDurationSec": 0.0,
+   "_fadeOutDurationSec": 5.0,
+   "_mixerGroup": null,
+   "ForceSetMixerGroup": 0,
+   "_playOnAwake": 0,
+   "_spread": 1.0,
+   "_spatialBlend": 1.0,
+   "_minDistance": 1.0,
+   "_maxDistance": 150.0,
+   "_rolloffCurve": {
+    "m_Curve": [
+     {
+      "time": 0.0,
+      "value": 1.0,
+      "inSlope": 0.0,
+      "outSlope": -1.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     },
+     {
+      "time": 1.0,
+      "value": 0.0,
+      "inSlope": -1.0,
+      "outSlope": 0.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     }
+    ],
+    "m_PreInfinity": 2,
+    "m_PostInfinity": 2,
+    "m_RotationOrder": 4
+   },
+   "_startPlayingDelay": {
+    "x": 1.0,
+    "y": 1.0
+   },
+   "_spreadCurve": {
+    "m_Curve": [
+     {
+      "time": 0.0,
+      "value": 0.0,
+      "inSlope": 0.0,
+      "outSlope": 1.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     },
+     {
+      "time": 1.0,
+      "value": 1.0,
+      "inSlope": 1.0,
+      "outSlope": 0.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     }
+    ],
+    "m_PreInfinity": 2,
+    "m_PostInfinity": 2,
+    "m_RotationOrder": 4
+   },
+   "_useCustomSpreadCurve": 0,
+   "_soundBank": {
+    "$asset:SoundBank": "After_1.2_Scav_Speech_SoundBank_03"
+   }
+  }
+ },
+ {
+  "cls": "Audio.AmbientSubsystem.OneShotAmbientSoundPlayer",
+  "path": "SOUND/AmbAfter2Cutscene/AmbientGroup/Explosions/Explosion_04",
+  "fields": {
+   "_volume": 0.30000001192092896,
+   "_deltaVolume": 0.029999999329447746,
+   "_randomPitchRange": {
+    "x": 0.8999999761581421,
+    "y": 1.100000023841858
+   },
+   "_fadeInDurationSec": 0.0,
+   "_fadeOutDurationSec": 5.0,
+   "_mixerGroup": null,
+   "ForceSetMixerGroup": 0,
+   "_playOnAwake": 0,
+   "_spread": 1.0,
+   "_spatialBlend": 1.0,
+   "_minDistance": 1.0,
+   "_maxDistance": 500.0,
+   "_rolloffCurve": {
+    "m_Curve": [
+     {
+      "time": -0.00119781494140625,
+      "value": 1.0,
+      "inSlope": -1.61217200756073,
+      "outSlope": -1.61217200756073,
+      "weightedMode": 0,
+      "inWeight": 0.3333333432674408,
+      "outWeight": 0.11500422656536102
+     },
+     {
+      "time": 0.2907211482524872,
+      "value": 0.4567343294620514,
+      "inSlope": -1.8492268323898315,
+      "outSlope": -1.8492268323898315,
+      "weightedMode": 0,
+      "inWeight": 0.3333333432674408,
+      "outWeight": 0.3333333432674408
+     },
+     {
+      "time": 1.0,
+      "value": 0.0,
+      "inSlope": -0.1361192911863327,
+      "outSlope": -0.1361192911863327,
+      "weightedMode": 0,
+      "inWeight": 0.3333333432674408,
+      "outWeight": 0.3333333432674408
+     }
+    ],
+    "m_PreInfinity": 2,
+    "m_PostInfinity": 2,
+    "m_RotationOrder": 4
+   },
+   "_startPlayingDelay": {
+    "x": 7.0,
+    "y": 7.0
+   },
+   "_spreadCurve": {
+    "m_Curve": [
+     {
+      "time": 0.0,
+      "value": 0.0,
+      "inSlope": 0.0,
+      "outSlope": 1.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     },
+     {
+      "time": 1.0,
+      "value": 1.0,
+      "inSlope": 1.0,
+      "outSlope": 0.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     }
+    ],
+    "m_PreInfinity": 2,
+    "m_PostInfinity": 2,
+    "m_RotationOrder": 4
+   },
+   "_useCustomSpreadCurve": 0,
+   "_soundBank": {
+    "$asset:SoundBank": "Pre_1.2_Far_Explosions_SoundBank_01"
+   }
+  }
+ },
+ {
+  "cls": "Audio.AmbientSubsystem.OneShotAmbientSoundPlayer",
+  "path": "SOUND/AmbAfter2Cutscene/AmbientGroup/Shots/Shot_02",
+  "fields": {
+   "_volume": 0.699999988079071,
+   "_deltaVolume": 0.029999999329447746,
+   "_randomPitchRange": {
+    "x": 0.8999999761581421,
+    "y": 1.100000023841858
+   },
+   "_fadeInDurationSec": 0.0,
+   "_fadeOutDurationSec": 5.0,
+   "_mixerGroup": null,
+   "ForceSetMixerGroup": 1,
+   "_playOnAwake": 0,
+   "_spread": 1.0,
+   "_spatialBlend": 1.0,
+   "_minDistance": 1.0,
+   "_maxDistance": 500.0,
+   "_rolloffCurve": {
+    "m_Curve": [
+     {
+      "time": -0.00119781494140625,
+      "value": 1.0,
+      "inSlope": -1.61217200756073,
+      "outSlope": -1.61217200756073,
+      "weightedMode": 0,
+      "inWeight": 0.3333333432674408,
+      "outWeight": 0.11500422656536102
+     },
+     {
+      "time": 0.2907211482524872,
+      "value": 0.4567343294620514,
+      "inSlope": -1.8492268323898315,
+      "outSlope": -1.8492268323898315,
+      "weightedMode": 0,
+      "inWeight": 0.3333333432674408,
+      "outWeight": 0.3333333432674408
+     },
+     {
+      "time": 1.0,
+      "value": 0.0,
+      "inSlope": -0.1361192911863327,
+      "outSlope": -0.1361192911863327,
+      "weightedMode": 0,
+      "inWeight": 0.3333333432674408,
+      "outWeight": 0.3333333432674408
+     }
+    ],
+    "m_PreInfinity": 2,
+    "m_PostInfinity": 2,
+    "m_RotationOrder": 4
+   },
+   "_startPlayingDelay": {
+    "x": 5.0,
+    "y": 5.0
+   },
+   "_spreadCurve": {
+    "m_Curve": [
+     {
+      "time": 0.0,
+      "value": 0.0,
+      "inSlope": 0.0,
+      "outSlope": 1.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     },
+     {
+      "time": 1.0,
+      "value": 1.0,
+      "inSlope": 1.0,
+      "outSlope": 0.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     }
+    ],
+    "m_PreInfinity": 2,
+    "m_PostInfinity": 2,
+    "m_RotationOrder": 4
+   },
+   "_useCustomSpreadCurve": 0,
+   "_soundBank": {
+    "$asset:SoundBank": "Pre_1.2_Far_Shots_SoundBank_01"
+   }
+  }
+ },
+ {
+  "cls": "Audio.AmbientSubsystem.OneShotAmbientSoundPlayer",
+  "path": "SOUND/AmbBetween1And2Cutscenes/AmbientGroup/StepsAndShouts/SplinePathMoverEmitter/GroupedEmitter/SpeechPlayer",
+  "fields": {
+   "_volume": 0.25,
+   "_deltaVolume": 0.0,
+   "_randomPitchRange": {
+    "x": 1.0,
+    "y": 1.0
+   },
+   "_fadeInDurationSec": 0.0,
+   "_fadeOutDurationSec": 5.0,
+   "_mixerGroup": null,
+   "ForceSetMixerGroup": 0,
+   "_playOnAwake": 0,
+   "_spread": 1.0,
+   "_spatialBlend": 1.0,
+   "_minDistance": 1.0,
+   "_maxDistance": 150.0,
+   "_rolloffCurve": {
+    "m_Curve": [
+     {
+      "time": 0.0,
+      "value": 1.0,
+      "inSlope": 0.0,
+      "outSlope": -1.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     },
+     {
+      "time": 1.0,
+      "value": 0.0,
+      "inSlope": -1.0,
+      "outSlope": 0.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     }
+    ],
+    "m_PreInfinity": 2,
+    "m_PostInfinity": 2,
+    "m_RotationOrder": 4
+   },
+   "_startPlayingDelay": {
+    "x": 11.0,
+    "y": 11.0
+   },
+   "_spreadCurve": {
+    "m_Curve": [
+     {
+      "time": 0.0,
+      "value": 0.0,
+      "inSlope": 0.0,
+      "outSlope": 1.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     },
+     {
+      "time": 1.0,
+      "value": 1.0,
+      "inSlope": 1.0,
+      "outSlope": 0.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     }
+    ],
+    "m_PreInfinity": 2,
+    "m_PostInfinity": 2,
+    "m_RotationOrder": 4
+   },
+   "_useCustomSpreadCurve": 0,
+   "_soundBank": {
+    "$asset:SoundBank": "Pre_1.2_Speech_SoundBank_01"
+   }
+  }
+ },
+ {
+  "cls": "Audio.AmbientSubsystem.OneShotAmbientSoundPlayer",
+  "path": "SOUND/AmbAfter2Cutscene/AmbientGroup/Explosions/Explosion_06",
+  "fields": {
+   "_volume": 0.30000001192092896,
+   "_deltaVolume": 0.029999999329447746,
+   "_randomPitchRange": {
+    "x": 0.8999999761581421,
+    "y": 1.100000023841858
+   },
+   "_fadeInDurationSec": 0.0,
+   "_fadeOutDurationSec": 5.0,
+   "_mixerGroup": null,
+   "ForceSetMixerGroup": 0,
+   "_playOnAwake": 0,
+   "_spread": 1.0,
+   "_spatialBlend": 1.0,
+   "_minDistance": 1.0,
+   "_maxDistance": 500.0,
+   "_rolloffCurve": {
+    "m_Curve": [
+     {
+      "time": -0.00119781494140625,
+      "value": 1.0,
+      "inSlope": -1.61217200756073,
+      "outSlope": -1.61217200756073,
+      "weightedMode": 0,
+      "inWeight": 0.3333333432674408,
+      "outWeight": 0.11500422656536102
+     },
+     {
+      "time": 0.2907211482524872,
+      "value": 0.4567343294620514,
+      "inSlope": -1.8492268323898315,
+      "outSlope": -1.8492268323898315,
+      "weightedMode": 0,
+      "inWeight": 0.3333333432674408,
+      "outWeight": 0.3333333432674408
+     },
+     {
+      "time": 1.0,
+      "value": 0.0,
+      "inSlope": -0.1361192911863327,
+      "outSlope": -0.1361192911863327,
+      "weightedMode": 0,
+      "inWeight": 0.3333333432674408,
+      "outWeight": 0.3333333432674408
+     }
+    ],
+    "m_PreInfinity": 2,
+    "m_PostInfinity": 2,
+    "m_RotationOrder": 4
+   },
+   "_startPlayingDelay": {
+    "x": 12.0,
+    "y": 12.0
+   },
+   "_spreadCurve": {
+    "m_Curve": [
+     {
+      "time": 0.0,
+      "value": 0.0,
+      "inSlope": 0.0,
+      "outSlope": 1.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     },
+     {
+      "time": 1.0,
+      "value": 1.0,
+      "inSlope": 1.0,
+      "outSlope": 0.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     }
+    ],
+    "m_PreInfinity": 2,
+    "m_PostInfinity": 2,
+    "m_RotationOrder": 4
+   },
+   "_useCustomSpreadCurve": 0,
+   "_soundBank": {
+    "$asset:SoundBank": "Pre_1.2_Far_Explosions_SoundBank_01"
+   }
+  }
+ },
+ {
+  "cls": "Audio.AmbientSubsystem.OneShotAmbientSoundPlayer",
+  "path": "SOUND/AmbBetween1And2Cutscenes/AmbientGroup/StepsAndShouts/SplinePathMoverEmitter (1)/GroupedEmitter/FootstepPlayer",
+  "fields": {
+   "_volume": 0.20000000298023224,
+   "_deltaVolume": 0.0,
+   "_randomPitchRange": {
+    "x": 1.0,
+    "y": 1.0
+   },
+   "_fadeInDurationSec": 0.0,
+   "_fadeOutDurationSec": 5.0,
+   "_mixerGroup": null,
+   "ForceSetMixerGroup": 0,
+   "_playOnAwake": 0,
+   "_spread": 1.0,
+   "_spatialBlend": 1.0,
+   "_minDistance": 1.0,
+   "_maxDistance": 150.0,
+   "_rolloffCurve": {
+    "m_Curve": [
+     {
+      "time": 0.0,
+      "value": 1.0,
+      "inSlope": 0.0,
+      "outSlope": -1.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     },
+     {
+      "time": 1.0,
+      "value": 0.0,
+      "inSlope": -1.0,
+      "outSlope": 0.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     }
+    ],
+    "m_PreInfinity": 2,
+    "m_PostInfinity": 2,
+    "m_RotationOrder": 4
+   },
+   "_startPlayingDelay": {
+    "x": 8.0,
+    "y": 8.0
+   },
+   "_spreadCurve": {
+    "m_Curve": [
+     {
+      "time": 0.0,
+      "value": 0.0,
+      "inSlope": 0.0,
+      "outSlope": 1.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     },
+     {
+      "time": 1.0,
+      "value": 1.0,
+      "inSlope": 1.0,
+      "outSlope": 0.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     }
+    ],
+    "m_PreInfinity": 2,
+    "m_PostInfinity": 2,
+    "m_RotationOrder": 4
+   },
+   "_useCustomSpreadCurve": 0,
+   "_soundBank": {
+    "$asset:SoundBank": "Pre_1.2_Footsteps_SoundBank_02"
+   }
+  }
+ },
+ {
+  "cls": "Audio.AmbientSubsystem.OneShotAmbientSoundPlayer",
+  "path": "SOUND/AmbBetween1And2Cutscenes/AmbientGroup/Explosions/Explosion_09",
+  "fields": {
+   "_volume": 0.30000001192092896,
+   "_deltaVolume": 0.029999999329447746,
+   "_randomPitchRange": {
+    "x": 0.8999999761581421,
+    "y": 1.100000023841858
+   },
+   "_fadeInDurationSec": 0.0,
+   "_fadeOutDurationSec": 5.0,
+   "_mixerGroup": null,
+   "ForceSetMixerGroup": 0,
+   "_playOnAwake": 0,
+   "_spread": 1.0,
+   "_spatialBlend": 1.0,
+   "_minDistance": 1.0,
+   "_maxDistance": 500.0,
+   "_rolloffCurve": {
+    "m_Curve": [
+     {
+      "time": -0.00119781494140625,
+      "value": 1.0,
+      "inSlope": -1.61217200756073,
+      "outSlope": -1.61217200756073,
+      "weightedMode": 0,
+      "inWeight": 0.3333333432674408,
+      "outWeight": 0.11500422656536102
+     },
+     {
+      "time": 0.2907211482524872,
+      "value": 0.4567343294620514,
+      "inSlope": -1.8492268323898315,
+      "outSlope": -1.8492268323898315,
+      "weightedMode": 0,
+      "inWeight": 0.3333333432674408,
+      "outWeight": 0.3333333432674408
+     },
+     {
+      "time": 1.0,
+      "value": 0.0,
+      "inSlope": -0.1361192911863327,
+      "outSlope": -0.1361192911863327,
+      "weightedMode": 0,
+      "inWeight": 0.3333333432674408,
+      "outWeight": 0.3333333432674408
+     }
+    ],
+    "m_PreInfinity": 2,
+    "m_PostInfinity": 2,
+    "m_RotationOrder": 4
+   },
+   "_startPlayingDelay": {
+    "x": 30.0,
+    "y": 30.0
+   },
+   "_spreadCurve": {
+    "m_Curve": [
+     {
+      "time": 0.0,
+      "value": 0.0,
+      "inSlope": 0.0,
+      "outSlope": 1.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     },
+     {
+      "time": 1.0,
+      "value": 1.0,
+      "inSlope": 1.0,
+      "outSlope": 0.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     }
+    ],
+    "m_PreInfinity": 2,
+    "m_PostInfinity": 2,
+    "m_RotationOrder": 4
+   },
+   "_useCustomSpreadCurve": 0,
+   "_soundBank": {
+    "$asset:SoundBank": "Pre_1.2_Far_Explosions_SoundBank_01"
+   }
+  }
+ },
+ {
+  "cls": "Audio.AmbientSubsystem.OneShotAmbientSoundPlayer",
+  "path": "SOUND/AmbAfter2Cutscene/AmbientGroup/StepsAndShouts/SplinePathMoverEmitter (2)/GroupedEmitter/SpeechPlayer",
+  "fields": {
+   "_volume": 0.30000001192092896,
+   "_deltaVolume": 0.0,
+   "_randomPitchRange": {
+    "x": 1.0,
+    "y": 1.0
+   },
+   "_fadeInDurationSec": 0.0,
+   "_fadeOutDurationSec": 5.0,
+   "_mixerGroup": null,
+   "ForceSetMixerGroup": 0,
+   "_playOnAwake": 0,
+   "_spread": 1.0,
+   "_spatialBlend": 1.0,
+   "_minDistance": 1.0,
+   "_maxDistance": 150.0,
+   "_rolloffCurve": {
+    "m_Curve": [
+     {
+      "time": 0.0,
+      "value": 1.0,
+      "inSlope": 0.0,
+      "outSlope": -1.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     },
+     {
+      "time": 1.0,
+      "value": 0.0,
+      "inSlope": -1.0,
+      "outSlope": 0.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     }
+    ],
+    "m_PreInfinity": 2,
+    "m_PostInfinity": 2,
+    "m_RotationOrder": 4
+   },
+   "_startPlayingDelay": {
+    "x": 1.0,
+    "y": 1.0
+   },
+   "_spreadCurve": {
+    "m_Curve": [
+     {
+      "time": 0.0,
+      "value": 0.0,
+      "inSlope": 0.0,
+      "outSlope": 1.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     },
+     {
+      "time": 1.0,
+      "value": 1.0,
+      "inSlope": 1.0,
+      "outSlope": 0.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     }
+    ],
+    "m_PreInfinity": 2,
+    "m_PostInfinity": 2,
+    "m_RotationOrder": 4
+   },
+   "_useCustomSpreadCurve": 0,
+   "_soundBank": {
+    "$asset:SoundBank": "After_1.2_Scav_Speech_SoundBank_01"
+   }
+  }
+ },
+ {
+  "cls": "Audio.AmbientSubsystem.AmbientSplineEmitter.SplineSoundEmitter.AmbientPlayerGroupSplineEmitter",
+  "path": "SOUND/AmbAfter2Cutscene/AmbientGroup/StepsAndShouts/SplinePathMoverEmitter (3)/GroupedEmitter",
+  "fields": {
+   "_configs": [
+    {
+     "soundPlayer": {
+      "$ref": "SOUND/AmbAfter2Cutscene/AmbientGroup/StepsAndShouts/SplinePathMoverEmitter (3)/GroupedEmitter/FootstepPlayer"
+     },
+     "spreadRange": {
+      "x": 0.0,
+      "y": 1.0
+     }
+    },
+    {
+     "soundPlayer": {
+      "$ref": "SOUND/AmbAfter2Cutscene/AmbientGroup/StepsAndShouts/SplinePathMoverEmitter (3)/GroupedEmitter/SpeechPlayer"
+     },
+     "spreadRange": {
+      "x": 0.0,
+      "y": 1.0
+     }
+    },
+    {
+     "soundPlayer": {
+      "$ref": "SOUND/AmbAfter2Cutscene/AmbientGroup/StepsAndShouts/SplinePathMoverEmitter (3)/GroupedEmitter/SpeechPlayer (1)"
+     },
+     "spreadRange": {
+      "x": 0.0,
+      "y": 1.0
+     }
+    },
+    {
+     "soundPlayer": {
+      "$ref": "SOUND/AmbAfter2Cutscene/AmbientGroup/StepsAndShouts/SplinePathMoverEmitter (3)/GroupedEmitter/ShootPlayer"
+     },
+     "spreadRange": {
+      "x": 0.0,
+      "y": 1.0
+     }
+    }
+   ]
+  }
+ },
+ {
+  "cls": "Audio.AmbientSubsystem.OneShotAmbientSoundPlayer",
+  "path": "SOUND/AmbBetween1And2Cutscenes/AmbientGroup/StepsAndShouts/SplinePathMoverEmitter (1)/GroupedEmitter/SpeechPlayer (1)",
+  "fields": {
+   "_volume": 0.6499999761581421,
+   "_deltaVolume": 0.0,
+   "_randomPitchRange": {
+    "x": 1.0,
+    "y": 1.0
+   },
+   "_fadeInDurationSec": 0.0,
+   "_fadeOutDurationSec": 5.0,
+   "_mixerGroup": null,
+   "ForceSetMixerGroup": 0,
+   "_playOnAwake": 0,
+   "_spread": 1.0,
+   "_spatialBlend": 1.0,
+   "_minDistance": 1.0,
+   "_maxDistance": 150.0,
+   "_rolloffCurve": {
+    "m_Curve": [
+     {
+      "time": 0.0,
+      "value": 1.0,
+      "inSlope": 0.0,
+      "outSlope": -1.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     },
+     {
+      "time": 1.0,
+      "value": 0.0,
+      "inSlope": -1.0,
+      "outSlope": 0.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     }
+    ],
+    "m_PreInfinity": 2,
+    "m_PostInfinity": 2,
+    "m_RotationOrder": 4
+   },
+   "_startPlayingDelay": {
+    "x": 10.0,
+    "y": 10.0
+   },
+   "_spreadCurve": {
+    "m_Curve": [
+     {
+      "time": 0.0,
+      "value": 0.0,
+      "inSlope": 0.0,
+      "outSlope": 1.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     },
+     {
+      "time": 1.0,
+      "value": 1.0,
+      "inSlope": 1.0,
+      "outSlope": 0.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     }
+    ],
+    "m_PreInfinity": 2,
+    "m_PostInfinity": 2,
+    "m_RotationOrder": 4
+   },
+   "_useCustomSpreadCurve": 0,
+   "_soundBank": {
+    "$asset:SoundBank": "Pre_1.2_Speech_SoundBank_04"
+   }
+  }
+ },
+ {
+  "cls": "Audio.AmbientSubsystem.OneShotAmbientSoundPlayer",
+  "path": "SOUND/AmbBetween1And2Cutscenes/AmbientGroup/Explosions/Explosion_For_Cam_Shake_01",
+  "fields": {
+   "_volume": 0.699999988079071,
+   "_deltaVolume": 0.029999999329447746,
+   "_randomPitchRange": {
+    "x": 0.8999999761581421,
+    "y": 1.100000023841858
+   },
+   "_fadeInDurationSec": 0.0,
+   "_fadeOutDurationSec": 5.0,
+   "_mixerGroup": null,
+   "ForceSetMixerGroup": 0,
+   "_playOnAwake": 0,
+   "_spread": 1.0,
+   "_spatialBlend": 1.0,
+   "_minDistance": 1.0,
+   "_maxDistance": 500.0,
+   "_rolloffCurve": {
+    "m_Curve": [
+     {
+      "time": -0.00119781494140625,
+      "value": 1.0,
+      "inSlope": -1.61217200756073,
+      "outSlope": -1.61217200756073,
+      "weightedMode": 0,
+      "inWeight": 0.3333333432674408,
+      "outWeight": 0.11500422656536102
+     },
+     {
+      "time": 0.2907211482524872,
+      "value": 0.4567343294620514,
+      "inSlope": -1.8492268323898315,
+      "outSlope": -1.8492268323898315,
+      "weightedMode": 0,
+      "inWeight": 0.3333333432674408,
+      "outWeight": 0.3333333432674408
+     },
+     {
+      "time": 1.0,
+      "value": 0.0,
+      "inSlope": -0.1361192911863327,
+      "outSlope": -0.1361192911863327,
+      "weightedMode": 0,
+      "inWeight": 0.3333333432674408,
+      "outWeight": 0.3333333432674408
+     }
+    ],
+    "m_PreInfinity": 2,
+    "m_PostInfinity": 2,
+    "m_RotationOrder": 4
+   },
+   "_startPlayingDelay": {
+    "x": 10.0,
+    "y": 10.0
+   },
+   "_spreadCurve": {
+    "m_Curve": [
+     {
+      "time": 0.0,
+      "value": 0.0,
+      "inSlope": 0.0,
+      "outSlope": 1.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     },
+     {
+      "time": 1.0,
+      "value": 1.0,
+      "inSlope": 1.0,
+      "outSlope": 0.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     }
+    ],
+    "m_PreInfinity": 2,
+    "m_PostInfinity": 2,
+    "m_RotationOrder": 4
+   },
+   "_useCustomSpreadCurve": 0,
+   "_soundBank": {
+    "$asset:SoundBank": "explosion_with_big_debris"
+   }
+  }
+ },
+ {
+  "cls": "BezierSplineTools.BezierSpline",
+  "path": "SOUND/AmbBetween1And2Cutscenes/AmbientGroup/StepsAndShouts/SplinePathMoverEmitter/Spline",
+  "fields": {
+   "points": [
+    {
+     "x": 61.24896240234375,
+     "y": -2.2803268432617188,
+     "z": -97.54867553710938
+    },
+    {
+     "x": 60.76251220703125,
+     "y": 0.01120758056640625,
+     "z": -97.54867553710938
+    },
+    {
+     "x": -1.2915191650390625,
+     "y": 7.62939453125e-06,
+     "z": -6.725128173828125
+    },
+    {
+     "x": -1.6748199462890625,
+     "y": 7.62939453125e-06,
+     "z": -6.725128173828125
+    },
+    {
+     "x": -1.5269927978515625,
+     "y": 7.62939453125e-06,
+     "z": -6.725128173828125
+    },
+    {
+     "x": 0.3249359130859375,
+     "y": -1.6317863464355469,
+     "z": -4.826904296875
+    },
+    {
+     "x": 0.0007171630859375,
+     "y": -1.6317863464355469,
+     "z": -4.826904296875
+    },
+    {
+     "x": 0.536712646484375,
+     "y": -2.586780548095703,
+     "z": -3.532745361328125
+    },
+    {
+     "x": -0.5836334228515625,
+     "y": -1.9684677124023438,
+     "z": 1.202392578125
+    },
+    {
+     "x": -0.7628326416015625,
+     "y": -1.9684677124023438,
+     "z": 1.202392578125
+    },
+    {
+     "x": -0.8744659423828125,
+     "y": -1.9684677124023438,
+     "z": 1.202392578125
+    },
+    {
+     "x": -1.0819854736328125,
+     "y": -1.7834587097167969,
+     "z": 3.13873291015625
+    },
+    {
+     "x": -0.8944854736328125,
+     "y": -1.7834587097167969,
+     "z": 3.13873291015625
+    }
+   ],
+   "modes": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "loop": 0
+  }
+ },
+ {
+  "cls": "Audio.AmbientSubsystem.AmbientSplineEmitter.SplineEmitterPathMover",
+  "path": "SOUND/AmbAfter2Cutscene/AmbientGroup/StepsAndShouts/SplinePathMoverEmitter (3)",
+  "fields": {
+   "_splineEmitter": {
+    "$ref": "SOUND/AmbAfter2Cutscene/AmbientGroup/StepsAndShouts/SplinePathMoverEmitter (3)/GroupedEmitter"
+   },
+   "_spline": {
+    "$ref": "SOUND/AmbAfter2Cutscene/AmbientGroup/StepsAndShouts/SplinePathMoverEmitter (3)/Spline"
+   },
+   "_resolution": 85,
+   "_calculationRadius": 151.0,
+   "MovementStrategy": 1,
+   "_movementActionOnCompleted": 0,
+   "_startMovementRandomDelayRange": {
+    "x": 0.0,
+    "y": 0.0
+   },
+   "_movementSpeed": 0.03999999910593033,
+   "_resetPositionOnMovementEnd": 0,
+   "_fadeEmitter": 1
+  }
+ },
+ {
+  "cls": "Audio.AmbientSubsystem.OneShotAmbientSoundPlayer",
+  "path": "SOUND/AmbAfter2Cutscene/AmbientGroup/Shots/Shot_03",
+  "fields": {
+   "_volume": 0.699999988079071,
+   "_deltaVolume": 0.029999999329447746,
+   "_randomPitchRange": {
+    "x": 0.8999999761581421,
+    "y": 1.100000023841858
+   },
+   "_fadeInDurationSec": 0.0,
+   "_fadeOutDurationSec": 5.0,
+   "_mixerGroup": null,
+   "ForceSetMixerGroup": 1,
+   "_playOnAwake": 0,
+   "_spread": 1.0,
+   "_spatialBlend": 1.0,
+   "_minDistance": 1.0,
+   "_maxDistance": 500.0,
+   "_rolloffCurve": {
+    "m_Curve": [
+     {
+      "time": -0.00119781494140625,
+      "value": 1.0,
+      "inSlope": -1.61217200756073,
+      "outSlope": -1.61217200756073,
+      "weightedMode": 0,
+      "inWeight": 0.3333333432674408,
+      "outWeight": 0.11500422656536102
+     },
+     {
+      "time": 0.2907211482524872,
+      "value": 0.4567343294620514,
+      "inSlope": -1.8492268323898315,
+      "outSlope": -1.8492268323898315,
+      "weightedMode": 0,
+      "inWeight": 0.3333333432674408,
+      "outWeight": 0.3333333432674408
+     },
+     {
+      "time": 1.0,
+      "value": 0.0,
+      "inSlope": -0.1361192911863327,
+      "outSlope": -0.1361192911863327,
+      "weightedMode": 0,
+      "inWeight": 0.3333333432674408,
+      "outWeight": 0.3333333432674408
+     }
+    ],
+    "m_PreInfinity": 2,
+    "m_PostInfinity": 2,
+    "m_RotationOrder": 4
+   },
+   "_startPlayingDelay": {
+    "x": 2.0,
+    "y": 2.0
+   },
+   "_spreadCurve": {
+    "m_Curve": [
+     {
+      "time": 0.0,
+      "value": 0.0,
+      "inSlope": 0.0,
+      "outSlope": 1.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     },
+     {
+      "time": 1.0,
+      "value": 1.0,
+      "inSlope": 1.0,
+      "outSlope": 0.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     }
+    ],
+    "m_PreInfinity": 2,
+    "m_PostInfinity": 2,
+    "m_RotationOrder": 4
+   },
+   "_useCustomSpreadCurve": 0,
+   "_soundBank": {
+    "$asset:SoundBank": "Pre_1.2_Far_Shots_SoundBank_01"
+   }
+  }
+ },
+ {
+  "cls": "Audio.AmbientSubsystem.OneShotAmbientSoundPlayer",
+  "path": "SOUND/AmbAfter2Cutscene/AmbientGroup/Explosions/Explosion_10",
+  "fields": {
+   "_volume": 0.30000001192092896,
+   "_deltaVolume": 0.029999999329447746,
+   "_randomPitchRange": {
+    "x": 0.8999999761581421,
+    "y": 1.100000023841858
+   },
+   "_fadeInDurationSec": 0.0,
+   "_fadeOutDurationSec": 5.0,
+   "_mixerGroup": null,
+   "ForceSetMixerGroup": 0,
+   "_playOnAwake": 0,
+   "_spread": 1.0,
+   "_spatialBlend": 1.0,
+   "_minDistance": 1.0,
+   "_maxDistance": 500.0,
+   "_rolloffCurve": {
+    "m_Curve": [
+     {
+      "time": -0.00119781494140625,
+      "value": 1.0,
+      "inSlope": -1.61217200756073,
+      "outSlope": -1.61217200756073,
+      "weightedMode": 0,
+      "inWeight": 0.3333333432674408,
+      "outWeight": 0.11500422656536102
+     },
+     {
+      "time": 0.2907211482524872,
+      "value": 0.4567343294620514,
+      "inSlope": -1.8492268323898315,
+      "outSlope": -1.8492268323898315,
+      "weightedMode": 0,
+      "inWeight": 0.3333333432674408,
+      "outWeight": 0.3333333432674408
+     },
+     {
+      "time": 1.0,
+      "value": 0.0,
+      "inSlope": -0.1361192911863327,
+      "outSlope": -0.1361192911863327,
+      "weightedMode": 0,
+      "inWeight": 0.3333333432674408,
+      "outWeight": 0.3333333432674408
+     }
+    ],
+    "m_PreInfinity": 2,
+    "m_PostInfinity": 2,
+    "m_RotationOrder": 4
+   },
+   "_startPlayingDelay": {
+    "x": 20.0,
+    "y": 20.0
+   },
+   "_spreadCurve": {
+    "m_Curve": [
+     {
+      "time": 0.0,
+      "value": 0.0,
+      "inSlope": 0.0,
+      "outSlope": 1.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     },
+     {
+      "time": 1.0,
+      "value": 1.0,
+      "inSlope": 1.0,
+      "outSlope": 0.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     }
+    ],
+    "m_PreInfinity": 2,
+    "m_PostInfinity": 2,
+    "m_RotationOrder": 4
+   },
+   "_useCustomSpreadCurve": 0,
+   "_soundBank": {
+    "$asset:SoundBank": "Pre_1.2_Far_Explosions_SoundBank_01"
+   }
+  }
+ },
+ {
+  "cls": "BezierSplineTools.BezierSpline",
+  "path": "SOUND/AmbAfter2Cutscene/AmbientGroup/StepsAndShouts/SplinePathMoverEmitter/Spline",
+  "fields": {
+   "points": [
+    {
+     "x": 34.2879638671875,
+     "y": -2.2803268432617188,
+     "z": -63.15435791015625
+    },
+    {
+     "x": 33.801513671875,
+     "y": 0.01120758056640625,
+     "z": -63.15435791015625
+    },
+    {
+     "x": -1.2915191650390625,
+     "y": 7.62939453125e-06,
+     "z": -6.725128173828125
+    },
+    {
+     "x": -1.6748199462890625,
+     "y": 7.62939453125e-06,
+     "z": -6.725128173828125
+    },
+    {
+     "x": -1.5269927978515625,
+     "y": 7.62939453125e-06,
+     "z": -6.725128173828125
+    },
+    {
+     "x": 0.3249359130859375,
+     "y": -1.6317863464355469,
+     "z": -4.826904296875
+    },
+    {
+     "x": 0.0007171630859375,
+     "y": -1.6317863464355469,
+     "z": -4.826904296875
+    },
+    {
+     "x": 0.536712646484375,
+     "y": -2.586780548095703,
+     "z": -3.532745361328125
+    },
+    {
+     "x": -0.5836334228515625,
+     "y": -1.9684677124023438,
+     "z": 1.202392578125
+    },
+    {
+     "x": -0.7628326416015625,
+     "y": -1.9684677124023438,
+     "z": 1.202392578125
+    },
+    {
+     "x": -0.8744659423828125,
+     "y": -1.9684677124023438,
+     "z": 1.202392578125
+    },
+    {
+     "x": -1.0819854736328125,
+     "y": -1.7834587097167969,
+     "z": 3.13873291015625
+    },
+    {
+     "x": -0.8944854736328125,
+     "y": -1.7834587097167969,
+     "z": 3.13873291015625
+    }
+   ],
+   "modes": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "loop": 0
+  }
+ },
+ {
+  "cls": "Audio.AmbientSubsystem.OneShotAmbientSoundPlayer",
+  "path": "SOUND/AmbAfter2Cutscene/AmbientGroup/Shots/Shot_04",
+  "fields": {
+   "_volume": 0.699999988079071,
+   "_deltaVolume": 0.029999999329447746,
+   "_randomPitchRange": {
+    "x": 0.8999999761581421,
+    "y": 1.100000023841858
+   },
+   "_fadeInDurationSec": 0.0,
+   "_fadeOutDurationSec": 5.0,
+   "_mixerGroup": null,
+   "ForceSetMixerGroup": 1,
+   "_playOnAwake": 0,
+   "_spread": 1.0,
+   "_spatialBlend": 1.0,
+   "_minDistance": 1.0,
+   "_maxDistance": 500.0,
+   "_rolloffCurve": {
+    "m_Curve": [
+     {
+      "time": -0.00119781494140625,
+      "value": 1.0,
+      "inSlope": -1.61217200756073,
+      "outSlope": -1.61217200756073,
+      "weightedMode": 0,
+      "inWeight": 0.3333333432674408,
+      "outWeight": 0.11500422656536102
+     },
+     {
+      "time": 0.2907211482524872,
+      "value": 0.4567343294620514,
+      "inSlope": -1.8492268323898315,
+      "outSlope": -1.8492268323898315,
+      "weightedMode": 0,
+      "inWeight": 0.3333333432674408,
+      "outWeight": 0.3333333432674408
+     },
+     {
+      "time": 1.0,
+      "value": 0.0,
+      "inSlope": -0.1361192911863327,
+      "outSlope": -0.1361192911863327,
+      "weightedMode": 0,
+      "inWeight": 0.3333333432674408,
+      "outWeight": 0.3333333432674408
+     }
+    ],
+    "m_PreInfinity": 2,
+    "m_PostInfinity": 2,
+    "m_RotationOrder": 4
+   },
+   "_startPlayingDelay": {
+    "x": 10.0,
+    "y": 10.0
+   },
+   "_spreadCurve": {
+    "m_Curve": [
+     {
+      "time": 0.0,
+      "value": 0.0,
+      "inSlope": 0.0,
+      "outSlope": 1.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     },
+     {
+      "time": 1.0,
+      "value": 1.0,
+      "inSlope": 1.0,
+      "outSlope": 0.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     }
+    ],
+    "m_PreInfinity": 2,
+    "m_PostInfinity": 2,
+    "m_RotationOrder": 4
+   },
+   "_useCustomSpreadCurve": 0,
+   "_soundBank": {
+    "$asset:SoundBank": "Pre_1.2_Far_Shots_SoundBank_01"
+   }
+  }
+ },
+ {
+  "cls": "Audio.AmbientSubsystem.AmbientSoundPlayer",
+  "path": "SOUND/AmbAfter2Cutscene/AmbientGroup/StepsAndShouts/SplinePathMoverEmitter (2)/GroupedEmitter/ShootPlayer",
+  "fields": {
+   "_volume": 0.6000000238418579,
+   "_deltaVolume": 0.0,
+   "_randomPitchRange": {
+    "x": 0.8999999761581421,
+    "y": 1.100000023841858
+   },
+   "_fadeInDurationSec": 0.0,
+   "_fadeOutDurationSec": 0.0,
+   "_mixerGroup": null,
+   "ForceSetMixerGroup": 0,
+   "_playOnAwake": 0,
+   "_spread": 1.0,
+   "_spatialBlend": 1.0,
+   "_minDistance": 1.0,
+   "_maxDistance": 120.0,
+   "_rolloffCurve": {
+    "m_Curve": [
+     {
+      "time": 0.0,
+      "value": 1.0,
+      "inSlope": 0.0,
+      "outSlope": -1.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     },
+     {
+      "time": 1.0,
+      "value": 0.0,
+      "inSlope": -1.0,
+      "outSlope": 0.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     }
+    ],
+    "m_PreInfinity": 2,
+    "m_PostInfinity": 2,
+    "m_RotationOrder": 4
+   },
+   "_startPlayingDelay": {
+    "x": 0.0,
+    "y": 0.0
+   },
+   "_spreadCurve": {
+    "m_Curve": [
+     {
+      "time": 0.0,
+      "value": 0.0,
+      "inSlope": 0.0,
+      "outSlope": 1.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     },
+     {
+      "time": 1.0,
+      "value": 1.0,
+      "inSlope": 1.0,
+      "outSlope": 0.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     }
+    ],
+    "m_PreInfinity": 2,
+    "m_PostInfinity": 2,
+    "m_RotationOrder": 4
+   },
+   "_useCustomSpreadCurve": 0,
+   "_randomTimeRange": {
+    "x": 1.0,
+    "y": 5.0
+   },
+   "_ambientBank": {
+    "$asset:SoundBank": "far_shoots"
+   }
+  }
+ },
+ {
+  "cls": "Audio.AmbientSubsystem.OneShotAmbientSoundPlayer",
+  "path": "SOUND/AmbBetween1And2Cutscenes/AmbientGroup/Explosions/Explosion_For_Cam_Shake_02",
+  "fields": {
+   "_volume": 0.699999988079071,
+   "_deltaVolume": 0.029999999329447746,
+   "_randomPitchRange": {
+    "x": 0.8999999761581421,
+    "y": 1.100000023841858
+   },
+   "_fadeInDurationSec": 0.0,
+   "_fadeOutDurationSec": 5.0,
+   "_mixerGroup": null,
+   "ForceSetMixerGroup": 0,
+   "_playOnAwake": 0,
+   "_spread": 1.0,
+   "_spatialBlend": 1.0,
+   "_minDistance": 1.0,
+   "_maxDistance": 500.0,
+   "_rolloffCurve": {
+    "m_Curve": [
+     {
+      "time": -0.00119781494140625,
+      "value": 1.0,
+      "inSlope": -1.61217200756073,
+      "outSlope": -1.61217200756073,
+      "weightedMode": 0,
+      "inWeight": 0.3333333432674408,
+      "outWeight": 0.11500422656536102
+     },
+     {
+      "time": 0.2907211482524872,
+      "value": 0.4567343294620514,
+      "inSlope": -1.8492268323898315,
+      "outSlope": -1.8492268323898315,
+      "weightedMode": 0,
+      "inWeight": 0.3333333432674408,
+      "outWeight": 0.3333333432674408
+     },
+     {
+      "time": 1.0,
+      "value": 0.0,
+      "inSlope": -0.1361192911863327,
+      "outSlope": -0.1361192911863327,
+      "weightedMode": 0,
+      "inWeight": 0.3333333432674408,
+      "outWeight": 0.3333333432674408
+     }
+    ],
+    "m_PreInfinity": 2,
+    "m_PostInfinity": 2,
+    "m_RotationOrder": 4
+   },
+   "_startPlayingDelay": {
+    "x": 38.0,
+    "y": 38.0
+   },
+   "_spreadCurve": {
+    "m_Curve": [
+     {
+      "time": 0.0,
+      "value": 0.0,
+      "inSlope": 0.0,
+      "outSlope": 1.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     },
+     {
+      "time": 1.0,
+      "value": 1.0,
+      "inSlope": 1.0,
+      "outSlope": 0.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     }
+    ],
+    "m_PreInfinity": 2,
+    "m_PostInfinity": 2,
+    "m_RotationOrder": 4
+   },
+   "_useCustomSpreadCurve": 0,
+   "_soundBank": {
+    "$asset:SoundBank": "explosion_with_big_debris"
+   }
+  }
+ },
+ {
+  "cls": "Audio.AmbientSubsystem.OneShotAmbientSoundPlayer",
+  "path": "SOUND/AmbBetween1And2Cutscenes/AmbientGroup/Explosions/Explosion_04",
+  "fields": {
+   "_volume": 0.30000001192092896,
+   "_deltaVolume": 0.029999999329447746,
+   "_randomPitchRange": {
+    "x": 0.8999999761581421,
+    "y": 1.100000023841858
+   },
+   "_fadeInDurationSec": 0.0,
+   "_fadeOutDurationSec": 5.0,
+   "_mixerGroup": null,
+   "ForceSetMixerGroup": 0,
+   "_playOnAwake": 0,
+   "_spread": 1.0,
+   "_spatialBlend": 1.0,
+   "_minDistance": 1.0,
+   "_maxDistance": 500.0,
+   "_rolloffCurve": {
+    "m_Curve": [
+     {
+      "time": -0.00119781494140625,
+      "value": 1.0,
+      "inSlope": -1.61217200756073,
+      "outSlope": -1.61217200756073,
+      "weightedMode": 0,
+      "inWeight": 0.3333333432674408,
+      "outWeight": 0.11500422656536102
+     },
+     {
+      "time": 0.2907211482524872,
+      "value": 0.4567343294620514,
+      "inSlope": -1.8492268323898315,
+      "outSlope": -1.8492268323898315,
+      "weightedMode": 0,
+      "inWeight": 0.3333333432674408,
+      "outWeight": 0.3333333432674408
+     },
+     {
+      "time": 1.0,
+      "value": 0.0,
+      "inSlope": -0.1361192911863327,
+      "outSlope": -0.1361192911863327,
+      "weightedMode": 0,
+      "inWeight": 0.3333333432674408,
+      "outWeight": 0.3333333432674408
+     }
+    ],
+    "m_PreInfinity": 2,
+    "m_PostInfinity": 2,
+    "m_RotationOrder": 4
+   },
+   "_startPlayingDelay": {
+    "x": 38.0,
+    "y": 38.0
+   },
+   "_spreadCurve": {
+    "m_Curve": [
+     {
+      "time": 0.0,
+      "value": 0.0,
+      "inSlope": 0.0,
+      "outSlope": 1.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     },
+     {
+      "time": 1.0,
+      "value": 1.0,
+      "inSlope": 1.0,
+      "outSlope": 0.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     }
+    ],
+    "m_PreInfinity": 2,
+    "m_PostInfinity": 2,
+    "m_RotationOrder": 4
+   },
+   "_useCustomSpreadCurve": 0,
+   "_soundBank": {
+    "$asset:SoundBank": "Pre_1.2_Far_Explosions_SoundBank_01"
+   }
+  }
+ },
+ {
+  "cls": "Audio.AmbientSubsystem.OneShotAmbientSoundPlayer",
+  "path": "SOUND/AmbAfter2Cutscene/AmbientGroup/StepsAndShouts/SplinePathMoverEmitter (2)/GroupedEmitter/SpeechPlayer (1)",
+  "fields": {
+   "_volume": 0.30000001192092896,
+   "_deltaVolume": 0.0,
+   "_randomPitchRange": {
+    "x": 1.0,
+    "y": 1.0
+   },
+   "_fadeInDurationSec": 0.0,
+   "_fadeOutDurationSec": 5.0,
+   "_mixerGroup": null,
+   "ForceSetMixerGroup": 0,
+   "_playOnAwake": 0,
+   "_spread": 1.0,
+   "_spatialBlend": 1.0,
+   "_minDistance": 1.0,
+   "_maxDistance": 150.0,
+   "_rolloffCurve": {
+    "m_Curve": [
+     {
+      "time": 0.0,
+      "value": 1.0,
+      "inSlope": 0.0,
+      "outSlope": -1.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     },
+     {
+      "time": 1.0,
+      "value": 0.0,
+      "inSlope": -1.0,
+      "outSlope": 0.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     }
+    ],
+    "m_PreInfinity": 2,
+    "m_PostInfinity": 2,
+    "m_RotationOrder": 4
+   },
+   "_startPlayingDelay": {
+    "x": 1.0,
+    "y": 1.0
+   },
+   "_spreadCurve": {
+    "m_Curve": [
+     {
+      "time": 0.0,
+      "value": 0.0,
+      "inSlope": 0.0,
+      "outSlope": 1.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     },
+     {
+      "time": 1.0,
+      "value": 1.0,
+      "inSlope": 1.0,
+      "outSlope": 0.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     }
+    ],
+    "m_PreInfinity": 2,
+    "m_PostInfinity": 2,
+    "m_RotationOrder": 4
+   },
+   "_useCustomSpreadCurve": 0,
+   "_soundBank": {
+    "$asset:SoundBank": "After_1.2_Scav_Speech_SoundBank_02"
+   }
+  }
+ },
+ {
+  "cls": "Audio.AmbientSubsystem.AmbientSplineEmitter.SplineEmitterPathMover",
+  "path": "SOUND/AmbAfter2Cutscene/AmbientGroup/StepsAndShouts/SplinePathMoverEmitter (2)",
+  "fields": {
+   "_splineEmitter": {
+    "$ref": "SOUND/AmbAfter2Cutscene/AmbientGroup/StepsAndShouts/SplinePathMoverEmitter (2)/GroupedEmitter"
+   },
+   "_spline": {
+    "$ref": "SOUND/AmbAfter2Cutscene/AmbientGroup/StepsAndShouts/SplinePathMoverEmitter (2)/Spline"
+   },
+   "_resolution": 85,
+   "_calculationRadius": 151.0,
+   "MovementStrategy": 1,
+   "_movementActionOnCompleted": 0,
+   "_startMovementRandomDelayRange": {
+    "x": 0.0,
+    "y": 0.0
+   },
+   "_movementSpeed": 0.03999999910593033,
+   "_resetPositionOnMovementEnd": 0,
+   "_fadeEmitter": 1
+  }
+ },
+ {
+  "cls": "Audio.AmbientSubsystem.OneShotAmbientSoundPlayer",
+  "path": "SOUND/AmbBetween1And2Cutscenes/AmbientGroup/Shots/Shot_04 (1)",
+  "fields": {
+   "_volume": 0.699999988079071,
+   "_deltaVolume": 0.029999999329447746,
+   "_randomPitchRange": {
+    "x": 0.8999999761581421,
+    "y": 1.100000023841858
+   },
+   "_fadeInDurationSec": 0.0,
+   "_fadeOutDurationSec": 5.0,
+   "_mixerGroup": null,
+   "ForceSetMixerGroup": 1,
+   "_playOnAwake": 0,
+   "_spread": 1.0,
+   "_spatialBlend": 1.0,
+   "_minDistance": 1.0,
+   "_maxDistance": 500.0,
+   "_rolloffCurve": {
+    "m_Curve": [
+     {
+      "time": -0.00119781494140625,
+      "value": 1.0,
+      "inSlope": -1.61217200756073,
+      "outSlope": -1.61217200756073,
+      "weightedMode": 0,
+      "inWeight": 0.3333333432674408,
+      "outWeight": 0.11500422656536102
+     },
+     {
+      "time": 0.2907211482524872,
+      "value": 0.4567343294620514,
+      "inSlope": -1.8492268323898315,
+      "outSlope": -1.8492268323898315,
+      "weightedMode": 0,
+      "inWeight": 0.3333333432674408,
+      "outWeight": 0.3333333432674408
+     },
+     {
+      "time": 1.0,
+      "value": 0.0,
+      "inSlope": -0.1361192911863327,
+      "outSlope": -0.1361192911863327,
+      "weightedMode": 0,
+      "inWeight": 0.3333333432674408,
+      "outWeight": 0.3333333432674408
+     }
+    ],
+    "m_PreInfinity": 2,
+    "m_PostInfinity": 2,
+    "m_RotationOrder": 4
+   },
+   "_startPlayingDelay": {
+    "x": 35.0,
+    "y": 35.0
+   },
+   "_spreadCurve": {
+    "m_Curve": [
+     {
+      "time": 0.0,
+      "value": 0.0,
+      "inSlope": 0.0,
+      "outSlope": 1.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     },
+     {
+      "time": 1.0,
+      "value": 1.0,
+      "inSlope": 1.0,
+      "outSlope": 0.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     }
+    ],
+    "m_PreInfinity": 2,
+    "m_PostInfinity": 2,
+    "m_RotationOrder": 4
+   },
+   "_useCustomSpreadCurve": 0,
+   "_soundBank": {
+    "$asset:SoundBank": "far_shoots"
+   }
+  }
+ },
+ {
+  "cls": "BezierSplineTools.BezierSpline",
+  "path": "SOUND/AmbAfter2Cutscene/AmbientGroup/StepsAndShouts/SplinePathMoverEmitter (1)/Spline",
+  "fields": {
+   "points": [
+    {
+     "x": -86.17193603515625,
+     "y": -2.2803268432617188,
+     "z": -58.09912109375
+    },
+    {
+     "x": -86.65838623046875,
+     "y": 0.01120758056640625,
+     "z": -58.09912109375
+    },
+    {
+     "x": -13.111968994140625,
+     "y": 7.62939453125e-06,
+     "z": -8.72467041015625
+    },
+    {
+     "x": -13.495269775390625,
+     "y": 7.62939453125e-06,
+     "z": -8.72467041015625
+    },
+    {
+     "x": -12.114349365234375,
+     "y": 7.62939453125e-06,
+     "z": -6.770751953125
+    },
+    {
+     "x": -6.250640869140625,
+     "y": -1.6317863464355469,
+     "z": -3.753692626953125
+    },
+    {
+     "x": -6.574859619140625,
+     "y": -1.6317863464355469,
+     "z": -3.753692626953125
+    },
+    {
+     "x": -2.416473388671875,
+     "y": -2.586780548095703,
+     "z": 0.3685302734375
+    },
+    {
+     "x": -0.5836334228515625,
+     "y": -1.9684677124023438,
+     "z": 1.202392578125
+    },
+    {
+     "x": -0.7628326416015625,
+     "y": -1.9684677124023438,
+     "z": 1.202392578125
+    },
+    {
+     "x": -0.8744659423828125,
+     "y": -1.9684677124023438,
+     "z": 1.202392578125
+    },
+    {
+     "x": 22.520416259765625,
+     "y": -1.7834587097167969,
+     "z": 10.1656494140625
+    },
+    {
+     "x": 22.707916259765625,
+     "y": -1.7834587097167969,
+     "z": 10.1656494140625
+    }
+   ],
+   "modes": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "loop": 0
+  }
+ },
+ {
+  "cls": "Audio.AmbientSubsystem.OneShotAmbientSoundPlayer",
+  "path": "SOUND/AmbAfter2Cutscene/AmbientGroup/Explosions/Explosion_09",
+  "fields": {
+   "_volume": 0.30000001192092896,
+   "_deltaVolume": 0.029999999329447746,
+   "_randomPitchRange": {
+    "x": 0.8999999761581421,
+    "y": 1.100000023841858
+   },
+   "_fadeInDurationSec": 0.0,
+   "_fadeOutDurationSec": 5.0,
+   "_mixerGroup": null,
+   "ForceSetMixerGroup": 0,
+   "_playOnAwake": 0,
+   "_spread": 1.0,
+   "_spatialBlend": 1.0,
+   "_minDistance": 1.0,
+   "_maxDistance": 500.0,
+   "_rolloffCurve": {
+    "m_Curve": [
+     {
+      "time": -0.00119781494140625,
+      "value": 1.0,
+      "inSlope": -1.61217200756073,
+      "outSlope": -1.61217200756073,
+      "weightedMode": 0,
+      "inWeight": 0.3333333432674408,
+      "outWeight": 0.11500422656536102
+     },
+     {
+      "time": 0.2907211482524872,
+      "value": 0.4567343294620514,
+      "inSlope": -1.8492268323898315,
+      "outSlope": -1.8492268323898315,
+      "weightedMode": 0,
+      "inWeight": 0.3333333432674408,
+      "outWeight": 0.3333333432674408
+     },
+     {
+      "time": 1.0,
+      "value": 0.0,
+      "inSlope": -0.1361192911863327,
+      "outSlope": -0.1361192911863327,
+      "weightedMode": 0,
+      "inWeight": 0.3333333432674408,
+      "outWeight": 0.3333333432674408
+     }
+    ],
+    "m_PreInfinity": 2,
+    "m_PostInfinity": 2,
+    "m_RotationOrder": 4
+   },
+   "_startPlayingDelay": {
+    "x": 18.0,
+    "y": 18.0
+   },
+   "_spreadCurve": {
+    "m_Curve": [
+     {
+      "time": 0.0,
+      "value": 0.0,
+      "inSlope": 0.0,
+      "outSlope": 1.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     },
+     {
+      "time": 1.0,
+      "value": 1.0,
+      "inSlope": 1.0,
+      "outSlope": 0.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     }
+    ],
+    "m_PreInfinity": 2,
+    "m_PostInfinity": 2,
+    "m_RotationOrder": 4
+   },
+   "_useCustomSpreadCurve": 0,
+   "_soundBank": {
+    "$asset:SoundBank": "Pre_1.2_Far_Explosions_SoundBank_01"
+   }
+  }
+ },
+ {
+  "cls": "Audio.AmbientSubsystem.AmbientSplineEmitter.SplineSoundEmitter.SoundPlayerSplineTrigger",
+  "path": "SOUND/AmbBetween1And2Cutscenes/AmbientGroup/Debris/Debris (1)",
+  "fields": {
+   "_triggerChance": 40,
+   "_cooldown": 0.0,
+   "_triggerOnce": 0,
+   "_ambientSoundPlayer": {
+    "$ref": "SOUND/AmbBetween1And2Cutscenes/AmbientGroup/Debris/Debris (1)"
+   }
+  }
+ },
+ {
+  "cls": "Audio.AmbientSubsystem.OneShotAmbientSoundPlayer",
+  "path": "SOUND/AmbBetween1And2Cutscenes/AmbientGroup/Debris/Debris (1)",
+  "fields": {
+   "_volume": 0.30000001192092896,
+   "_deltaVolume": 0.027000000700354576,
+   "_randomPitchRange": {
+    "x": 0.8999999761581421,
+    "y": 1.100000023841858
+   },
+   "_fadeInDurationSec": 0.0,
+   "_fadeOutDurationSec": 0.0,
+   "_mixerGroup": null,
+   "ForceSetMixerGroup": 1,
+   "_playOnAwake": 0,
+   "_spread": 1.0,
+   "_spatialBlend": 1.0,
+   "_minDistance": 0.5,
+   "_maxDistance": 15.0,
+   "_rolloffCurve": {
+    "m_Curve": [
+     {
+      "time": 0.0,
+      "value": 1.0,
+      "inSlope": -0.3469701111316681,
+      "outSlope": -0.3469701111316681,
+      "weightedMode": 0,
+      "inWeight": 0.3333333432674408,
+      "outWeight": 0.13463367521762848
+     },
+     {
+      "time": 0.4930075407028198,
+      "value": 0.6564537882804871,
+      "inSlope": -1.4346222877502441,
+      "outSlope": -1.4346222877502441,
+      "weightedMode": 0,
+      "inWeight": 0.15218564867973328,
+      "outWeight": 0.2286125123500824
+     },
+     {
+      "time": 0.6151975393295288,
+      "value": 0.4811009168624878,
+      "inSlope": -1.5474307537078857,
+      "outSlope": -1.5474307537078857,
+      "weightedMode": 0,
+      "inWeight": 0.3333333432674408,
+      "outWeight": 0.4460785388946533
+     },
+     {
+      "time": 0.7586607933044434,
+      "value": 0.27358001470565796,
+      "inSlope": -1.272645354270935,
+      "outSlope": -1.272645354270935,
+      "weightedMode": 0,
+      "inWeight": 0.04074617102742195,
+      "outWeight": 0.06756456196308136
+     },
+     {
+      "time": 0.9993896484375,
+      "value": 0.0,
+      "inSlope": -0.47896626591682434,
+      "outSlope": -0.47896626591682434,
+      "weightedMode": 0,
+      "inWeight": 0.08487462252378464,
+      "outWeight": 0.3333333432674408
+     }
+    ],
+    "m_PreInfinity": 2,
+    "m_PostInfinity": 2,
+    "m_RotationOrder": 4
+   },
+   "_startPlayingDelay": {
+    "x": 13.0,
+    "y": 13.0
+   },
+   "_spreadCurve": {
+    "m_Curve": [
+     {
+      "time": 0.0,
+      "value": 0.0,
+      "inSlope": 0.5281265377998352,
+      "outSlope": 0.5281265377998352,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.03257142752408981
+     },
+     {
+      "time": 1.0,
+      "value": 0.20000000298023224,
+      "inSlope": 0.5976046323776245,
+      "outSlope": 0.5976046323776245,
+      "weightedMode": 0,
+      "inWeight": 0.02571427822113037,
+      "outWeight": 0.0
+     }
+    ],
+    "m_PreInfinity": 2,
+    "m_PostInfinity": 2,
+    "m_RotationOrder": 4
+   },
+   "_useCustomSpreadCurve": 1,
+   "_soundBank": {
+    "$asset:SoundBank": "debris_falling"
+   }
+  }
+ },
+ {
+  "cls": "Audio.AmbientSubsystem.OneShotAmbientSoundPlayer",
+  "path": "SOUND/AmbAfter2Cutscene/AmbientGroup/Explosions/Explosion_02",
+  "fields": {
+   "_volume": 0.30000001192092896,
+   "_deltaVolume": 0.029999999329447746,
+   "_randomPitchRange": {
+    "x": 0.8999999761581421,
+    "y": 1.100000023841858
+   },
+   "_fadeInDurationSec": 0.0,
+   "_fadeOutDurationSec": 5.0,
+   "_mixerGroup": null,
+   "ForceSetMixerGroup": 0,
+   "_playOnAwake": 0,
+   "_spread": 1.0,
+   "_spatialBlend": 1.0,
+   "_minDistance": 1.0,
+   "_maxDistance": 500.0,
+   "_rolloffCurve": {
+    "m_Curve": [
+     {
+      "time": -0.00119781494140625,
+      "value": 1.0,
+      "inSlope": -1.61217200756073,
+      "outSlope": -1.61217200756073,
+      "weightedMode": 0,
+      "inWeight": 0.3333333432674408,
+      "outWeight": 0.11500422656536102
+     },
+     {
+      "time": 0.2907211482524872,
+      "value": 0.4567343294620514,
+      "inSlope": -1.8492268323898315,
+      "outSlope": -1.8492268323898315,
+      "weightedMode": 0,
+      "inWeight": 0.3333333432674408,
+      "outWeight": 0.3333333432674408
+     },
+     {
+      "time": 1.0,
+      "value": 0.0,
+      "inSlope": -0.1361192911863327,
+      "outSlope": -0.1361192911863327,
+      "weightedMode": 0,
+      "inWeight": 0.3333333432674408,
+      "outWeight": 0.3333333432674408
+     }
+    ],
+    "m_PreInfinity": 2,
+    "m_PostInfinity": 2,
+    "m_RotationOrder": 4
+   },
+   "_startPlayingDelay": {
+    "x": 3.0,
+    "y": 3.0
+   },
+   "_spreadCurve": {
+    "m_Curve": [
+     {
+      "time": 0.0,
+      "value": 0.0,
+      "inSlope": 0.0,
+      "outSlope": 1.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     },
+     {
+      "time": 1.0,
+      "value": 1.0,
+      "inSlope": 1.0,
+      "outSlope": 0.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     }
+    ],
+    "m_PreInfinity": 2,
+    "m_PostInfinity": 2,
+    "m_RotationOrder": 4
+   },
+   "_useCustomSpreadCurve": 0,
+   "_soundBank": {
+    "$asset:SoundBank": "Pre_1.2_Far_Explosions_SoundBank_01"
+   }
+  }
+ },
+ {
+  "cls": "BezierSplineTools.BezierSpline",
+  "path": "SOUND/AmbBetween1And2Cutscenes/AmbientGroup/StepsAndShouts/SplinePathMoverEmitter (1)/Spline",
+  "fields": {
+   "points": [
+    {
+     "x": -86.17193603515625,
+     "y": -2.2803268432617188,
+     "z": -58.09912109375
+    },
+    {
+     "x": -86.65838623046875,
+     "y": 0.01120758056640625,
+     "z": -58.09912109375
+    },
+    {
+     "x": -13.111968994140625,
+     "y": 7.62939453125e-06,
+     "z": -8.72467041015625
+    },
+    {
+     "x": -13.495269775390625,
+     "y": 7.62939453125e-06,
+     "z": -8.72467041015625
+    },
+    {
+     "x": -12.114349365234375,
+     "y": 7.62939453125e-06,
+     "z": -6.770751953125
+    },
+    {
+     "x": -6.250640869140625,
+     "y": -1.6317863464355469,
+     "z": -3.753692626953125
+    },
+    {
+     "x": -6.574859619140625,
+     "y": -1.6317863464355469,
+     "z": -3.753692626953125
+    },
+    {
+     "x": -2.416473388671875,
+     "y": -2.586780548095703,
+     "z": 0.3685302734375
+    },
+    {
+     "x": -0.5836334228515625,
+     "y": -1.9684677124023438,
+     "z": 1.202392578125
+    },
+    {
+     "x": -0.7628326416015625,
+     "y": -1.9684677124023438,
+     "z": 1.202392578125
+    },
+    {
+     "x": -0.8744659423828125,
+     "y": -1.9684677124023438,
+     "z": 1.202392578125
+    },
+    {
+     "x": 22.520416259765625,
+     "y": -1.7834587097167969,
+     "z": 10.1656494140625
+    },
+    {
+     "x": 22.707916259765625,
+     "y": -1.7834587097167969,
+     "z": 10.1656494140625
+    }
+   ],
+   "modes": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "loop": 0
+  }
+ },
+ {
+  "cls": "Audio.AmbientSubsystem.OneShotAmbientSoundPlayer",
+  "path": "SOUND/AmbBetween1And2Cutscenes/AmbientGroup/Explosions/Explosion_02",
+  "fields": {
+   "_volume": 0.30000001192092896,
+   "_deltaVolume": 0.029999999329447746,
+   "_randomPitchRange": {
+    "x": 0.8999999761581421,
+    "y": 1.100000023841858
+   },
+   "_fadeInDurationSec": 0.0,
+   "_fadeOutDurationSec": 5.0,
+   "_mixerGroup": null,
+   "ForceSetMixerGroup": 0,
+   "_playOnAwake": 0,
+   "_spread": 1.0,
+   "_spatialBlend": 1.0,
+   "_minDistance": 1.0,
+   "_maxDistance": 500.0,
+   "_rolloffCurve": {
+    "m_Curve": [
+     {
+      "time": -0.00119781494140625,
+      "value": 1.0,
+      "inSlope": -1.61217200756073,
+      "outSlope": -1.61217200756073,
+      "weightedMode": 0,
+      "inWeight": 0.3333333432674408,
+      "outWeight": 0.11500422656536102
+     },
+     {
+      "time": 0.2907211482524872,
+      "value": 0.4567343294620514,
+      "inSlope": -1.8492268323898315,
+      "outSlope": -1.8492268323898315,
+      "weightedMode": 0,
+      "inWeight": 0.3333333432674408,
+      "outWeight": 0.3333333432674408
+     },
+     {
+      "time": 1.0,
+      "value": 0.0,
+      "inSlope": -0.1361192911863327,
+      "outSlope": -0.1361192911863327,
+      "weightedMode": 0,
+      "inWeight": 0.3333333432674408,
+      "outWeight": 0.3333333432674408
+     }
+    ],
+    "m_PreInfinity": 2,
+    "m_PostInfinity": 2,
+    "m_RotationOrder": 4
+   },
+   "_startPlayingDelay": {
+    "x": 20.0,
+    "y": 20.0
+   },
+   "_spreadCurve": {
+    "m_Curve": [
+     {
+      "time": 0.0,
+      "value": 0.0,
+      "inSlope": 0.0,
+      "outSlope": 1.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     },
+     {
+      "time": 1.0,
+      "value": 1.0,
+      "inSlope": 1.0,
+      "outSlope": 0.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     }
+    ],
+    "m_PreInfinity": 2,
+    "m_PostInfinity": 2,
+    "m_RotationOrder": 4
+   },
+   "_useCustomSpreadCurve": 0,
+   "_soundBank": {
+    "$asset:SoundBank": "Pre_1.2_Far_Explosions_SoundBank_01"
+   }
+  }
+ },
+ {
+  "cls": "Audio.AmbientSubsystem.AmbientSplineEmitter.SplineEmitterPathMover",
+  "path": "SOUND/AmbBetween1And2Cutscenes/AmbientGroup/StepsAndShouts/SplinePathMoverEmitter (1)",
+  "fields": {
+   "_splineEmitter": {
+    "$ref": "SOUND/AmbBetween1And2Cutscenes/AmbientGroup/StepsAndShouts/SplinePathMoverEmitter (1)/GroupedEmitter"
+   },
+   "_spline": {
+    "$ref": "SOUND/AmbBetween1And2Cutscenes/AmbientGroup/StepsAndShouts/SplinePathMoverEmitter (1)/Spline"
+   },
+   "_resolution": 85,
+   "_calculationRadius": 170.0,
+   "MovementStrategy": 1,
+   "_movementActionOnCompleted": 0,
+   "_startMovementRandomDelayRange": {
+    "x": 0.0,
+    "y": 0.0
+   },
+   "_movementSpeed": 0.03999999910593033,
+   "_resetPositionOnMovementEnd": 0,
+   "_fadeEmitter": 1
+  }
+ },
+ {
+  "cls": "Audio.AmbientSubsystem.OneShotAmbientSoundPlayer",
+  "path": "SOUND/AmbBetween1And2Cutscenes/AmbientGroup/Explosions/Explosion_07",
+  "fields": {
+   "_volume": 0.30000001192092896,
+   "_deltaVolume": 0.029999999329447746,
+   "_randomPitchRange": {
+    "x": 0.8999999761581421,
+    "y": 1.100000023841858
+   },
+   "_fadeInDurationSec": 0.0,
+   "_fadeOutDurationSec": 5.0,
+   "_mixerGroup": null,
+   "ForceSetMixerGroup": 0,
+   "_playOnAwake": 0,
+   "_spread": 1.0,
+   "_spatialBlend": 1.0,
+   "_minDistance": 1.0,
+   "_maxDistance": 500.0,
+   "_rolloffCurve": {
+    "m_Curve": [
+     {
+      "time": -0.00119781494140625,
+      "value": 1.0,
+      "inSlope": -1.61217200756073,
+      "outSlope": -1.61217200756073,
+      "weightedMode": 0,
+      "inWeight": 0.3333333432674408,
+      "outWeight": 0.11500422656536102
+     },
+     {
+      "time": 0.2907211482524872,
+      "value": 0.4567343294620514,
+      "inSlope": -1.8492268323898315,
+      "outSlope": -1.8492268323898315,
+      "weightedMode": 0,
+      "inWeight": 0.3333333432674408,
+      "outWeight": 0.3333333432674408
+     },
+     {
+      "time": 1.0,
+      "value": 0.0,
+      "inSlope": -0.1361192911863327,
+      "outSlope": -0.1361192911863327,
+      "weightedMode": 0,
+      "inWeight": 0.3333333432674408,
+      "outWeight": 0.3333333432674408
+     }
+    ],
+    "m_PreInfinity": 2,
+    "m_PostInfinity": 2,
+    "m_RotationOrder": 4
+   },
+   "_startPlayingDelay": {
+    "x": 25.0,
+    "y": 25.0
+   },
+   "_spreadCurve": {
+    "m_Curve": [
+     {
+      "time": 0.0,
+      "value": 0.0,
+      "inSlope": 0.0,
+      "outSlope": 1.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     },
+     {
+      "time": 1.0,
+      "value": 1.0,
+      "inSlope": 1.0,
+      "outSlope": 0.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     }
+    ],
+    "m_PreInfinity": 2,
+    "m_PostInfinity": 2,
+    "m_RotationOrder": 4
+   },
+   "_useCustomSpreadCurve": 0,
+   "_soundBank": {
+    "$asset:SoundBank": "Pre_1.2_Far_Explosions_SoundBank_01"
+   }
+  }
+ },
+ {
+  "cls": "Audio.AmbientSubsystem.OneShotAmbientSoundPlayer",
+  "path": "SOUND/AmbAfter2Cutscene/AmbientGroup/StepsAndShouts/SplinePathMoverEmitter (2)/GroupedEmitter/FootstepPlayer",
+  "fields": {
+   "_volume": 0.15000000596046448,
+   "_deltaVolume": 0.0,
+   "_randomPitchRange": {
+    "x": 1.100000023841858,
+    "y": 1.100000023841858
+   },
+   "_fadeInDurationSec": 0.0,
+   "_fadeOutDurationSec": 5.0,
+   "_mixerGroup": null,
+   "ForceSetMixerGroup": 0,
+   "_playOnAwake": 0,
+   "_spread": 1.0,
+   "_spatialBlend": 1.0,
+   "_minDistance": 1.0,
+   "_maxDistance": 150.0,
+   "_rolloffCurve": {
+    "m_Curve": [
+     {
+      "time": 0.0,
+      "value": 1.0,
+      "inSlope": 0.0,
+      "outSlope": -1.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     },
+     {
+      "time": 1.0,
+      "value": 0.0,
+      "inSlope": -1.0,
+      "outSlope": 0.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     }
+    ],
+    "m_PreInfinity": 2,
+    "m_PostInfinity": 2,
+    "m_RotationOrder": 4
+   },
+   "_startPlayingDelay": {
+    "x": 1.0,
+    "y": 1.0
+   },
+   "_spreadCurve": {
+    "m_Curve": [
+     {
+      "time": 0.0,
+      "value": 0.0,
+      "inSlope": 0.0,
+      "outSlope": 1.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     },
+     {
+      "time": 1.0,
+      "value": 1.0,
+      "inSlope": 1.0,
+      "outSlope": 0.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     }
+    ],
+    "m_PreInfinity": 2,
+    "m_PostInfinity": 2,
+    "m_RotationOrder": 4
+   },
+   "_useCustomSpreadCurve": 0,
+   "_soundBank": {
+    "$asset:SoundBank": "Pre_1.2_Footsteps_SoundBank_01"
+   }
+  }
+ },
+ {
+  "cls": "Audio.AmbientSubsystem.OneShotAmbientSoundPlayer",
+  "path": "SOUND/AmbBetween1And2Cutscenes/AmbientGroup/StepsAndShouts/SplinePathMoverEmitter (1)/GroupedEmitter/SpeechPlayer",
+  "fields": {
+   "_volume": 0.25,
+   "_deltaVolume": 0.0,
+   "_randomPitchRange": {
+    "x": 1.0,
+    "y": 1.0
+   },
+   "_fadeInDurationSec": 0.0,
+   "_fadeOutDurationSec": 5.0,
+   "_mixerGroup": null,
+   "ForceSetMixerGroup": 0,
+   "_playOnAwake": 0,
+   "_spread": 1.0,
+   "_spatialBlend": 1.0,
+   "_minDistance": 1.0,
+   "_maxDistance": 150.0,
+   "_rolloffCurve": {
+    "m_Curve": [
+     {
+      "time": 0.0,
+      "value": 1.0,
+      "inSlope": 0.0,
+      "outSlope": -1.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     },
+     {
+      "time": 1.0,
+      "value": 0.0,
+      "inSlope": -1.0,
+      "outSlope": 0.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     }
+    ],
+    "m_PreInfinity": 2,
+    "m_PostInfinity": 2,
+    "m_RotationOrder": 4
+   },
+   "_startPlayingDelay": {
+    "x": 11.0,
+    "y": 11.0
+   },
+   "_spreadCurve": {
+    "m_Curve": [
+     {
+      "time": 0.0,
+      "value": 0.0,
+      "inSlope": 0.0,
+      "outSlope": 1.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     },
+     {
+      "time": 1.0,
+      "value": 1.0,
+      "inSlope": 1.0,
+      "outSlope": 0.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     }
+    ],
+    "m_PreInfinity": 2,
+    "m_PostInfinity": 2,
+    "m_RotationOrder": 4
+   },
+   "_useCustomSpreadCurve": 0,
+   "_soundBank": {
+    "$asset:SoundBank": "Pre_1.2_Speech_SoundBank_02"
+   }
+  }
+ },
+ {
+  "cls": "Audio.AmbientSubsystem.OneShotAmbientSoundPlayer",
+  "path": "SOUND/AmbAfter2Cutscene/AmbientGroup/StepsAndShouts/SplinePathMoverEmitter/GroupedEmitter/FootstepPlayer",
+  "fields": {
+   "_volume": 0.15000000596046448,
+   "_deltaVolume": 0.0,
+   "_randomPitchRange": {
+    "x": 1.0,
+    "y": 1.0
+   },
+   "_fadeInDurationSec": 0.0,
+   "_fadeOutDurationSec": 5.0,
+   "_mixerGroup": null,
+   "ForceSetMixerGroup": 0,
+   "_playOnAwake": 0,
+   "_spread": 1.0,
+   "_spatialBlend": 1.0,
+   "_minDistance": 1.0,
+   "_maxDistance": 150.0,
+   "_rolloffCurve": {
+    "m_Curve": [
+     {
+      "time": 0.0,
+      "value": 1.0,
+      "inSlope": 0.0,
+      "outSlope": -1.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     },
+     {
+      "time": 1.0,
+      "value": 0.0,
+      "inSlope": -1.0,
+      "outSlope": 0.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     }
+    ],
+    "m_PreInfinity": 2,
+    "m_PostInfinity": 2,
+    "m_RotationOrder": 4
+   },
+   "_startPlayingDelay": {
+    "x": 0.0,
+    "y": 0.0
+   },
+   "_spreadCurve": {
+    "m_Curve": [
+     {
+      "time": 0.0,
+      "value": 0.0,
+      "inSlope": 0.0,
+      "outSlope": 1.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     },
+     {
+      "time": 1.0,
+      "value": 1.0,
+      "inSlope": 1.0,
+      "outSlope": 0.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     }
+    ],
+    "m_PreInfinity": 2,
+    "m_PostInfinity": 2,
+    "m_RotationOrder": 4
+   },
+   "_useCustomSpreadCurve": 0,
+   "_soundBank": {
+    "$asset:SoundBank": "Pre_1.2_Footsteps_SoundBank_01"
+   }
+  }
+ },
+ {
+  "cls": "Audio.AmbientSubsystem.OneShotAmbientSoundPlayer",
+  "path": "SOUND/AmbAfter2Cutscene/AmbientGroup/Explosions/Explosion_05",
+  "fields": {
+   "_volume": 0.30000001192092896,
+   "_deltaVolume": 0.029999999329447746,
+   "_randomPitchRange": {
+    "x": 0.8999999761581421,
+    "y": 1.100000023841858
+   },
+   "_fadeInDurationSec": 0.0,
+   "_fadeOutDurationSec": 5.0,
+   "_mixerGroup": null,
+   "ForceSetMixerGroup": 0,
+   "_playOnAwake": 0,
+   "_spread": 1.0,
+   "_spatialBlend": 1.0,
+   "_minDistance": 1.0,
+   "_maxDistance": 500.0,
+   "_rolloffCurve": {
+    "m_Curve": [
+     {
+      "time": -0.00119781494140625,
+      "value": 1.0,
+      "inSlope": -1.61217200756073,
+      "outSlope": -1.61217200756073,
+      "weightedMode": 0,
+      "inWeight": 0.3333333432674408,
+      "outWeight": 0.11500422656536102
+     },
+     {
+      "time": 0.2907211482524872,
+      "value": 0.4567343294620514,
+      "inSlope": -1.8492268323898315,
+      "outSlope": -1.8492268323898315,
+      "weightedMode": 0,
+      "inWeight": 0.3333333432674408,
+      "outWeight": 0.3333333432674408
+     },
+     {
+      "time": 1.0,
+      "value": 0.0,
+      "inSlope": -0.1361192911863327,
+      "outSlope": -0.1361192911863327,
+      "weightedMode": 0,
+      "inWeight": 0.3333333432674408,
+      "outWeight": 0.3333333432674408
+     }
+    ],
+    "m_PreInfinity": 2,
+    "m_PostInfinity": 2,
+    "m_RotationOrder": 4
+   },
+   "_startPlayingDelay": {
+    "x": 10.0,
+    "y": 10.0
+   },
+   "_spreadCurve": {
+    "m_Curve": [
+     {
+      "time": 0.0,
+      "value": 0.0,
+      "inSlope": 0.0,
+      "outSlope": 1.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     },
+     {
+      "time": 1.0,
+      "value": 1.0,
+      "inSlope": 1.0,
+      "outSlope": 0.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     }
+    ],
+    "m_PreInfinity": 2,
+    "m_PostInfinity": 2,
+    "m_RotationOrder": 4
+   },
+   "_useCustomSpreadCurve": 0,
+   "_soundBank": {
+    "$asset:SoundBank": "Pre_1.2_Far_Explosions_SoundBank_01"
+   }
+  }
+ },
+ {
+  "cls": "Audio.AmbientSubsystem.AmbientSoundPlayer",
+  "path": "SOUND/AmbAfter2Cutscene/AmbientGroup/StepsAndShouts/SplinePathMoverEmitter (3)/GroupedEmitter/ShootPlayer",
+  "fields": {
+   "_volume": 0.6000000238418579,
+   "_deltaVolume": 0.0,
+   "_randomPitchRange": {
+    "x": 0.8999999761581421,
+    "y": 1.100000023841858
+   },
+   "_fadeInDurationSec": 0.0,
+   "_fadeOutDurationSec": 0.0,
+   "_mixerGroup": null,
+   "ForceSetMixerGroup": 0,
+   "_playOnAwake": 0,
+   "_spread": 1.0,
+   "_spatialBlend": 1.0,
+   "_minDistance": 1.0,
+   "_maxDistance": 120.0,
+   "_rolloffCurve": {
+    "m_Curve": [
+     {
+      "time": 0.0,
+      "value": 1.0,
+      "inSlope": 0.0,
+      "outSlope": -1.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     },
+     {
+      "time": 1.0,
+      "value": 0.0,
+      "inSlope": -1.0,
+      "outSlope": 0.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     }
+    ],
+    "m_PreInfinity": 2,
+    "m_PostInfinity": 2,
+    "m_RotationOrder": 4
+   },
+   "_startPlayingDelay": {
+    "x": 0.0,
+    "y": 0.0
+   },
+   "_spreadCurve": {
+    "m_Curve": [
+     {
+      "time": 0.0,
+      "value": 0.0,
+      "inSlope": 0.0,
+      "outSlope": 1.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     },
+     {
+      "time": 1.0,
+      "value": 1.0,
+      "inSlope": 1.0,
+      "outSlope": 0.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     }
+    ],
+    "m_PreInfinity": 2,
+    "m_PostInfinity": 2,
+    "m_RotationOrder": 4
+   },
+   "_useCustomSpreadCurve": 0,
+   "_randomTimeRange": {
+    "x": 1.0,
+    "y": 5.0
+   },
+   "_ambientBank": {
+    "$asset:SoundBank": "far_shoots"
+   }
+  }
+ },
+ {
+  "cls": "Audio.AmbientSubsystem.OneShotAmbientSoundPlayer",
+  "path": "SOUND/AmbAfter2Cutscene/AmbientGroup/StepsAndShouts/SplinePathMoverEmitter/GroupedEmitter/SpeechPlayer",
+  "fields": {
+   "_volume": 0.30000001192092896,
+   "_deltaVolume": 0.0,
+   "_randomPitchRange": {
+    "x": 1.0,
+    "y": 1.0
+   },
+   "_fadeInDurationSec": 0.0,
+   "_fadeOutDurationSec": 5.0,
+   "_mixerGroup": null,
+   "ForceSetMixerGroup": 0,
+   "_playOnAwake": 0,
+   "_spread": 1.0,
+   "_spatialBlend": 1.0,
+   "_minDistance": 1.0,
+   "_maxDistance": 150.0,
+   "_rolloffCurve": {
+    "m_Curve": [
+     {
+      "time": 0.0,
+      "value": 1.0,
+      "inSlope": 0.0,
+      "outSlope": -1.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     },
+     {
+      "time": 1.0,
+      "value": 0.0,
+      "inSlope": -1.0,
+      "outSlope": 0.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     }
+    ],
+    "m_PreInfinity": 2,
+    "m_PostInfinity": 2,
+    "m_RotationOrder": 4
+   },
+   "_startPlayingDelay": {
+    "x": 0.0,
+    "y": 0.0
+   },
+   "_spreadCurve": {
+    "m_Curve": [
+     {
+      "time": 0.0,
+      "value": 0.0,
+      "inSlope": 0.0,
+      "outSlope": 1.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     },
+     {
+      "time": 1.0,
+      "value": 1.0,
+      "inSlope": 1.0,
+      "outSlope": 0.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     }
+    ],
+    "m_PreInfinity": 2,
+    "m_PostInfinity": 2,
+    "m_RotationOrder": 4
+   },
+   "_useCustomSpreadCurve": 0,
+   "_soundBank": {
+    "$asset:SoundBank": "After_1.2_VSRF_Speech_SoundBank_01"
+   }
+  }
+ },
+ {
+  "cls": "Audio.AmbientSubsystem.OneShotAmbientSoundPlayer",
+  "path": "SOUND/AmbBetween1And2Cutscenes/AmbientGroup/Shots/Shot_03",
+  "fields": {
+   "_volume": 0.699999988079071,
+   "_deltaVolume": 0.029999999329447746,
+   "_randomPitchRange": {
+    "x": 0.8999999761581421,
+    "y": 1.100000023841858
+   },
+   "_fadeInDurationSec": 0.0,
+   "_fadeOutDurationSec": 5.0,
+   "_mixerGroup": null,
+   "ForceSetMixerGroup": 1,
+   "_playOnAwake": 0,
+   "_spread": 1.0,
+   "_spatialBlend": 1.0,
+   "_minDistance": 1.0,
+   "_maxDistance": 500.0,
+   "_rolloffCurve": {
+    "m_Curve": [
+     {
+      "time": -0.00119781494140625,
+      "value": 1.0,
+      "inSlope": -1.61217200756073,
+      "outSlope": -1.61217200756073,
+      "weightedMode": 0,
+      "inWeight": 0.3333333432674408,
+      "outWeight": 0.11500422656536102
+     },
+     {
+      "time": 0.2907211482524872,
+      "value": 0.4567343294620514,
+      "inSlope": -1.8492268323898315,
+      "outSlope": -1.8492268323898315,
+      "weightedMode": 0,
+      "inWeight": 0.3333333432674408,
+      "outWeight": 0.3333333432674408
+     },
+     {
+      "time": 1.0,
+      "value": 0.0,
+      "inSlope": -0.1361192911863327,
+      "outSlope": -0.1361192911863327,
+      "weightedMode": 0,
+      "inWeight": 0.3333333432674408,
+      "outWeight": 0.3333333432674408
+     }
+    ],
+    "m_PreInfinity": 2,
+    "m_PostInfinity": 2,
+    "m_RotationOrder": 4
+   },
+   "_startPlayingDelay": {
+    "x": 15.0,
+    "y": 15.0
+   },
+   "_spreadCurve": {
+    "m_Curve": [
+     {
+      "time": 0.0,
+      "value": 0.0,
+      "inSlope": 0.0,
+      "outSlope": 1.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     },
+     {
+      "time": 1.0,
+      "value": 1.0,
+      "inSlope": 1.0,
+      "outSlope": 0.0,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.0
+     }
+    ],
+    "m_PreInfinity": 2,
+    "m_PostInfinity": 2,
+    "m_RotationOrder": 4
+   },
+   "_useCustomSpreadCurve": 0,
+   "_soundBank": {
+    "$asset:SoundBank": "Pre_1.2_Far_Shots_SoundBank_01"
+   }
+  }
+ },
+ {
+  "cls": "Audio.AmbientSubsystem.AmbientSplineEmitter.SplineSoundEmitter.AmbientPlayerGroupSplineEmitter",
+  "path": "SOUND/AmbAfter2Cutscene/AmbientGroup/StepsAndShouts/SplinePathMoverEmitter (2)/GroupedEmitter",
+  "fields": {
+   "_configs": [
+    {
+     "soundPlayer": {
+      "$ref": "SOUND/AmbAfter2Cutscene/AmbientGroup/StepsAndShouts/SplinePathMoverEmitter (2)/GroupedEmitter/FootstepPlayer"
+     },
+     "spreadRange": {
+      "x": 0.0,
+      "y": 1.0
+     }
+    },
+    {
+     "soundPlayer": {
+      "$ref": "SOUND/AmbAfter2Cutscene/AmbientGroup/StepsAndShouts/SplinePathMoverEmitter (2)/GroupedEmitter/SpeechPlayer"
+     },
+     "spreadRange": {
+      "x": 0.0,
+      "y": 1.0
+     }
+    },
+    {
+     "soundPlayer": {
+      "$ref": "SOUND/AmbAfter2Cutscene/AmbientGroup/StepsAndShouts/SplinePathMoverEmitter (2)/GroupedEmitter/SpeechPlayer (1)"
+     },
+     "spreadRange": {
+      "x": 0.0,
+      "y": 1.0
+     }
+    },
+    {
+     "soundPlayer": {
+      "$ref": "SOUND/AmbAfter2Cutscene/AmbientGroup/StepsAndShouts/SplinePathMoverEmitter (2)/GroupedEmitter/ShootPlayer"
+     },
+     "spreadRange": {
+      "x": 0.0,
+      "y": 1.0
+     }
+    }
+   ]
+  }
+ },
+ {
+  "cls": "Audio.AmbientSubsystem.AmbientSplineEmitter.SplineEmitterPathMover",
+  "path": "SOUND/AmbBetween1And2Cutscenes/AmbientGroup/StepsAndShouts/SplinePathMoverEmitter",
+  "fields": {
+   "_splineEmitter": {
+    "$ref": "SOUND/AmbBetween1And2Cutscenes/AmbientGroup/StepsAndShouts/SplinePathMoverEmitter/GroupedEmitter"
+   },
+   "_spline": {
+    "$ref": "SOUND/AmbBetween1And2Cutscenes/AmbientGroup/StepsAndShouts/SplinePathMoverEmitter/Spline"
+   },
+   "_resolution": 85,
+   "_calculationRadius": 170.0,
+   "MovementStrategy": 1,
+   "_movementActionOnCompleted": 0,
+   "_startMovementRandomDelayRange": {
+    "x": 0.0,
+    "y": 0.0
+   },
+   "_movementSpeed": 0.03999999910593033,
+   "_resetPositionOnMovementEnd": 0,
+   "_fadeEmitter": 1
+  }
+ }
+]

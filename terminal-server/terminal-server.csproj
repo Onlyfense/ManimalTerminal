@@ -1,0 +1,43 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <RootNamespace>Manimal.Terminal.Server</RootNamespace>
+    <AssemblyName>terminal-server</AssemblyName>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <OutputType>Library</OutputType>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <Authors>$(ModUsername)</Authors>
+    <Version>$(ModVersion)</Version>
+    <CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="0Harmony">
+      <HintPath>$(SPTPath)\SPT\0Harmony.dll</HintPath>
+    </Reference>
+    <PackageReference Include="SPTarkov.Common" Version="4.0.13" />
+    <PackageReference Include="SPTarkov.DI" Version="4.0.13" />
+    <PackageReference Include="SPTarkov.Server.Core" Version="4.0.13" />
+  </ItemGroup>
+
+  <!--
+    deploy dll + db + bundles.json into the dev SPT mod folder. scene/preset BUNDLES
+    are NOT copied per-build — those deploy to StreamingAssets by hand or script
+    (playbook phase 5: the client resolves bundle keys against StreamingAssets FIRST).
+  -->
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <PropertyGroup>
+      <DevModDir>$(SPTPath)\SPT\user\mods\ManimalTerminal</DevModDir>
+    </PropertyGroup>
+    <ItemGroup>
+      <DbFiles Include="$(ProjectDir)db\**\*.*" />
+    </ItemGroup>
+    <MakeDir Directories="$(DevModDir)" />
+    <Copy SourceFiles="@(DbFiles)" DestinationFiles="@(DbFiles->'$(DevModDir)\db\%(RecursiveDir)%(Filename)%(Extension)')" />
+    <Copy SourceFiles="$(ProjectDir)bundles.json" DestinationFolder="$(DevModDir)" />
+    <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(DevModDir)" />
+  </Target>
+
+</Project>

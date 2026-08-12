@@ -1,0 +1,148 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <RootNamespace>Manimal.Terminal</RootNamespace>
+    <AssemblyName>ManimalTerminalClient</AssemblyName>
+    <Nullable>disable</Nullable>
+    <Authors>Manimal</Authors>
+    <AssemblyVersion>$(ModVersion).0</AssemblyVersion>
+    <FileVersion>$(AssemblyVersion)</FileVersion>
+    <Configurations>Debug;Release</Configurations>
+    <Version>$(ModVersion)</Version>
+    <LangVersion>latest</LangVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+
+  <!-- minimal reference set for the skeleton — add game/unity modules as systems
+       get ported (see icebreaker-client.csproj for the full list icebreaker ended
+       up needing) -->
+  <ItemGroup>
+    <Reference Include="0Harmony">
+      <HintPath>$(SPTPath)\BepInEx\core\0Harmony.dll</HintPath>
+    </Reference>
+    <Reference Include="BepInEx">
+      <HintPath>$(SPTPath)\BepInEx\core\BepInEx.dll</HintPath>
+    </Reference>
+    <Reference Include="Assembly-CSharp">
+      <HintPath>$(SPTPath)\EscapeFromTarkov_Data\Managed\Assembly-CSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="Comfort">
+      <HintPath>$(SPTPath)\EscapeFromTarkov_Data\Managed\Comfort.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>$(SPTPath)\EscapeFromTarkov_Data\Managed\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine">
+      <HintPath>$(SPTPath)\EscapeFromTarkov_Data\Managed\UnityEngine.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.CoreModule">
+      <HintPath>$(SPTPath)\EscapeFromTarkov_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UI">
+      <HintPath>$(SPTPath)\EscapeFromTarkov_Data\Managed\UnityEngine.UI.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UIModule">
+      <HintPath>$(SPTPath)\EscapeFromTarkov_Data\Managed\UnityEngine.UIModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.IMGUIModule">
+      <HintPath>$(SPTPath)\EscapeFromTarkov_Data\Managed\UnityEngine.IMGUIModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.DirectorModule">
+      <HintPath>$(SPTPath)\EscapeFromTarkov_Data\Managed\UnityEngine.DirectorModule.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Timeline">
+      <HintPath>$(SPTPath)\EscapeFromTarkov_Data\Managed\Unity.Timeline.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.PhysicsModule">
+      <HintPath>$(SPTPath)\EscapeFromTarkov_Data\Managed\UnityEngine.PhysicsModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.AIModule">
+      <HintPath>$(SPTPath)\EscapeFromTarkov_Data\Managed\UnityEngine.AIModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.AudioModule">
+      <HintPath>$(SPTPath)\EscapeFromTarkov_Data\Managed\UnityEngine.AudioModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.InputLegacyModule">
+      <HintPath>$(SPTPath)\EscapeFromTarkov_Data\Managed\UnityEngine.InputLegacyModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.ImageConversionModule">
+      <HintPath>$(SPTPath)\EscapeFromTarkov_Data\Managed\UnityEngine.ImageConversionModule.dll</HintPath>
+    </Reference>
+    <Reference Include="Sirenix.Serialization">
+      <HintPath>$(SPTPath)\EscapeFromTarkov_Data\Managed\Sirenix.Serialization.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.AssetBundleModule">
+      <HintPath>$(SPTPath)\EscapeFromTarkov_Data\Managed\UnityEngine.AssetBundleModule.dll</HintPath>
+    </Reference>
+    <Reference Include="DissonanceVoip">
+      <HintPath>$(SPTPath)\EscapeFromTarkov_Data\Managed\DissonanceVoip.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.AnimationModule">
+      <HintPath>$(SPTPath)\EscapeFromTarkov_Data\Managed\UnityEngine.AnimationModule.dll</HintPath>
+    </Reference>
+    <Reference Include="DrakiaXYZ-BigBrain">
+      <HintPath>$(SPTPath)\BepInEx\plugins\DrakiaXYZ-BigBrain.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <!--
+    generate BuildInfo.g.cs from Directory.Build.props so [BepInPlugin] can use
+    BuildInfo.Version / BuildInfo.ModGuid as compile-time constants.
+  -->
+  <Target Name="GenerateBuildInfo" BeforeTargets="CoreCompile">
+    <PropertyGroup>
+      <BuildInfoFile>$(IntermediateOutputPath)BuildInfo.g.cs</BuildInfoFile>
+    </PropertyGroup>
+    <ItemGroup>
+      <_BuildInfoLines Remove="@(_BuildInfoLines)" />
+      <_BuildInfoLines Include="// auto-generated from Directory.Build.props — do not edit" />
+      <_BuildInfoLines Include="namespace $(RootNamespace)" />
+      <_BuildInfoLines Include="{" />
+      <_BuildInfoLines Include="    internal static class BuildInfo" />
+      <_BuildInfoLines Include="    {" />
+      <_BuildInfoLines Include="        public const string Version = %22$(ModVersion)%22%3B" />
+      <_BuildInfoLines Include="        public const string ModGuid = %22$(ModGuid)%22%3B" />
+      <_BuildInfoLines Include="    }" />
+      <_BuildInfoLines Include="}" />
+    </ItemGroup>
+    <WriteLinesToFile File="$(BuildInfoFile)" Lines="@(_BuildInfoLines)" Overwrite="true" WriteOnlyWhenDifferent="true" />
+    <ItemGroup>
+      <Compile Include="$(BuildInfoFile)" />
+    </ItemGroup>
+  </Target>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <ItemGroup>
+      <PluginDataFiles Include="$(ProjectDir)plugin-data\**\*.*" />
+    </ItemGroup>
+    <MakeDir Directories="$(SPTPath)\BepInEx\plugins\ManimalTerminal" />
+    <Exec Command="copy &quot;$(TargetPath)&quot; &quot;$(SPTPath)\BepInEx\plugins\ManimalTerminal\$(TargetFileName)&quot;" />
+    <!-- self-hosted PC runtime rides next to the dll (culling sidecar volumes bind to it) -->
+    <Copy SourceFiles="$(ProjectDir)lib\PerfectCullingRuntime.dll" DestinationFolder="$(SPTPath)\BepInEx\plugins\ManimalTerminal" Condition="Exists('$(ProjectDir)lib\PerfectCullingRuntime.dll')" />
+    <!-- data sidecars ride next to the dll — load paths are assembly-relative -->
+    <Copy SourceFiles="@(PluginDataFiles)" DestinationFiles="@(PluginDataFiles->'$(SPTPath)\BepInEx\plugins\ManimalTerminal\plugin-data\%(RecursiveDir)%(Filename)%(Extension)')" />
+    <!-- keep the fika coop-test install's dll current too (payload/bundles mirrored by hand) -->
+    <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(FikaPath)\BepInEx\plugins\ManimalTerminal" Condition="Exists('$(FikaPath)')" />
+    <Copy SourceFiles="@(PluginDataFiles)" DestinationFiles="@(PluginDataFiles->'$(FikaPath)\BepInEx\plugins\ManimalTerminal\plugin-data\%(RecursiveDir)%(Filename)%(Extension)')" Condition="Exists('$(FikaPath)')" />
+  </Target>
+
+  <!-- per-build: DLL-ONLY update zip, for testers who already have the full install.
+       the full package (scene bundle) will live behind an explicit package-release.ps1
+       at the repo root, not behind every compile. -->
+  <Target Name="PackageModForDistribution" AfterTargets="Build">
+    <PropertyGroup>
+      <ZipFileName>Manimal-Terminal-client-DLL-UPDATE-$(ModVersion).zip</ZipFileName>
+      <TempPackageDir>$(ProjectDir)obj\Package</TempPackageDir>
+      <ModPackageDir>$(TempPackageDir)\BepInEx\plugins\ManimalTerminal</ModPackageDir>
+    </PropertyGroup>
+    <RemoveDir Directories="$(TempPackageDir)" />
+    <MakeDir Directories="$(ModPackageDir)" />
+    <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(ModPackageDir)" />
+    <ZipDirectory SourceDirectory="$(TempPackageDir)" DestinationFile="$(ProjectDir)$(ZipFileName)" Overwrite="true" />
+    <RemoveDir Directories="$(TempPackageDir)" />
+    <Message Text="--- dll-update zip at: $(ProjectDir)$(ZipFileName) ---" Importance="high" />
+  </Target>
+
+</Project>

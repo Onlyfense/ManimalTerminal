@@ -1,0 +1,1480 @@
+{
+ "players": [
+  {
+   "path": "SOUND/AmbAfter2Cutscene/AmbientGroup/StepsAndShouts/SplinePathMoverEmitter (1)/GroupedEmitter/FootstepPlayer",
+   "phase": "after",
+   "kind": "oneshot",
+   "volume": 0.15000000596046448,
+   "pitchRange": [
+    0.8999999761581421,
+    0.8999999761581421
+   ],
+   "minDistance": 1.0,
+   "maxDistance": 150.0,
+   "spatialBlend": 1.0,
+   "spread": 1.0,
+   "delayRange": [
+    0.0,
+    0.0
+   ],
+   "clips": [
+    "pre_1.2_footsteps_2"
+   ]
+  },
+  {
+   "path": "SOUND/AmbAfter2Cutscene/AmbientGroup/StepsAndShouts/SplinePathMoverEmitter (1)/GroupedEmitter/ShootPlayer",
+   "phase": "after",
+   "kind": "loop",
+   "volume": 0.6000000238418579,
+   "pitchRange": [
+    0.8999999761581421,
+    1.100000023841858
+   ],
+   "minDistance": 1.0,
+   "maxDistance": 120.0,
+   "spatialBlend": 1.0,
+   "spread": 1.0,
+   "delayRange": [
+    0.0,
+    0.0
+   ],
+   "clips": [
+    "amb_sparrow_in_garbage_02",
+    "arena_far_fight2_1",
+    "arena_far_fight2_2",
+    "arena_far_fight2_3",
+    "arena_far_fight2_4",
+    "arena_far_fight2_5",
+    "arena_far_fight2_6",
+    "arena_far_fight2_7",
+    "arena_far_fight2_8",
+    "amb_factory_sand_shovel_far_reflections_1"
+   ],
+   "intervalRange": [
+    1.0,
+    5.0
+   ]
+  },
+  {
+   "path": "SOUND/AmbAfter2Cutscene/AmbientGroup/Explosions/Explosion_08",
+   "phase": "after",
+   "kind": "oneshot",
+   "volume": 0.30000001192092896,
+   "pitchRange": [
+    0.8999999761581421,
+    1.100000023841858
+   ],
+   "minDistance": 1.0,
+   "maxDistance": 500.0,
+   "spatialBlend": 1.0,
+   "spread": 1.0,
+   "delayRange": [
+    15.0,
+    15.0
+   ],
+   "clips": [
+    "pre_1.2_explosion_06",
+    "pre_1.2_explosion_05",
+    "pre_1.2_explosion_04",
+    "pre_1.2_explosion_03"
+   ]
+  },
+  {
+   "path": "SOUND/AmbAfter2Cutscene/AmbientGroup/Explosions/Explosion_03",
+   "phase": "after",
+   "kind": "oneshot",
+   "volume": 0.30000001192092896,
+   "pitchRange": [
+    0.8999999761581421,
+    1.100000023841858
+   ],
+   "minDistance": 1.0,
+   "maxDistance": 500.0,
+   "spatialBlend": 1.0,
+   "spread": 1.0,
+   "delayRange": [
+    4.0,
+    4.0
+   ],
+   "clips": [
+    "pre_1.2_explosion_06",
+    "pre_1.2_explosion_05",
+    "pre_1.2_explosion_04",
+    "pre_1.2_explosion_03"
+   ]
+  },
+  {
+   "path": "SOUND/AmbAfter2Cutscene/AmbientGroup/StepsAndShouts/SplinePathMoverEmitter/GroupedEmitter/SpeechPlayer (1)",
+   "phase": "after",
+   "kind": "oneshot",
+   "volume": 0.30000001192092896,
+   "pitchRange": [
+    1.0,
+    1.0
+   ],
+   "minDistance": 1.0,
+   "maxDistance": 150.0,
+   "spatialBlend": 1.0,
+   "spread": 1.0,
+   "delayRange": [
+    0.0,
+    0.0
+   ],
+   "clips": [
+    "after_1.2_vsrf_voices_02"
+   ]
+  },
+  {
+   "path": "SOUND/AmbBetween1And2Cutscenes/AmbientGroup/Explosions/Explosion_03",
+   "phase": "between",
+   "kind": "oneshot",
+   "volume": 0.30000001192092896,
+   "pitchRange": [
+    0.8999999761581421,
+    1.100000023841858
+   ],
+   "minDistance": 1.0,
+   "maxDistance": 500.0,
+   "spatialBlend": 1.0,
+   "spread": 1.0,
+   "delayRange": [
+    17.0,
+    17.0
+   ],
+   "clips": [
+    "pre_1.2_explosion_06",
+    "pre_1.2_explosion_05",
+    "pre_1.2_explosion_04",
+    "pre_1.2_explosion_03"
+   ]
+  },
+  {
+   "path": "SOUND/AmbBetween1And2Cutscenes/AmbientGroup/StepsAndShouts/SplinePathMoverEmitter/GroupedEmitter/FootstepPlayer",
+   "phase": "between",
+   "kind": "oneshot",
+   "volume": 0.20000000298023224,
+   "pitchRange": [
+    1.0,
+    1.0
+   ],
+   "minDistance": 1.0,
+   "maxDistance": 150.0,
+   "spatialBlend": 1.0,
+   "spread": 1.0,
+   "delayRange": [
+    12.0,
+    12.0
+   ],
+   "clips": [
+    "pre_1.2_footsteps_1"
+   ]
+  },
+  {
+   "path": "SOUND/AmbBetween1And2Cutscenes/AmbientGroup/Shots/Shot_04",
+   "phase": "between",
+   "kind": "oneshot",
+   "volume": 0.699999988079071,
+   "pitchRange": [
+    0.8999999761581421,
+    1.100000023841858
+   ],
+   "minDistance": 1.0,
+   "maxDistance": 500.0,
+   "spatialBlend": 1.0,
+   "spread": 1.0,
+   "delayRange": [
+    35.0,
+    35.0
+   ],
+   "clips": [
+    "rfb_fire_far",
+    "sako_fire_outdoor_far",
+    "sako_fire_outdoor_distant"
+   ]
+  },
+  {
+   "path": "SOUND/AmbAfter2Cutscene/AmbientGroup/StepsAndShouts/SplinePathMoverEmitter (1)/GroupedEmitter/SpeechPlayer (1)",
+   "phase": "after",
+   "kind": "oneshot",
+   "volume": 0.30000001192092896,
+   "pitchRange": [
+    1.0,
+    1.0
+   ],
+   "minDistance": 1.0,
+   "maxDistance": 150.0,
+   "spatialBlend": 1.0,
+   "spread": 1.0,
+   "delayRange": [
+    0.0,
+    0.0
+   ],
+   "clips": [
+    "after_1.2_vsrf_voices_04"
+   ]
+  },
+  {
+   "path": "SOUND/AmbBetween1And2Cutscenes/AmbientGroup/Explosions/Explosion_10",
+   "phase": "between",
+   "kind": "oneshot",
+   "volume": 0.30000001192092896,
+   "pitchRange": [
+    0.8999999761581421,
+    1.100000023841858
+   ],
+   "minDistance": 1.0,
+   "maxDistance": 500.0,
+   "spatialBlend": 1.0,
+   "spread": 1.0,
+   "delayRange": [
+    32.0,
+    32.0
+   ],
+   "clips": [
+    "pre_1.2_explosion_06",
+    "pre_1.2_explosion_05",
+    "pre_1.2_explosion_04",
+    "pre_1.2_explosion_03"
+   ]
+  },
+  {
+   "path": "SOUND/AmbBetween1And2Cutscenes/AmbientGroup/Debris/Debris",
+   "phase": "between",
+   "kind": "oneshot",
+   "volume": 0.30000001192092896,
+   "pitchRange": [
+    0.8999999761581421,
+    1.100000023841858
+   ],
+   "minDistance": 0.5,
+   "maxDistance": 15.0,
+   "spatialBlend": 1.0,
+   "spread": 1.0,
+   "delayRange": [
+    9.0,
+    9.0
+   ],
+   "clips": [
+    "amb_terminal_debris_01",
+    "amb_terminal_debris_02",
+    "amb_terminal_debris_03",
+    "amb_terminal_debris_04",
+    "amb_terminal_debris_05",
+    "amb_terminal_debris_06",
+    "amb_terminal_debris_07",
+    "amb_terminal_debris_08"
+   ],
+   "triggerChance": 40
+  },
+  {
+   "path": "SOUND/AmbAfter2Cutscene/AmbientGroup/StepsAndShouts/SplinePathMoverEmitter (1)/GroupedEmitter/SpeechPlayer",
+   "phase": "after",
+   "kind": "oneshot",
+   "volume": 0.30000001192092896,
+   "pitchRange": [
+    1.0,
+    1.0
+   ],
+   "minDistance": 1.0,
+   "maxDistance": 150.0,
+   "spatialBlend": 1.0,
+   "spread": 1.0,
+   "delayRange": [
+    0.0,
+    0.0
+   ],
+   "clips": [
+    "after_1.2_vsrf_voices_03"
+   ]
+  },
+  {
+   "path": "SOUND/AmbBetween1And2Cutscenes/AmbientGroup/Explosions/Explosion_06",
+   "phase": "between",
+   "kind": "oneshot",
+   "volume": 0.30000001192092896,
+   "pitchRange": [
+    0.8999999761581421,
+    1.100000023841858
+   ],
+   "minDistance": 1.0,
+   "maxDistance": 500.0,
+   "spatialBlend": 1.0,
+   "spread": 1.0,
+   "delayRange": [
+    40.0,
+    40.0
+   ],
+   "clips": [
+    "pre_1.2_explosion_06",
+    "pre_1.2_explosion_05",
+    "pre_1.2_explosion_04",
+    "pre_1.2_explosion_03"
+   ]
+  },
+  {
+   "path": "SOUND/AmbBetween1And2Cutscenes/AmbientGroup/Shots/Shot_04 (2)",
+   "phase": "between",
+   "kind": "oneshot",
+   "volume": 0.699999988079071,
+   "pitchRange": [
+    0.8999999761581421,
+    1.100000023841858
+   ],
+   "minDistance": 1.0,
+   "maxDistance": 500.0,
+   "spatialBlend": 1.0,
+   "spread": 1.0,
+   "delayRange": [
+    38.0,
+    38.0
+   ],
+   "clips": [
+    "amb_sparrow_in_garbage_02",
+    "arena_far_fight2_1",
+    "arena_far_fight2_2",
+    "arena_far_fight2_3",
+    "arena_far_fight2_4",
+    "arena_far_fight2_5",
+    "arena_far_fight2_6",
+    "arena_far_fight2_7",
+    "arena_far_fight2_8",
+    "amb_factory_sand_shovel_far_reflections_1"
+   ]
+  },
+  {
+   "path": "SOUND/AmbBetween1And2Cutscenes/AmbientGroup/Debris/Debris (2)",
+   "phase": "between",
+   "kind": "oneshot",
+   "volume": 0.30000001192092896,
+   "pitchRange": [
+    0.8999999761581421,
+    1.100000023841858
+   ],
+   "minDistance": 0.5,
+   "maxDistance": 15.0,
+   "spatialBlend": 1.0,
+   "spread": 1.0,
+   "delayRange": [
+    18.0,
+    18.0
+   ],
+   "clips": [
+    "amb_terminal_debris_01",
+    "amb_terminal_debris_02",
+    "amb_terminal_debris_03",
+    "amb_terminal_debris_04",
+    "amb_terminal_debris_05",
+    "amb_terminal_debris_06",
+    "amb_terminal_debris_07",
+    "amb_terminal_debris_08"
+   ],
+   "triggerChance": 40
+  },
+  {
+   "path": "SOUND/AmbAfter2Cutscene/AmbientGroup/StepsAndShouts/SplinePathMoverEmitter (3)/GroupedEmitter/FootstepPlayer",
+   "phase": "after",
+   "kind": "oneshot",
+   "volume": 0.15000000596046448,
+   "pitchRange": [
+    1.0,
+    1.0
+   ],
+   "minDistance": 1.0,
+   "maxDistance": 150.0,
+   "spatialBlend": 1.0,
+   "spread": 1.0,
+   "delayRange": [
+    1.0,
+    1.0
+   ],
+   "clips": [
+    "pre_1.2_footsteps_2"
+   ]
+  },
+  {
+   "path": "SOUND/AmbBetween1And2Cutscenes/AmbientGroup/Shots/Shot_01",
+   "phase": "between",
+   "kind": "oneshot",
+   "volume": 0.699999988079071,
+   "pitchRange": [
+    0.8999999761581421,
+    1.100000023841858
+   ],
+   "minDistance": 1.0,
+   "maxDistance": 500.0,
+   "spatialBlend": 1.0,
+   "spread": 1.0,
+   "delayRange": [
+    17.0,
+    17.0
+   ],
+   "clips": [
+    "rfb_fire_far",
+    "sako_fire_outdoor_far",
+    "sako_fire_outdoor_distant"
+   ]
+  },
+  {
+   "path": "SOUND/AmbAfter2Cutscene/AmbientGroup/Explosions/Explosion_For_Cam_Shake_03",
+   "phase": "after",
+   "kind": "oneshot",
+   "volume": 0.699999988079071,
+   "pitchRange": [
+    0.8999999761581421,
+    1.100000023841858
+   ],
+   "minDistance": 1.0,
+   "maxDistance": 500.0,
+   "spatialBlend": 1.0,
+   "spread": 1.0,
+   "delayRange": [
+    2.0,
+    2.0
+   ],
+   "clips": [
+    "amb_terminal_occluded_explosion_close_with_derbis"
+   ]
+  },
+  {
+   "path": "SOUND/AmbAfter2Cutscene/AmbientGroup/StepsAndShouts/SplinePathMoverEmitter/GroupedEmitter/ShootPlayer",
+   "phase": "after",
+   "kind": "loop",
+   "volume": 0.699999988079071,
+   "pitchRange": [
+    0.8999999761581421,
+    1.100000023841858
+   ],
+   "minDistance": 1.0,
+   "maxDistance": 120.0,
+   "spatialBlend": 1.0,
+   "spread": 1.0,
+   "delayRange": [
+    0.0,
+    0.0
+   ],
+   "clips": [
+    "amb_sparrow_in_garbage_02",
+    "arena_far_fight2_1",
+    "arena_far_fight2_2",
+    "arena_far_fight2_3",
+    "arena_far_fight2_4",
+    "arena_far_fight2_5",
+    "arena_far_fight2_6",
+    "arena_far_fight2_7",
+    "arena_far_fight2_8",
+    "amb_factory_sand_shovel_far_reflections_1"
+   ],
+   "intervalRange": [
+    1.0,
+    5.0
+   ]
+  },
+  {
+   "path": "SOUND/AmbAfter2Cutscene/AmbientGroup/StepsAndShouts/SplinePathMoverEmitter (3)/GroupedEmitter/SpeechPlayer (1)",
+   "phase": "after",
+   "kind": "oneshot",
+   "volume": 0.30000001192092896,
+   "pitchRange": [
+    1.0,
+    1.0
+   ],
+   "minDistance": 1.0,
+   "maxDistance": 150.0,
+   "spatialBlend": 1.0,
+   "spread": 1.0,
+   "delayRange": [
+    1.0,
+    1.0
+   ],
+   "clips": [
+    "after_1.2_scav_voices_08"
+   ]
+  },
+  {
+   "path": "SOUND/AmbBetween1And2Cutscenes/AmbientGroup/Explosions/Explosion_05",
+   "phase": "between",
+   "kind": "oneshot",
+   "volume": 0.30000001192092896,
+   "pitchRange": [
+    0.8999999761581421,
+    1.100000023841858
+   ],
+   "minDistance": 1.0,
+   "maxDistance": 500.0,
+   "spatialBlend": 1.0,
+   "spread": 1.0,
+   "delayRange": [
+    27.0,
+    27.0
+   ],
+   "clips": [
+    "pre_1.2_explosion_06",
+    "pre_1.2_explosion_05",
+    "pre_1.2_explosion_04",
+    "pre_1.2_explosion_03"
+   ]
+  },
+  {
+   "path": "SOUND/AmbAfter2Cutscene/AmbientGroup/Shots/Shot_01",
+   "phase": "after",
+   "kind": "oneshot",
+   "volume": 0.699999988079071,
+   "pitchRange": [
+    0.8999999761581421,
+    1.100000023841858
+   ],
+   "minDistance": 1.0,
+   "maxDistance": 500.0,
+   "spatialBlend": 1.0,
+   "spread": 1.0,
+   "delayRange": [
+    3.0,
+    3.0
+   ],
+   "clips": [
+    "rfb_fire_far",
+    "sako_fire_outdoor_far",
+    "sako_fire_outdoor_distant"
+   ]
+  },
+  {
+   "path": "SOUND/AmbBetween1And2Cutscenes/AmbientGroup/Shots/Shot_02",
+   "phase": "between",
+   "kind": "oneshot",
+   "volume": 0.699999988079071,
+   "pitchRange": [
+    0.8999999761581421,
+    1.100000023841858
+   ],
+   "minDistance": 1.0,
+   "maxDistance": 500.0,
+   "spatialBlend": 1.0,
+   "spread": 1.0,
+   "delayRange": [
+    25.0,
+    25.0
+   ],
+   "clips": [
+    "rfb_fire_far",
+    "sako_fire_outdoor_far",
+    "sako_fire_outdoor_distant"
+   ]
+  },
+  {
+   "path": "SOUND/AmbBetween1And2Cutscenes/AmbientGroup/StepsAndShouts/SplinePathMoverEmitter/GroupedEmitter/SpeechPlayer (1)",
+   "phase": "between",
+   "kind": "oneshot",
+   "volume": 0.699999988079071,
+   "pitchRange": [
+    1.0,
+    1.0
+   ],
+   "minDistance": 1.0,
+   "maxDistance": 150.0,
+   "spatialBlend": 1.0,
+   "spread": 1.0,
+   "delayRange": [
+    9.0,
+    9.0
+   ],
+   "clips": [
+    "pre_1.2_vsrf_voices_3"
+   ]
+  },
+  {
+   "path": "SOUND/AmbAfter2Cutscene/AmbientGroup/StepsAndShouts/SplinePathMoverEmitter (3)/GroupedEmitter/SpeechPlayer",
+   "phase": "after",
+   "kind": "oneshot",
+   "volume": 0.30000001192092896,
+   "pitchRange": [
+    1.0,
+    1.0
+   ],
+   "minDistance": 1.0,
+   "maxDistance": 150.0,
+   "spatialBlend": 1.0,
+   "spread": 1.0,
+   "delayRange": [
+    1.0,
+    1.0
+   ],
+   "clips": [
+    "after_1.2_scav_voices_07"
+   ]
+  },
+  {
+   "path": "SOUND/AmbAfter2Cutscene/AmbientGroup/Explosions/Explosion_04",
+   "phase": "after",
+   "kind": "oneshot",
+   "volume": 0.30000001192092896,
+   "pitchRange": [
+    0.8999999761581421,
+    1.100000023841858
+   ],
+   "minDistance": 1.0,
+   "maxDistance": 500.0,
+   "spatialBlend": 1.0,
+   "spread": 1.0,
+   "delayRange": [
+    7.0,
+    7.0
+   ],
+   "clips": [
+    "pre_1.2_explosion_06",
+    "pre_1.2_explosion_05",
+    "pre_1.2_explosion_04",
+    "pre_1.2_explosion_03"
+   ]
+  },
+  {
+   "path": "SOUND/AmbAfter2Cutscene/AmbientGroup/Shots/Shot_02",
+   "phase": "after",
+   "kind": "oneshot",
+   "volume": 0.699999988079071,
+   "pitchRange": [
+    0.8999999761581421,
+    1.100000023841858
+   ],
+   "minDistance": 1.0,
+   "maxDistance": 500.0,
+   "spatialBlend": 1.0,
+   "spread": 1.0,
+   "delayRange": [
+    5.0,
+    5.0
+   ],
+   "clips": [
+    "rfb_fire_far",
+    "sako_fire_outdoor_far",
+    "sako_fire_outdoor_distant"
+   ]
+  },
+  {
+   "path": "SOUND/AmbBetween1And2Cutscenes/AmbientGroup/StepsAndShouts/SplinePathMoverEmitter/GroupedEmitter/SpeechPlayer",
+   "phase": "between",
+   "kind": "oneshot",
+   "volume": 0.25,
+   "pitchRange": [
+    1.0,
+    1.0
+   ],
+   "minDistance": 1.0,
+   "maxDistance": 150.0,
+   "spatialBlend": 1.0,
+   "spread": 1.0,
+   "delayRange": [
+    11.0,
+    11.0
+   ],
+   "clips": [
+    "pre_1.2_voices_01"
+   ]
+  },
+  {
+   "path": "SOUND/AmbAfter2Cutscene/AmbientGroup/Explosions/Explosion_06",
+   "phase": "after",
+   "kind": "oneshot",
+   "volume": 0.30000001192092896,
+   "pitchRange": [
+    0.8999999761581421,
+    1.100000023841858
+   ],
+   "minDistance": 1.0,
+   "maxDistance": 500.0,
+   "spatialBlend": 1.0,
+   "spread": 1.0,
+   "delayRange": [
+    12.0,
+    12.0
+   ],
+   "clips": [
+    "pre_1.2_explosion_06",
+    "pre_1.2_explosion_05",
+    "pre_1.2_explosion_04",
+    "pre_1.2_explosion_03"
+   ]
+  },
+  {
+   "path": "SOUND/AmbBetween1And2Cutscenes/AmbientGroup/StepsAndShouts/SplinePathMoverEmitter (1)/GroupedEmitter/FootstepPlayer",
+   "phase": "between",
+   "kind": "oneshot",
+   "volume": 0.20000000298023224,
+   "pitchRange": [
+    1.0,
+    1.0
+   ],
+   "minDistance": 1.0,
+   "maxDistance": 150.0,
+   "spatialBlend": 1.0,
+   "spread": 1.0,
+   "delayRange": [
+    8.0,
+    8.0
+   ],
+   "clips": [
+    "pre_1.2_footsteps_2"
+   ]
+  },
+  {
+   "path": "SOUND/AmbBetween1And2Cutscenes/AmbientGroup/Explosions/Explosion_09",
+   "phase": "between",
+   "kind": "oneshot",
+   "volume": 0.30000001192092896,
+   "pitchRange": [
+    0.8999999761581421,
+    1.100000023841858
+   ],
+   "minDistance": 1.0,
+   "maxDistance": 500.0,
+   "spatialBlend": 1.0,
+   "spread": 1.0,
+   "delayRange": [
+    30.0,
+    30.0
+   ],
+   "clips": [
+    "pre_1.2_explosion_06",
+    "pre_1.2_explosion_05",
+    "pre_1.2_explosion_04",
+    "pre_1.2_explosion_03"
+   ]
+  },
+  {
+   "path": "SOUND/AmbAfter2Cutscene/AmbientGroup/StepsAndShouts/SplinePathMoverEmitter (2)/GroupedEmitter/SpeechPlayer",
+   "phase": "after",
+   "kind": "oneshot",
+   "volume": 0.30000001192092896,
+   "pitchRange": [
+    1.0,
+    1.0
+   ],
+   "minDistance": 1.0,
+   "maxDistance": 150.0,
+   "spatialBlend": 1.0,
+   "spread": 1.0,
+   "delayRange": [
+    1.0,
+    1.0
+   ],
+   "clips": [
+    "after_1.2_scav_voices_05"
+   ]
+  },
+  {
+   "path": "SOUND/AmbBetween1And2Cutscenes/AmbientGroup/StepsAndShouts/SplinePathMoverEmitter (1)/GroupedEmitter/SpeechPlayer (1)",
+   "phase": "between",
+   "kind": "oneshot",
+   "volume": 0.6499999761581421,
+   "pitchRange": [
+    1.0,
+    1.0
+   ],
+   "minDistance": 1.0,
+   "maxDistance": 150.0,
+   "spatialBlend": 1.0,
+   "spread": 1.0,
+   "delayRange": [
+    10.0,
+    10.0
+   ],
+   "clips": [
+    "pre_1.2_vsrf_voices_4"
+   ]
+  },
+  {
+   "path": "SOUND/AmbBetween1And2Cutscenes/AmbientGroup/Explosions/Explosion_For_Cam_Shake_01",
+   "phase": "between",
+   "kind": "oneshot",
+   "volume": 0.699999988079071,
+   "pitchRange": [
+    0.8999999761581421,
+    1.100000023841858
+   ],
+   "minDistance": 1.0,
+   "maxDistance": 500.0,
+   "spatialBlend": 1.0,
+   "spread": 1.0,
+   "delayRange": [
+    10.0,
+    10.0
+   ],
+   "clips": [
+    "amb_terminal_occluded_explosion_close_with_derbis"
+   ]
+  },
+  {
+   "path": "SOUND/AmbAfter2Cutscene/AmbientGroup/Shots/Shot_03",
+   "phase": "after",
+   "kind": "oneshot",
+   "volume": 0.699999988079071,
+   "pitchRange": [
+    0.8999999761581421,
+    1.100000023841858
+   ],
+   "minDistance": 1.0,
+   "maxDistance": 500.0,
+   "spatialBlend": 1.0,
+   "spread": 1.0,
+   "delayRange": [
+    2.0,
+    2.0
+   ],
+   "clips": [
+    "rfb_fire_far",
+    "sako_fire_outdoor_far",
+    "sako_fire_outdoor_distant"
+   ]
+  },
+  {
+   "path": "SOUND/AmbAfter2Cutscene/AmbientGroup/Explosions/Explosion_10",
+   "phase": "after",
+   "kind": "oneshot",
+   "volume": 0.30000001192092896,
+   "pitchRange": [
+    0.8999999761581421,
+    1.100000023841858
+   ],
+   "minDistance": 1.0,
+   "maxDistance": 500.0,
+   "spatialBlend": 1.0,
+   "spread": 1.0,
+   "delayRange": [
+    20.0,
+    20.0
+   ],
+   "clips": [
+    "pre_1.2_explosion_06",
+    "pre_1.2_explosion_05",
+    "pre_1.2_explosion_04",
+    "pre_1.2_explosion_03"
+   ]
+  },
+  {
+   "path": "SOUND/AmbAfter2Cutscene/AmbientGroup/Shots/Shot_04",
+   "phase": "after",
+   "kind": "oneshot",
+   "volume": 0.699999988079071,
+   "pitchRange": [
+    0.8999999761581421,
+    1.100000023841858
+   ],
+   "minDistance": 1.0,
+   "maxDistance": 500.0,
+   "spatialBlend": 1.0,
+   "spread": 1.0,
+   "delayRange": [
+    10.0,
+    10.0
+   ],
+   "clips": [
+    "rfb_fire_far",
+    "sako_fire_outdoor_far",
+    "sako_fire_outdoor_distant"
+   ]
+  },
+  {
+   "path": "SOUND/AmbAfter2Cutscene/AmbientGroup/StepsAndShouts/SplinePathMoverEmitter (2)/GroupedEmitter/ShootPlayer",
+   "phase": "after",
+   "kind": "loop",
+   "volume": 0.6000000238418579,
+   "pitchRange": [
+    0.8999999761581421,
+    1.100000023841858
+   ],
+   "minDistance": 1.0,
+   "maxDistance": 120.0,
+   "spatialBlend": 1.0,
+   "spread": 1.0,
+   "delayRange": [
+    0.0,
+    0.0
+   ],
+   "clips": [
+    "amb_sparrow_in_garbage_02",
+    "arena_far_fight2_1",
+    "arena_far_fight2_2",
+    "arena_far_fight2_3",
+    "arena_far_fight2_4",
+    "arena_far_fight2_5",
+    "arena_far_fight2_6",
+    "arena_far_fight2_7",
+    "arena_far_fight2_8",
+    "amb_factory_sand_shovel_far_reflections_1"
+   ],
+   "intervalRange": [
+    1.0,
+    5.0
+   ]
+  },
+  {
+   "path": "SOUND/AmbBetween1And2Cutscenes/AmbientGroup/Explosions/Explosion_For_Cam_Shake_02",
+   "phase": "between",
+   "kind": "oneshot",
+   "volume": 0.699999988079071,
+   "pitchRange": [
+    0.8999999761581421,
+    1.100000023841858
+   ],
+   "minDistance": 1.0,
+   "maxDistance": 500.0,
+   "spatialBlend": 1.0,
+   "spread": 1.0,
+   "delayRange": [
+    38.0,
+    38.0
+   ],
+   "clips": [
+    "amb_terminal_occluded_explosion_close_with_derbis"
+   ]
+  },
+  {
+   "path": "SOUND/AmbBetween1And2Cutscenes/AmbientGroup/Explosions/Explosion_04",
+   "phase": "between",
+   "kind": "oneshot",
+   "volume": 0.30000001192092896,
+   "pitchRange": [
+    0.8999999761581421,
+    1.100000023841858
+   ],
+   "minDistance": 1.0,
+   "maxDistance": 500.0,
+   "spatialBlend": 1.0,
+   "spread": 1.0,
+   "delayRange": [
+    38.0,
+    38.0
+   ],
+   "clips": [
+    "pre_1.2_explosion_06",
+    "pre_1.2_explosion_05",
+    "pre_1.2_explosion_04",
+    "pre_1.2_explosion_03"
+   ]
+  },
+  {
+   "path": "SOUND/AmbAfter2Cutscene/AmbientGroup/StepsAndShouts/SplinePathMoverEmitter (2)/GroupedEmitter/SpeechPlayer (1)",
+   "phase": "after",
+   "kind": "oneshot",
+   "volume": 0.30000001192092896,
+   "pitchRange": [
+    1.0,
+    1.0
+   ],
+   "minDistance": 1.0,
+   "maxDistance": 150.0,
+   "spatialBlend": 1.0,
+   "spread": 1.0,
+   "delayRange": [
+    1.0,
+    1.0
+   ],
+   "clips": [
+    "after_1.2_scav_voices_06"
+   ]
+  },
+  {
+   "path": "SOUND/AmbBetween1And2Cutscenes/AmbientGroup/Shots/Shot_04 (1)",
+   "phase": "between",
+   "kind": "oneshot",
+   "volume": 0.699999988079071,
+   "pitchRange": [
+    0.8999999761581421,
+    1.100000023841858
+   ],
+   "minDistance": 1.0,
+   "maxDistance": 500.0,
+   "spatialBlend": 1.0,
+   "spread": 1.0,
+   "delayRange": [
+    35.0,
+    35.0
+   ],
+   "clips": [
+    "amb_sparrow_in_garbage_02",
+    "arena_far_fight2_1",
+    "arena_far_fight2_2",
+    "arena_far_fight2_3",
+    "arena_far_fight2_4",
+    "arena_far_fight2_5",
+    "arena_far_fight2_6",
+    "arena_far_fight2_7",
+    "arena_far_fight2_8",
+    "amb_factory_sand_shovel_far_reflections_1"
+   ]
+  },
+  {
+   "path": "SOUND/AmbAfter2Cutscene/AmbientGroup/Explosions/Explosion_09",
+   "phase": "after",
+   "kind": "oneshot",
+   "volume": 0.30000001192092896,
+   "pitchRange": [
+    0.8999999761581421,
+    1.100000023841858
+   ],
+   "minDistance": 1.0,
+   "maxDistance": 500.0,
+   "spatialBlend": 1.0,
+   "spread": 1.0,
+   "delayRange": [
+    18.0,
+    18.0
+   ],
+   "clips": [
+    "pre_1.2_explosion_06",
+    "pre_1.2_explosion_05",
+    "pre_1.2_explosion_04",
+    "pre_1.2_explosion_03"
+   ]
+  },
+  {
+   "path": "SOUND/AmbBetween1And2Cutscenes/AmbientGroup/Debris/Debris (1)",
+   "phase": "between",
+   "kind": "oneshot",
+   "volume": 0.30000001192092896,
+   "pitchRange": [
+    0.8999999761581421,
+    1.100000023841858
+   ],
+   "minDistance": 0.5,
+   "maxDistance": 15.0,
+   "spatialBlend": 1.0,
+   "spread": 1.0,
+   "delayRange": [
+    13.0,
+    13.0
+   ],
+   "clips": [
+    "amb_terminal_debris_01",
+    "amb_terminal_debris_02",
+    "amb_terminal_debris_03",
+    "amb_terminal_debris_04",
+    "amb_terminal_debris_05",
+    "amb_terminal_debris_06",
+    "amb_terminal_debris_07",
+    "amb_terminal_debris_08"
+   ],
+   "triggerChance": 40
+  },
+  {
+   "path": "SOUND/AmbAfter2Cutscene/AmbientGroup/Explosions/Explosion_02",
+   "phase": "after",
+   "kind": "oneshot",
+   "volume": 0.30000001192092896,
+   "pitchRange": [
+    0.8999999761581421,
+    1.100000023841858
+   ],
+   "minDistance": 1.0,
+   "maxDistance": 500.0,
+   "spatialBlend": 1.0,
+   "spread": 1.0,
+   "delayRange": [
+    3.0,
+    3.0
+   ],
+   "clips": [
+    "pre_1.2_explosion_06",
+    "pre_1.2_explosion_05",
+    "pre_1.2_explosion_04",
+    "pre_1.2_explosion_03"
+   ]
+  },
+  {
+   "path": "SOUND/AmbBetween1And2Cutscenes/AmbientGroup/Explosions/Explosion_02",
+   "phase": "between",
+   "kind": "oneshot",
+   "volume": 0.30000001192092896,
+   "pitchRange": [
+    0.8999999761581421,
+    1.100000023841858
+   ],
+   "minDistance": 1.0,
+   "maxDistance": 500.0,
+   "spatialBlend": 1.0,
+   "spread": 1.0,
+   "delayRange": [
+    20.0,
+    20.0
+   ],
+   "clips": [
+    "pre_1.2_explosion_06",
+    "pre_1.2_explosion_05",
+    "pre_1.2_explosion_04",
+    "pre_1.2_explosion_03"
+   ]
+  },
+  {
+   "path": "SOUND/AmbBetween1And2Cutscenes/AmbientGroup/Explosions/Explosion_07",
+   "phase": "between",
+   "kind": "oneshot",
+   "volume": 0.30000001192092896,
+   "pitchRange": [
+    0.8999999761581421,
+    1.100000023841858
+   ],
+   "minDistance": 1.0,
+   "maxDistance": 500.0,
+   "spatialBlend": 1.0,
+   "spread": 1.0,
+   "delayRange": [
+    25.0,
+    25.0
+   ],
+   "clips": [
+    "pre_1.2_explosion_06",
+    "pre_1.2_explosion_05",
+    "pre_1.2_explosion_04",
+    "pre_1.2_explosion_03"
+   ]
+  },
+  {
+   "path": "SOUND/AmbAfter2Cutscene/AmbientGroup/StepsAndShouts/SplinePathMoverEmitter (2)/GroupedEmitter/FootstepPlayer",
+   "phase": "after",
+   "kind": "oneshot",
+   "volume": 0.15000000596046448,
+   "pitchRange": [
+    1.100000023841858,
+    1.100000023841858
+   ],
+   "minDistance": 1.0,
+   "maxDistance": 150.0,
+   "spatialBlend": 1.0,
+   "spread": 1.0,
+   "delayRange": [
+    1.0,
+    1.0
+   ],
+   "clips": [
+    "pre_1.2_footsteps_1"
+   ]
+  },
+  {
+   "path": "SOUND/AmbBetween1And2Cutscenes/AmbientGroup/StepsAndShouts/SplinePathMoverEmitter (1)/GroupedEmitter/SpeechPlayer",
+   "phase": "between",
+   "kind": "oneshot",
+   "volume": 0.25,
+   "pitchRange": [
+    1.0,
+    1.0
+   ],
+   "minDistance": 1.0,
+   "maxDistance": 150.0,
+   "spatialBlend": 1.0,
+   "spread": 1.0,
+   "delayRange": [
+    11.0,
+    11.0
+   ],
+   "clips": [
+    "pre_1.2_voices_02"
+   ]
+  },
+  {
+   "path": "SOUND/AmbAfter2Cutscene/AmbientGroup/StepsAndShouts/SplinePathMoverEmitter/GroupedEmitter/FootstepPlayer",
+   "phase": "after",
+   "kind": "oneshot",
+   "volume": 0.15000000596046448,
+   "pitchRange": [
+    1.0,
+    1.0
+   ],
+   "minDistance": 1.0,
+   "maxDistance": 150.0,
+   "spatialBlend": 1.0,
+   "spread": 1.0,
+   "delayRange": [
+    0.0,
+    0.0
+   ],
+   "clips": [
+    "pre_1.2_footsteps_1"
+   ]
+  },
+  {
+   "path": "SOUND/AmbAfter2Cutscene/AmbientGroup/Explosions/Explosion_05",
+   "phase": "after",
+   "kind": "oneshot",
+   "volume": 0.30000001192092896,
+   "pitchRange": [
+    0.8999999761581421,
+    1.100000023841858
+   ],
+   "minDistance": 1.0,
+   "maxDistance": 500.0,
+   "spatialBlend": 1.0,
+   "spread": 1.0,
+   "delayRange": [
+    10.0,
+    10.0
+   ],
+   "clips": [
+    "pre_1.2_explosion_06",
+    "pre_1.2_explosion_05",
+    "pre_1.2_explosion_04",
+    "pre_1.2_explosion_03"
+   ]
+  },
+  {
+   "path": "SOUND/AmbAfter2Cutscene/AmbientGroup/StepsAndShouts/SplinePathMoverEmitter (3)/GroupedEmitter/ShootPlayer",
+   "phase": "after",
+   "kind": "loop",
+   "volume": 0.6000000238418579,
+   "pitchRange": [
+    0.8999999761581421,
+    1.100000023841858
+   ],
+   "minDistance": 1.0,
+   "maxDistance": 120.0,
+   "spatialBlend": 1.0,
+   "spread": 1.0,
+   "delayRange": [
+    0.0,
+    0.0
+   ],
+   "clips": [
+    "amb_sparrow_in_garbage_02",
+    "arena_far_fight2_1",
+    "arena_far_fight2_2",
+    "arena_far_fight2_3",
+    "arena_far_fight2_4",
+    "arena_far_fight2_5",
+    "arena_far_fight2_6",
+    "arena_far_fight2_7",
+    "arena_far_fight2_8",
+    "amb_factory_sand_shovel_far_reflections_1"
+   ],
+   "intervalRange": [
+    1.0,
+    5.0
+   ]
+  },
+  {
+   "path": "SOUND/AmbAfter2Cutscene/AmbientGroup/StepsAndShouts/SplinePathMoverEmitter/GroupedEmitter/SpeechPlayer",
+   "phase": "after",
+   "kind": "oneshot",
+   "volume": 0.30000001192092896,
+   "pitchRange": [
+    1.0,
+    1.0
+   ],
+   "minDistance": 1.0,
+   "maxDistance": 150.0,
+   "spatialBlend": 1.0,
+   "spread": 1.0,
+   "delayRange": [
+    0.0,
+    0.0
+   ],
+   "clips": [
+    "after_1.2_vsrf_voices_01"
+   ]
+  },
+  {
+   "path": "SOUND/AmbBetween1And2Cutscenes/AmbientGroup/Shots/Shot_03",
+   "phase": "between",
+   "kind": "oneshot",
+   "volume": 0.699999988079071,
+   "pitchRange": [
+    0.8999999761581421,
+    1.100000023841858
+   ],
+   "minDistance": 1.0,
+   "maxDistance": 500.0,
+   "spatialBlend": 1.0,
+   "spread": 1.0,
+   "delayRange": [
+    15.0,
+    15.0
+   ],
+   "clips": [
+    "rfb_fire_far",
+    "sako_fire_outdoor_far",
+    "sako_fire_outdoor_distant"
+   ]
+  }
+ ],
+ "alarm": [
+  {
+   "path": "SOUND/Alarm/alarm_sound_root/alarm_sound_03",
+   "clip": "amb_terminal_siren",
+   "loop": 1
+  },
+  {
+   "path": "SOUND/Alarm/alarm_sound_root/alarm_sound_04",
+   "clip": "amb_terminal_siren",
+   "loop": 1
+  },
+  {
+   "path": "SOUND/Alarm/alarm_sound_root/alarm_sound_01",
+   "clip": "amb_terminal_siren",
+   "loop": 1
+  },
+  {
+   "path": "SOUND/Alarm/alarm_sound_root/alarm_sound_02",
+   "clip": "amb_terminal_siren",
+   "loop": 1
+  }
+ ],
+ "doorOpen": {
+  "doorId": "door_Terminal_Area_01_CutScene_00000",
+  "sounds": [
+   {
+    "path": "SOUND/AdditionalSounds/DoorOpenSound",
+    "clip": "entity_cardlock_doorunlock",
+    "volume": 0.7,
+    "delay": 0.0
+   },
+   {
+    "path": "SOUND/AdditionalSounds/DoorOpenVSRFFoley",
+    "clip": "vsrf_door_open_foley",
+    "volume": 0.902,
+    "delay": 1.2
+   },
+   {
+    "path": "SOUND/AdditionalSounds/DoorOpenVSRFVoice",
+    "clip": "vsrf_door_open_voice_eng",
+    "volume": 1.0,
+    "delay": 2.2
+   }
+  ]
+ },
+ "firefight": {
+  "preset": {
+   "DensityCurve": {
+    "m_Curve": [
+     {
+      "time": 0.0,
+      "value": 0.699999988079071,
+      "inSlope": 0.43382322788238525,
+      "outSlope": 0.43382322788238525,
+      "weightedMode": 0,
+      "inWeight": 0.0,
+      "outWeight": 0.3333333432674408
+     },
+     {
+      "time": 0.35410022735595703,
+      "value": 0.8536168932914734,
+      "inSlope": 0.3302288055419922,
+      "outSlope": 0.3302288055419922,
+      "weightedMode": 0,
+      "inWeight": 0.3333333432674408,
+      "outWeight": 0.3333333432674408
+     },
+     {
+      "time": 1.0,
+      "value": 1.0,
+      "inSlope": 0.10929607599973679,
+      "outSlope": 0.10929607599973679,
+      "weightedMode": 0,
+      "inWeight": 0.12122885137796402,
+      "outWeight": 0.0
+     }
+    ],
+    "m_PreInfinity": 2,
+    "m_PostInfinity": 2,
+    "m_RotationOrder": 4
+   },
+   "DensityPeriodSec": 10.0,
+   "BaseDensity": 0.5,
+   "GrenadeEventsPerShooterPerMinuteAtMaxDensity": 0.15000000596046448,
+   "InitialCooldownRangeSec": {
+    "x": 0.10000000149011612,
+    "y": 0.5
+   },
+   "BaseCooldownAtZeroDensitySec": 1.0,
+   "BaseCooldownAtMaxDensitySec": 0.10000000149011612,
+   "CooldownJitterRangeSec": {
+    "x": 0.0,
+    "y": 0.20000000298023224
+   },
+   "NoProfileRetryCooldownSec": 0.5,
+   "BackoffAtZeroDensitySec": 0.20000000298023224,
+   "BackoffAtMaxDensitySec": 0.6000000238418579,
+   "EnableCallAndResponse": 1,
+   "ResponseProbability": 0.6499999761581421,
+   "ResponseDelayRange": {
+    "x": 1.0,
+    "y": 3.0
+   },
+   "ResponseShotsRange": {
+    "x": 1,
+    "y": 5
+   },
+   "ResponseCooldownRange": {
+    "x": 3.0,
+    "y": 7.0
+   }
+  },
+  "areas": [
+   {
+    "path": "SOUND/FirefightDirector/FirefightAreas/FirefightArea_03",
+    "radius": 450.0,
+    "localDensity": 1.0,
+    "useSector": 1,
+    "sectorApertureDeg": 130.0,
+    "forwardOffsetPercentRange": [
+     0.0,
+     0.800000011920929
+    ]
+   },
+   {
+    "path": "SOUND/FirefightDirector/FirefightAreas/FirefightArea_01",
+    "radius": 450.0,
+    "localDensity": 1.0,
+    "useSector": 1,
+    "sectorApertureDeg": 130.0,
+    "forwardOffsetPercentRange": [
+     0.0,
+     0.800000011920929
+    ]
+   },
+   {
+    "path": "SOUND/FirefightDirector/FirefightAreas/FirefightArea_02",
+    "radius": 450.0,
+    "localDensity": 1.0,
+    "useSector": 1,
+    "sectorApertureDeg": 130.0,
+    "forwardOffsetPercentRange": [
+     0.0,
+     0.800000011920929
+    ]
+   },
+   {
+    "path": "SOUND/FirefightDirector/FirefightAreas/FirefightArea_04",
+    "radius": 450.0,
+    "localDensity": 1.0,
+    "useSector": 1,
+    "sectorApertureDeg": 130.0,
+    "forwardOffsetPercentRange": [
+     0.0,
+     0.800000011920929
+    ]
+   }
+  ],
+  "shotClips": [
+   "amb_sparrow_in_garbage_02",
+   "arena_far_fight2_1",
+   "arena_far_fight2_2",
+   "arena_far_fight2_3",
+   "arena_far_fight2_4",
+   "arena_far_fight2_5",
+   "arena_far_fight2_6",
+   "arena_far_fight2_7",
+   "arena_far_fight2_8",
+   "amb_factory_sand_shovel_far_reflections_1"
+  ],
+  "debrisClips": [
+   "amb_terminal_debris_01",
+   "amb_terminal_debris_02",
+   "amb_terminal_debris_03",
+   "amb_terminal_debris_04",
+   "amb_terminal_debris_05",
+   "amb_terminal_debris_06",
+   "amb_terminal_debris_07",
+   "amb_terminal_debris_08"
+  ],
+  "explosionClips": [
+   "amb_terminal_occluded_explosion_close_with_derbis"
+  ]
+ }
+}
