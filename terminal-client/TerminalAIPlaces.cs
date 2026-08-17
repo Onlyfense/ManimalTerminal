@@ -67,6 +67,7 @@ namespace Manimal.Terminal
                 try
                 {
                     TerminalCrewJobs.Reset();
+                    TerminalPortBossPool.ResetForRaid();
                     if (__instance.BotSpawner != null)
                         __instance.BotSpawner.OnBotCreated += TerminalCrewJobs.OnBotCreated;
                     TerminalHangarCrew.AugmentHangarZone(); // native fix: interior markers before any wave fires

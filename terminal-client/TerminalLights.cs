@@ -1,443 +1,1043 @@
+// RECOVERED FROM THE COMPILED DLL 2026-08-16: a botched git checkout discarded this
+// file's working copy (an entire session of changes); logic was restored by
+// decompiling our own last-good build, so the original comments are gone. the
+// session's design notes live in docs/memory/terminal-backport.md — key systems in
+// here: authored lamp restore (terminal_lights.json, position-keyed, culling-max
+// intensities), TOD sky self-drive + probes + hour offset, sky-tint ambient via
+// LevelSettings (NVG hemisphere preserved), night-sky substitute (stands down when
+// WeatherController lives), hitch logger, weapon/loot light filters, lamp-system
+// prefix skips, cutscene holds.
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
+using System.IO;
+using System.Reflection;
+using System.Text;
+using BepInEx.Configuration;
+using BepInEx.Logging;
 using Comfort.Common;
 using EFT;
+using EFT.Interactive;
+using EFT.Weather;
 using HarmonyLib;
+using Newtonsoft.Json.Linq;
 using UnityEngine;
+using UnityEngine.Rendering;
+using UnityEngine.SceneManagement;
 
 namespace Manimal.Terminal
 {
-    // the light/lamp system, ported from icebreaker's RenderEnvProbe subset: the rip
-    // loses baked lighting, so interior lamps serialize at intensity 0 — revive them
-    // realtime, add a flat ambient fill, and clamp bsg's native light fade window
-    // (CullingManager FADES intensity across an authored 50-80m window and never
-    // disables a light — far lamps bleed GPU on players even when the dev box shows
-    // nothing).
+
+
     internal static class TerminalLights
     {
-        // the discovered dead lamps, cached so the slider can re-drive them (once set
-        // to a real intensity they no longer look "dead", so we can't re-detect)
-        private static readonly List<Light> _lamps = new List<Light>();
-        private static float _lastLamp = -1f, _lastAmbient = -1f, _lastLightCull = -1f;
-        private static Camera _opticCam;
-        private static bool _lastShadows;
+    	[HarmonyPatch]
+    	internal static class Patch_LampsDead
+    	{
+    		private static IEnumerable<MethodBase> TargetMethods()
+    		{
+    			string[] array = new string[4] { "Awake", "OnEnable", "ManualUpdate", "TurnLights" };
+    			foreach (string m in array)
+    			{
+    				MethodInfo mi = AccessTools.Method(typeof(LampController), m, (Type[])null, (Type[])null);
+    				if (mi != null)
+    				{
+    					yield return mi;
+    				}
+    			}
+    		}
 
-        internal static bool CutsceneHold;
+    		[HarmonyPrefix]
+    		private static bool Prefix()
+    		{
+    			return !TerminalGate.On && !TerminalLoaded.Check();
+    		}
+    	}
 
-        internal static void ResetForNewRaid()
-        {
-            _lamps.Clear();
-            _lastLamp = _lastAmbient = _lastLightCull = -1f;
-            CutsceneHold = false;
-            _sky = null;
-            _skyTimeLogged = false;
-        }
+    	[HarmonyPatch(typeof(GameWorld), "OnGameStarted")]
+    	internal static class Patch_LightsAtRaidStart
+    	{
+    		[HarmonyPostfix]
+    		private static void Postfix()
+    		{
+    			//IL_0014: Unknown result type (might be due to invalid IL or missing references)
+    			//IL_001a: Expected O, but got Unknown
+    			if (TerminalGate.On)
+    			{
+    				GameObject val = new GameObject("Terminal_Lights");
+    				val.AddComponent<Host>();
+    			}
+    		}
+    	}
 
-        // TOD HOUR SYNC — the healed sky runs at the scene's authored serialized hour
-        // (night) because WeatherController (the thing that syncs TOD to session time)
-        // is scrubbed until the weather port. drive the cycle straight from the raid
-        // clock: icebreaker's memory names the exact failure this prevents ("no TOD
-        // hour sync -> night sun -> pitch black map").
-        private static TOD_Sky _sky;
-        private static bool _skyTimeLogged;
+    	internal class Host : MonoBehaviour
+    	{
+    		private void Start()
+    		{
+    			((MonoBehaviour)this).StartCoroutine(Init());
+    		}
 
-        internal static void TickSkyTime()
-        {
-            try
-            {
-                if (_sky == null) _sky = UnityEngine.Object.FindObjectOfType<TOD_Sky>();
-                if (_sky == null || !_sky.Initialized) return;
-                // GClass4.CurrentTime never materializes on terminal (2026-08-10 raid:
-                // clock host waited 20s, sky stayed daytime) — GameWorld's clock is the
-                // one RaidClock anchors, fall back to it
-                var gdt = GClass4.Instance?.CurrentTime?.GameDateTime
-                       ?? Comfort.Common.Singleton<EFT.GameWorld>.Instance?.GameDateTime;
-                if (gdt == null) return;
-                var dt = gdt.Calculate();
-                _sky.Cycle.DateTime = dt;
-                if (!_skyTimeLogged)
-                {
-                    _skyTimeLogged = true;
-                    Plugin.Log.LogWarning($"[Sky] TOD hour synced to raid time: {dt:HH:mm} (re-synced ~1/s)");
-                }
-            }
-            catch { }
-        }
+    		private IEnumerator Init()
+    		{
+    			DiscoverLamps();
+    			yield return null;
+    			ApplyLamps();
+    			yield return null;
+    			ApplyAmbient();
+    			yield return null;
+    			TerminalVolumetricLights.Restore();
+    			yield return null;
+    			try
+    			{
+    				TerminalFlares.TryBuild();
+    			}
+    			catch (Exception ex)
+    			{
+    				Exception e = ex;
+    				Plugin.Log.LogWarning((object)("[Flares] build failed: " + e.Message));
+    			}
+    		}
 
-        // near-zero non-directional light in a Terminal scene = dead lamp. additive:
-        // safe to call again for streamed-in stragglers.
-        // every lit non-directional light within 4m of the player, full hierarchy path —
-        // the definitive "what is that glow" instrument
-        internal static void DumpNearPlayerLights()
-        {
-            try
-            {
-                var mp = Comfort.Common.Singleton<EFT.GameWorld>.Instance?.MainPlayer;
-                if (mp == null) { Plugin.Log.LogWarning("[LightProbe] no main player"); return; }
-                int found = 0;
-                foreach (var l in UnityEngine.Object.FindObjectsOfType<Light>())
-                {
-                    if (l == null || !l.enabled || l.intensity <= 0.01f || l.type == LightType.Directional) continue;
-                    if ((l.transform.position - mp.Position).sqrMagnitude > 4f * 4f) continue;
-                    string path = l.transform.name;
-                    for (var t = l.transform.parent; t != null; t = t.parent) path = t.name + "/" + path;
-                    Plugin.Log.LogWarning($"[LightProbe] near-player light: '{path}' scene='{l.gameObject.scene.name}' "
-                        + $"type={l.type} intensity={l.intensity:0.00} range={l.range:0.0} culled={l.GetComponent<CullingLightObject>() != null}");
-                    found++;
-                }
-                if (found == 0) Plugin.Log.LogWarning("[LightProbe] no lit lights within 4m right now");
-            }
-            catch { }
-        }
+    		private void Update()
+    		{
+    			//IL_01c1: Unknown result type (might be due to invalid IL or missing references)
+    			//IL_01c6: Unknown result type (might be due to invalid IL or missing references)
+    			//IL_0203: Unknown result type (might be due to invalid IL or missing references)
+    			//IL_0208: Unknown result type (might be due to invalid IL or missing references)
+    			float unscaledDeltaTime = Time.unscaledDeltaTime;
+    			_frameAvg = Mathf.Lerp((_frameAvg <= 0f) ? unscaledDeltaTime : _frameAvg, unscaledDeltaTime, 0.05f);
+    			bool flag = _frameAvg > 1.5f / Mathf.Max(30f, (Application.targetFrameRate > 0) ? ((float)Application.targetFrameRate) : 60f);
+    			if (flag != _inChop && Time.time - _lastChopEdge > 2f)
+    			{
+    				_inChop = flag;
+    				_lastChopEdge = Time.time;
+    				int num = GC.CollectionCount(0);
+    				Plugin.Log.LogWarning((object)(string.Format("[Perf] {0} t={1:0.0}s ", flag ? "CHOPPY window start" : "smooth again", Time.time) + $"avgFrame={_frameAvg * 1000f:0.0}ms gc0={num} (delta {num - _lastGc})"));
+    				_lastGc = num;
+    			}
+    			if (Time.frameCount % 10 == 7)
+    			{
+    				TickSkyTime();
+    			}
+    			if (Time.frameCount % 300 == 47)
+    			{
+    				_lastAmbient = -1f;
+    			}
+    			if (Time.frameCount % 120 == 23)
+    			{
+    				TerminalWeather.TryStage();
+    				TerminalWeather.TickProbe();
+					TerminalStencils.TryStage();
+    			}
+    			TickNightSky();
+    			if (Plugin.SpatialAudio.Value)
+    			{
+    				if (Time.frameCount % 120 == 7)
+    				{
+    					TerminalAcoustics.TickSpatialInit();
+    					TerminalAcoustics.TickSpatialVerdict();
+    					TerminalAcoustics.TryBuildEnvironmentTriggers();
+    					if (Plugin.AmbientRetail.Value)
+    					{
+    						TerminalAcoustics.TryStageAmbient();
+    					}
+    					TerminalAcoustics.TryApplyAmbientAuthoring();
+    				}
+    				if ((Time.frameCount & 1) == 0)
+    				{
+    					TerminalAcoustics.DriveEnvironment();
+    				}
+    			}
+    			KeyboardShortcut value = Plugin.LightProbeKey.Value;
+    			if (value.IsDown() || (Plugin.DevMode.Value && Time.frameCount % 300 == 33))
+    			{
+    				DumpNearPlayerLights();
+    			}
+    			value = Plugin.SoundProbeKey.Value;
+    			if (value.IsDown())
+    			{
+    				DumpNearPlayerSounds();
+    			}
+    			if ((UnityEngine.Object)(object)_opticCam == (UnityEngine.Object)null)
+    			{
+    				Camera[] allCameras = Camera.allCameras;
+    				for (int i = 0; i < allCameras.Length; i++)
+    				{
+    					if ((UnityEngine.Object)(object)allCameras[i] != (UnityEngine.Object)null && ((UnityEngine.Object)allCameras[i]).name == "BaseOpticCamera(Clone)")
+    					{
+    						_opticCam = allCameras[i];
+    						break;
+    					}
+    				}
+    			}
+    			if ((UnityEngine.Object)(object)_opticCam != (UnityEngine.Object)null)
+    			{
+    				TOD_Scattering component = ((Component)_opticCam).GetComponent<TOD_Scattering>();
+    				if ((UnityEngine.Object)(object)component != (UnityEngine.Object)null && ((Behaviour)component).enabled)
+    				{
+    					((Behaviour)component).enabled = false;
+    					Plugin.Log.LogInfo((object)"[Lights] optic camera TOD_Scattering disabled (dark magnified scopes)");
+    				}
+    			}
+    			if (Time.frameCount % 30 == 0)
+    			{
+    				if (Plugin.LampIntensity.Value != _lastLamp || Plugin.LampShadows.Value != _lastShadows || Plugin.LightCullDistance.Value != _lastLightCull)
+    				{
+    					ApplyLamps();
+    				}
+    				if (Plugin.AmbientIntensity.Value != _lastAmbient)
+    				{
+    					ApplyAmbient();
+    				}
+    			}
+    		}
+    	}
 
-        // every playing AudioSource within earshot, loudest-closest first — clip name,
-        // hierarchy path, volume, distance, rolloff. the what-is-that-noise instrument.
-        internal static void DumpNearPlayerSounds()
-        {
-            try
-            {
-                var mp = Comfort.Common.Singleton<EFT.GameWorld>.Instance?.MainPlayer;
-                if (mp == null) { Plugin.Log.LogWarning("[SoundProbe] no main player"); return; }
-                var rows = new System.Collections.Generic.List<(float score, string line)>();
-                foreach (var s in UnityEngine.Object.FindObjectsOfType<AudioSource>())
-                {
-                    if (s == null || !s.isPlaying || s.volume <= 0.001f) continue;
-                    float d = (s.transform.position - mp.Position).magnitude;
-                    // 2D sources play at full volume everywhere REGARDLESS of where
-                    // their transform sits — the 60m distance cut hid exactly the
-                    // sources that sound "consistent in open areas" (2026-08-11: the
-                    // global sparrow loop escaped the probe entirely). never cut those.
-                    bool global = s.spatialBlend < 0.5f;
-                    if (!global && d > 60f) continue;
-                    string path = s.transform.name;
-                    for (var t = s.transform.parent; t != null; t = t.parent) path = t.name + "/" + path;
-                    rows.Add((global ? float.MaxValue : s.volume / Mathf.Max(d, 1f),
-                        $"[SoundProbe] {(global ? "GLOBAL/2D " : "")}'{s.clip?.name ?? "<procedural>"}' on '{path}' "
-                        + $"vol={s.volume:0.00} dist={d:0.0}m blend={s.spatialBlend:0.0} loop={s.loop} "
-                        + $"min/max={s.minDistance:0.0}/{s.maxDistance:0.0} scene='{s.gameObject.scene.name}'"));
-                }
-                rows.Sort((a, b) => b.score.CompareTo(a.score));
-                foreach (var (_, line) in rows.Take(20)) Plugin.Log.LogWarning(line);
-                Plugin.Log.LogWarning($"[SoundProbe] {rows.Count} playing source(s) within 60m ({Mathf.Max(rows.Count - 20, 0)} not shown)");
-            }
-            catch { }
-        }
+    	private static readonly List<Light> _lamps = new List<Light>();
 
-        internal static void DiscoverLamps()
-        {
-            // lights owned by a CullingLightObject are driven by BSG's native system
-            // (intensity from _maxLightIntensity + fade curves) — ours would fight it
-            var nativeOwned = new HashSet<Light>();
-            foreach (var clo in UnityEngine.Object.FindObjectsOfType<CullingLightObject>())
-            {
-                var l = clo.GetLight();
-                if (l != null) nativeOwned.Add(l);
-            }
-            int skipped = 0;
-            foreach (var l in UnityEngine.Object.FindObjectsOfType<Light>())
-            {
-                if (l == null || l.type == LightType.Directional || l.intensity > 0.1f || _lamps.Contains(l)) continue;
-                // MAP lights only — icebreaker's ungated sweep once revived the camera
-                // prefab's dormant hideout flashlight and it rode the player like a halo
-                var sc = l.gameObject.scene.name;
-                if (sc == null || !sc.StartsWith("Terminal")) continue;
-                if (nativeOwned.Contains(l)) { skipped++; continue; }
-                _lamps.Add(l);
-            }
-            if (skipped > 0)
-                Plugin.Log.LogInfo($"[Lights] {skipped} lamps native-owned (CullingLightObject) — LampIntensity drives only the {_lamps.Count} unowned");
-        }
+    	private static float _lastLamp = -1f;
 
-        // drive every discovered lamp from the config slider (live). native-owned
-        // lights get their brightness ceiling set instead — and float_1 (the cached
-        // "on" value CullingManager actually drives) must follow or nothing changes.
-        internal static void ApplyLamps()
-        {
-            float v = Plugin.LampIntensity.Value;
-            var shadows = Plugin.LampShadows.Value ? LightShadows.Hard : LightShadows.None;
-            int n = 0;
-            foreach (var l in _lamps)
-                if (l != null)
-                {
-                    l.intensity = v; l.shadows = shadows; n++;
-                    // slider at 0 = lights OFF, guaranteed — not "intensity 0 and hope
-                    // unity skips it" (big GPU win; emissives carry the look)
-                    if (v <= 0.01f) l.enabled = false;
-                    else if (!l.enabled) l.enabled = true;
-                }
+    	private static float _lastAmbient = -1f;
 
-            int natives = 0, windowed = 0;
-            var fMax = AccessTools.Field(typeof(CullingLightObject), "_maxLightIntensity");
-            var fCached = AccessTools.Field(typeof(CullingLightObject), "float_1");
-            // LightCullDistance tightens the NATIVE fade window — one-way shrink per
-            // raid; raising it back needs a raid restart
-            var fFadeStart = AccessTools.Field(typeof(CullingLightObject), "_fadeStartDistance");
-            var fFadeEnd = AccessTools.Field(typeof(CullingLightObject), "_fadeEndDistance");
-            float dCull = Plugin.LightCullDistance.Value;
-            // MANAGER-LESS MODE (terminal, unlike icebreaker): the ceilings written
-            // below are only ever APPLIED to the actual Light by CullingManager's
-            // visibility path — and terminal has no manager (native culling suppressed,
-            // machinery stubless). drive the Light components directly ourselves.
-            bool managerAlive = false;
-            try { managerAlive = CullingManager.Instance != null; } catch { }
-            foreach (var clo in UnityEngine.Object.FindObjectsOfType<CullingLightObject>())
-            {
-                var cl = clo.GetLight();
-                if (cl == null) continue;
-                // MAP lights only — same gate as DiscoverLamps (the halo lesson): this
-                // loop used to drive EVERY CullingLightObject in the game, including any
-                // riding the player/weapon rig in the main scene
-                var cs = cl.gameObject.scene.name;
-                if (cs == null || !cs.StartsWith("Terminal")) continue;
-                fMax?.SetValue(clo, v);
-                fCached?.SetValue(clo, v);
-                if (!managerAlive)
-                {
-                    cl.intensity = v;
-                    cl.shadows = shadows;
-                    if (v <= 0.01f) cl.enabled = false;
-                    else if (!cl.enabled) cl.enabled = true;
-                }
-                natives++;
-                try
-                {
-                    if (fFadeStart != null && fFadeEnd != null && dCull < (float)fFadeEnd.GetValue(clo))
-                    {
-                        fFadeStart.SetValue(clo, Mathf.Min((float)fFadeStart.GetValue(clo), dCull * 0.6f));
-                        fFadeEnd.SetValue(clo, dCull);
-                        clo.method_3(); // recompute the squared-distance caches
-                        windowed++;
-                    }
-                }
-                catch { }
-            }
-            if (windowed > 0)
-                Plugin.Log.LogDebug($"[Lights] native fade window tightened to {dCull:0}m on {windowed} lights");
-            _lastLamp = v;
-            _lastShadows = Plugin.LampShadows.Value;
-            _lastLightCull = dCull;
-            Plugin.Log.LogInfo($"[Lights] drove {n} plain lamps + {natives} native culling lights to intensity {v:F2}"
-                + (managerAlive ? "" : " (MANAGER-LESS: Light components driven directly)"));
+    	private static float _lastLightCull = -1f;
 
-            // LAMP AUTOPSY — pitch-black-near-lamps discriminator: if these show
-            // enabled lights with sane range/color/mask and the ground still stays
-            // black, the geometry's deferred response is broken (shader rebind gap),
-            // not the lights. one-shot per apply.
-            try
-            {
-                var cam = TerminalCullingDriver.CameraRef != null ? TerminalCullingDriver.CameraRef : Camera.main;
-                var camPos = cam != null ? cam.transform.position : Vector3.zero;
-                int near = 0, sampled = 0;
-                var sb = new System.Text.StringBuilder();
-                foreach (var clo in UnityEngine.Object.FindObjectsOfType<CullingLightObject>())
-                {
-                    var l = clo.GetLight();
-                    if (l == null) continue;
-                    float d = Vector3.Distance(l.transform.position, camPos);
-                    if (d < 30f) near++;
-                    if (sampled < 5 && d < 60f)
-                    {
-                        sampled++;
-                        sb.Append($"\n  '{l.name}' d={d:0}m enabled={l.enabled} type={l.type} intensity={l.intensity:0.##} range={l.range:0.#} color={l.color} mask=0x{l.cullingMask:X} shadows={l.shadows}");
-                    }
-                }
-                Plugin.Log.LogWarning($"[Lights] AUTOPSY: {near} native lights within 30m of camera, samples:{sb}");
-            }
-            catch (System.Exception e) { Plugin.Log.LogDebug($"[Lights] autopsy failed: {e.Message}"); }
-        }
+    	private static Camera _opticCam;
 
-        // flat ambient fill. retail LevelSettings re-applies its OWN ambient fields
-        // every frame via Camera.onPreCull (authored black — the map relied on baked
-        // lightmaps we don't have), so when the singleton exists write our fill
-        // THROUGH its fields; direct RenderSettings writes are the fallback.
-        internal static void ApplyAmbient()
-        {
-            float a = Plugin.AmbientIntensity.Value;
-            _lastAmbient = a;
-            var fill = new Color(0.15f * a, 0.15f * a, 0.18f * a, 1f);
-            var ls = Singleton<LevelSettings>.Instance;
-            if (ls != null)
-            {
-                ls.AmbientMode = UnityEngine.Rendering.AmbientMode.Flat;
-                ls.SkyColor = fill;      // Flat mode: the native applier writes SkyColor into ambientLight
-                ls.EquatorColor = fill;
-                ls.GroundColor = fill;
-                ls.AmbientIntensity = a;
-                // NVG hemisphere too — toggling goggles swaps RenderSettings to the
-                // NightVision* fields, which retail authors at 0.04 gray / intensity 0
-                // (extraction 2026-08-10 — retail brightness lived in lightmaps we dont
-                // have), so NVGs made the map DARKER. lifted fill: the goggle post-gain
-                // amplifies whatever ambient exists.
-                float nv = Plugin.NvgAmbient.Value;
-                var nvFill = new Color(0.15f * a * nv, 0.18f * a * nv, 0.15f * a * nv, 1f);
-                ls.NightVisionSkyColor = nvFill;
-                ls.NightVisionEquatorColor = nvFill;
-                ls.NightVisionGroundColor = nvFill;
-                ls.NightVisionAmbientIntensity = a * nv;
-                Plugin.Log.LogDebug($"[Ambient] flat ambient -> {fill}, nvg -> {nvFill} (via LevelSettings, native per-frame apply)");
-            }
-            else
-            {
-                RenderSettings.ambientMode = UnityEngine.Rendering.AmbientMode.Flat;
-                RenderSettings.ambientLight = fill;
-                RenderSettings.ambientIntensity = a;
-                Plugin.Log.LogDebug($"[Ambient] flat ambient -> {fill} (RenderSettings fallback, no LevelSettings singleton)");
-            }
-        }
+    	private static bool _lastShadows;
 
-        // the native system darkens lights by fading INTENSITY, not Light.enabled —
-        // restore state + intensity ourselves, per-object guarded (bsg's own
-        // ForceEnable loop NREs on culling objects with null internals)
-        private static System.Reflection.FieldInfo _cloMaxIntensity;
-        internal static int ForceNativeLightsOn()
-        {
-            if (_cloMaxIntensity == null)
-                _cloMaxIntensity = AccessTools.Field(typeof(CullingLightObject), "_maxLightIntensity");
-            int n = 0;
-            foreach (var clo in UnityEngine.Object.FindObjectsOfType<CullingLightObject>())
-            {
-                try { clo.SetVisibility(true); } catch { }
-                var l = clo.GetLight();
-                if (l == null) continue;
-                if (!l.enabled) l.enabled = true;
-                try
-                {
-                    float mi = (float)_cloMaxIntensity.GetValue(clo);
-                    if (mi > 0f && l.intensity < mi) { l.intensity = mi; n++; }
-                }
-                catch { }
-            }
-            return n;
-        }
+    	internal static bool CutsceneHold;
 
-        // for cutscene wide shots: the native CullingManager also rides onPreCull and
-        // would cull from the PLAYER's stale position (dark map, wedged lights).
-        // LockState(true) pauses evaluation WITHOUT unhooking anything — NEVER toggle
-        // cm.enabled: OnDisable unhooks its onPreCull and only Awake re-registers
-        // (raid-long lobotomy, icebreaker shipped that bug once).
-        internal static void CutsceneShowAll()
-        {
-            CutsceneHold = true;
-            try
-            {
-                var cm = CullingManager.Instance;
-                if (cm != null) cm.LockState(true);
-            }
-            catch (Exception e) { Plugin.Log.LogWarning($"[CutsceneHold] native manager lock failed: {e.Message}"); }
-            int lamps = 0;
-            foreach (var l in _lamps)
-                if (l != null && !l.enabled) { l.enabled = true; lamps++; }
-            int native = ForceNativeLightsOn();
-            Plugin.Log.LogDebug($"[CutsceneHold] armed — {lamps} lamps re-enabled, {native} native lights forced on");
-        }
+    	private static TOD_Sky _sky;
 
-        // post-cutscene: heal every native light once more, then unlock the manager so
-        // it resumes with fresh distances from the real camera and re-culls cleanly
-        internal static void CutsceneRelease()
-        {
-            CutsceneHold = false;
-            int native = 0;
-            try { native = ForceNativeLightsOn(); } catch { }
-            try
-            {
-                var cm = CullingManager.Instance;
-                if (cm != null) cm.LockState(false);
-            }
-            catch (Exception e) { Plugin.Log.LogWarning($"[CutsceneHold] release failed: {e.Message}"); }
-            Plugin.Log.LogDebug($"[CutsceneHold] released — healed {native} native lights, culling unlocked");
-        }
+    	private static bool _skyTimeLogged;
 
-        [HarmonyPatch(typeof(GameWorld), nameof(GameWorld.OnGameStarted))]
-        internal static class Patch_LightsAtRaidStart
-        {
-            [HarmonyPostfix]
-            private static void Postfix()
-            {
-                if (!TerminalGate.On) return;
-                var go = new GameObject("Terminal_Lights");
-                go.AddComponent<Host>();
-            }
-        }
+    	private static int _skyProbes;
 
-        // staged init (one system per frame — icebreaker's all-in-one-frame stage was
-        // a 14s load-in hitch), then a light ticker for live config re-apply
-        internal class Host : MonoBehaviour
-        {
-            private void Start() => StartCoroutine(Init());
+    	private static int _skyTicks;
 
-            private IEnumerator Init()
-            {
-                DiscoverLamps(); yield return null;
-                ApplyLamps(); yield return null;
-                ApplyAmbient(); yield return null;
-                // after ApplyLamps on purpose: VolumetricLight.CheckIntensity refuses
-                // to register a beam whose light sits under 0.001, and the lamps are
-                // authored at 0 until the pass above lights them
-                TerminalVolumetricLights.Restore(); yield return null;
-                try { TerminalFlares.TryBuild(); }
-                catch (System.Exception e) { Plugin.Log.LogWarning($"[Flares] build failed: {e.Message}"); }
-            }
+    	private static bool _ambientAuthorityTaken;
 
-            private void Update()
-            {
-                if (Time.frameCount % 60 == 17) TickSkyTime();
-                // acoustics tier 2: build once (idempotent, liveness-tracked), then
-                // self-drive the env poll — BSG's own async driver dies silently on the
-                // first half-spawned player exception
-                if (Plugin.SpatialAudio.Value)
-                {
-                    if (Time.frameCount % 120 == 7)
-                    {
-                        TerminalAcoustics.TickSpatialInit(); // rooms first — the ambient gating rides on them
-                        TerminalAcoustics.TickSpatialVerdict();
-                        TerminalAcoustics.TryBuildEnvironmentTriggers();
-                        // the authored layer first; the interim volume/governor pass
-                        // stands itself down once that succeeds
-                        if (Plugin.AmbientRetail.Value) TerminalAcoustics.TryStageAmbient();
-                        TerminalAcoustics.TryApplyAmbientAuthoring();
-                    }
-                    if ((Time.frameCount & 1) == 0) TerminalAcoustics.DriveEnvironment();
-                }
-                // the player-halo hunt (2026-08-10, "light appears when i mag the AK"):
-                // manual key (user call — no DevMode required) or DevMode interval —
-                // names every lit light near the player so the culprit stops being a
-                // theory
-                if (Plugin.LightProbeKey.Value.IsDown() || (Plugin.DevMode.Value && Time.frameCount % 300 == 33))
-                    DumpNearPlayerLights();
-                // the loud-clip hunt (2026-08-11: rat-squeak + chain-jingle ambients too
-                // loud, too frequent): name every audibly-playing source near the player
-                if (Plugin.SoundProbeKey.Value.IsDown())
-                    DumpNearPlayerSounds();
-                // magnified scopes render through BaseOpticCamera(Clone) which ships its
-                // OWN TOD_Scattering — it fogs the whole magnified view toward the black
-                // night sky (icebreaker lesson: dark scopes). the cam only registers
-                // while aiming, so poll Camera.allCameras (a handful) until cached, then
-                // keep the component dead.
-                if (_opticCam == null)
-                {
-                    var cams = Camera.allCameras;
-                    for (int i = 0; i < cams.Length; i++)
-                        if (cams[i] != null && cams[i].name == "BaseOpticCamera(Clone)") { _opticCam = cams[i]; break; }
-                }
-                if (_opticCam != null)
-                {
-                    var os = _opticCam.GetComponent<TOD_Scattering>();
-                    if (os != null && os.enabled)
-                    {
-                        os.enabled = false;
-                        Plugin.Log.LogInfo("[Lights] optic camera TOD_Scattering disabled (dark magnified scopes)");
-                    }
-                }
-                if (Time.frameCount % 30 != 0) return;
-                if (Plugin.LampIntensity.Value != _lastLamp
-                    || Plugin.LampShadows.Value != _lastShadows
-                    || Plugin.LightCullDistance.Value != _lastLightCull)
-                    ApplyLamps();
-                if (Plugin.AmbientIntensity.Value != _lastAmbient)
-                    ApplyAmbient();
-            }
-        }
+    	private static float _frameAvg;
+
+    	private static bool _inChop;
+
+    	private static float _lastChopEdge;
+
+    	private static int _lastGc;
+
+    	private static float _authoredBrightness = -1f;
+
+    	private static float _authoredScatter = -1f;
+
+    	private static Dictionary<(int, int, int), List<float[]>> _authored;
+
+    	private static bool _authoredTried;
+
+    	private static FieldInfo _cloMaxIntensity;
+
+    	internal static void ResetForNewRaid()
+    	{
+    		_lamps.Clear();
+    		_lastLamp = (_lastAmbient = (_lastLightCull = -1f));
+    		CutsceneHold = false;
+    		_sky = null;
+    		_skyTimeLogged = false;
+    		_ambientAuthorityTaken = false;
+    	}
+
+    	internal static void TickSkyTime()
+    	{
+    		//IL_01f7: Unknown result type (might be due to invalid IL or missing references)
+    		//IL_01fc: Unknown result type (might be due to invalid IL or missing references)
+    		//IL_0231: Unknown result type (might be due to invalid IL or missing references)
+    		//IL_023d: Unknown result type (might be due to invalid IL or missing references)
+    		//IL_03d0: Unknown result type (might be due to invalid IL or missing references)
+    		//IL_0407: Unknown result type (might be due to invalid IL or missing references)
+    		//IL_0413: Unknown result type (might be due to invalid IL or missing references)
+    		//IL_0429: Unknown result type (might be due to invalid IL or missing references)
+    		//IL_0435: Unknown result type (might be due to invalid IL or missing references)
+    		//IL_043c: Unknown result type (might be due to invalid IL or missing references)
+    		//IL_0441: Unknown result type (might be due to invalid IL or missing references)
+    		//IL_0446: Unknown result type (might be due to invalid IL or missing references)
+    		try
+    		{
+    			if (!_sky)
+    			{
+    				_sky = UnityEngine.Object.FindObjectOfType<TOD_Sky>();
+    			}
+    			if (!_sky || !_sky.Initialized)
+    			{
+    				return;
+    			}
+    			GInterface0 instance = GClass4.Instance;
+    			GameDateTime val = ((instance == null) ? null : instance.CurrentTime?.GameDateTime) ?? Singleton<GameWorld>.Instance?.GameDateTime;
+    			if (val == null)
+    			{
+    				return;
+    			}
+    			DateTime dateTime = val.Calculate();
+    			_sky.Cycle.DateTime = dateTime.AddHours(Plugin.SkyHourOffset.Value);
+    			if (!((Behaviour)_sky).enabled)
+    			{
+    				((Behaviour)_sky).enabled = true;
+    				Plugin.Log.LogWarning((object)"[Sky] TOD_Sky component was DISABLED - re-enabled (this is why the solver froze)");
+    			}
+    			if (!_ambientAuthorityTaken)
+    			{
+    				_ambientAuthorityTaken = true;
+    				try
+    				{
+    					_sky.Ambient.UpdateInterval = float.MaxValue;
+    					_lastAmbient = -1f;
+    					Plugin.Log.LogWarning((object)"[Sky] TOD ambient module muzzled (UpdateInterval=max) - flat fill + NvgAmbient own RenderSettings ambient again");
+    				}
+    				catch (Exception ex)
+    				{
+    					Plugin.Log.LogWarning((object)("[Sky] ambient muzzle failed: " + ex.Message));
+    				}
+    			}
+    			try
+    			{
+    				_sky.method_18();
+    			}
+    			catch (Exception ex2)
+    			{
+    				if (_skyProbes < 3)
+    				{
+    					Plugin.Log.LogWarning((object)("[Sky] self-driven solve threw: " + ex2.Message));
+    				}
+    			}
+    			if (!_skyTimeLogged)
+    			{
+    				_skyTimeLogged = true;
+    				Plugin.Log.LogWarning((object)$"[Sky] TOD hour synced to raid time: {dateTime:HH:mm} (re-synced ~1/s)");
+    			}
+    			_skyTicks++;
+    			if (_skyProbes >= 3 || _skyTicks % 90 != 5)
+    			{
+    				return;
+    			}
+    			_skyProbes++;
+    			try
+    			{
+    				Vector3 sunDirection = _sky.SunDirection;
+    				Plugin.Log.LogWarning((object)($"[Sky] TOD state: cycleHour={_sky.Cycle.Hour:0.00} " + string.Format("sunDir.y={0:0.000} ({1}) ", sunDirection.y, (sunDirection.y > 0f) ? "SUN IS UP - solver disagrees with the clock" : "sun is down - solver agrees") + $"IsDay={_sky.IsDay} IsNight={_sky.IsNight} LerpValue={_sky.LerpValue:0.000} " + $"atmoBrightness={_sky.Atmosphere.Brightness:0.000} " + $"lat={_sky.World.Latitude:0.0} long={_sky.World.Longitude:0.0} UTC={_sky.World.UTC:0.00} " + $"date={_sky.Cycle.Year}-{_sky.Cycle.Month:00}-{_sky.Cycle.Day:00} zenith={_sky.SunZenith:0.0}"));
+    				TOD_Components component = ((Component)_sky).GetComponent<TOD_Components>();
+    				if ((bool)component && (bool)component.SunTransform && (bool)component.DomeTransform)
+    				{
+    					Transform sunTransform = component.SunTransform;
+    					Transform domeTransform = component.DomeTransform;
+    					ManualLogSource log = Plugin.Log;
+    					string text = string.Format("[Sky] sun rig: sunLocalPos={0} sunParent='{1}' ", sunTransform.localPosition, (bool)sunTransform.parent ? ((UnityEngine.Object)sunTransform.parent).name : "NULL");
+    					string text2 = $"domeScale={domeTransform.localScale} domePos={domeTransform.position} ";
+    					object arg = sunTransform.position;
+    					Vector3 val2 = domeTransform.position - sunTransform.position;
+    					log.LogWarning((object)(text + text2 + $"sunWorld={arg} sunToDome={val2.magnitude:0.###}"));
+    				}
+    			}
+    			catch (Exception ex3)
+    			{
+    				Plugin.Log.LogWarning((object)("[Sky] state probe failed: " + ex3.Message));
+    			}
+    		}
+    		catch
+    		{
+    		}
+    	}
+
+    	internal static void TickNightSky()
+    	{
+    		//IL_00a0: Unknown result type (might be due to invalid IL or missing references)
+    		try
+    		{
+    			if (!_sky || !_sky.Initialized || (bool)WeatherController.Instance)
+    			{
+    				return;
+    			}
+    			float value = Plugin.SkyNightStrength.Value;
+    			if (!(value <= 0f))
+    			{
+    				if (_authoredBrightness < 0f)
+    				{
+    					_authoredBrightness = _sky.Atmosphere.Brightness;
+    					_authoredScatter = _sky.Atmosphere.ScatteringBrightness;
+    				}
+    				float y = _sky.SunDirection.y;
+    				float hour = _sky.Cycle.Hour;
+    				bool flag = hour >= 21f || hour < 6f;
+    				float num = Mathf.Clamp01(y * 4f + 0.15f);
+    				if (flag)
+    				{
+    					num = Mathf.Min(num, 1f - value);
+    				}
+    				_sky.Atmosphere.Brightness = Mathf.Lerp(_authoredBrightness * 0.06f, _authoredBrightness, num);
+    				_sky.Atmosphere.ScatteringBrightness = Mathf.Lerp(_authoredScatter * 0.08f, _authoredScatter, num);
+    			}
+    		}
+    		catch
+    		{
+    		}
+    	}
+
+    	internal static void DumpNearPlayerLights()
+    	{
+    		//IL_008d: Unknown result type (might be due to invalid IL or missing references)
+    		//IL_0093: Unknown result type (might be due to invalid IL or missing references)
+    		//IL_0098: Unknown result type (might be due to invalid IL or missing references)
+    		//IL_009d: Unknown result type (might be due to invalid IL or missing references)
+    		//IL_0070: Unknown result type (might be due to invalid IL or missing references)
+    		//IL_0076: Invalid comparison between Unknown and I4
+    		//IL_012b: Unknown result type (might be due to invalid IL or missing references)
+    		//IL_0130: Unknown result type (might be due to invalid IL or missing references)
+    		//IL_0153: Unknown result type (might be due to invalid IL or missing references)
+    		try
+    		{
+    			Player val = Singleton<GameWorld>.Instance?.MainPlayer;
+    			if ((UnityEngine.Object)(object)val == (UnityEngine.Object)null)
+    			{
+    				Plugin.Log.LogWarning((object)"[LightProbe] no main player");
+    				return;
+    			}
+    			int num = 0;
+    			Light[] array = UnityEngine.Object.FindObjectsOfType<Light>();
+    			foreach (Light val2 in array)
+    			{
+    				if ((UnityEngine.Object)(object)val2 == (UnityEngine.Object)null || !((Behaviour)val2).enabled || val2.intensity <= 0.01f || (int)val2.type == 1)
+    				{
+    					continue;
+    				}
+    				Vector3 val3 = ((Component)val2).transform.position - val.Position;
+    				if (!(val3.sqrMagnitude > 16f))
+    				{
+    					string text = ((UnityEngine.Object)((Component)val2).transform).name;
+    					Transform parent = ((Component)val2).transform.parent;
+    					while ((UnityEngine.Object)(object)parent != (UnityEngine.Object)null)
+    					{
+    						text = ((UnityEngine.Object)parent).name + "/" + text;
+    						parent = parent.parent;
+    					}
+    					ManualLogSource log = Plugin.Log;
+    					string[] obj = new string[6] { "[LightProbe] near-player light: '", text, "' scene='", null, null, null };
+    					Scene scene = ((Component)val2).gameObject.scene;
+    					obj[3] = scene.name;
+    					obj[4] = "' ";
+    					obj[5] = $"type={val2.type} intensity={val2.intensity:0.00} range={val2.range:0.0} culled={(UnityEngine.Object)(object)((Component)val2).GetComponent<CullingLightObject>() != (UnityEngine.Object)null}";
+    					log.LogWarning((object)string.Concat(obj));
+    					num++;
+    				}
+    			}
+    			if (num == 0)
+    			{
+    				Plugin.Log.LogWarning((object)"[LightProbe] no lit lights within 4m right now");
+    			}
+    		}
+    		catch
+    		{
+    		}
+    	}
+
+    	internal static void DumpNearPlayerSounds()
+    	{
+    		//IL_008a: Unknown result type (might be due to invalid IL or missing references)
+    		//IL_0090: Unknown result type (might be due to invalid IL or missing references)
+    		//IL_0095: Unknown result type (might be due to invalid IL or missing references)
+    		//IL_009a: Unknown result type (might be due to invalid IL or missing references)
+    		//IL_0208: Unknown result type (might be due to invalid IL or missing references)
+    		//IL_020d: Unknown result type (might be due to invalid IL or missing references)
+    		try
+    		{
+    			Player val = Singleton<GameWorld>.Instance?.MainPlayer;
+    			if ((UnityEngine.Object)(object)val == (UnityEngine.Object)null)
+    			{
+    				Plugin.Log.LogWarning((object)"[SoundProbe] no main player");
+    				return;
+    			}
+    			List<(float, string)> list = new List<(float, string)>();
+    			AudioSource[] array = UnityEngine.Object.FindObjectsOfType<AudioSource>();
+    			foreach (AudioSource val2 in array)
+    			{
+    				if ((UnityEngine.Object)(object)val2 == (UnityEngine.Object)null || !val2.isPlaying || val2.volume <= 0.001f)
+    				{
+    					continue;
+    				}
+    				Vector3 val3 = ((Component)val2).transform.position - val.Position;
+    				float magnitude = val3.magnitude;
+    				bool flag = val2.spatialBlend < 0.5f;
+    				if (flag || !(magnitude > 60f))
+    				{
+    					string text = ((UnityEngine.Object)((Component)val2).transform).name;
+    					Transform parent = ((Component)val2).transform.parent;
+    					while ((UnityEngine.Object)(object)parent != (UnityEngine.Object)null)
+    					{
+    						text = ((UnityEngine.Object)parent).name + "/" + text;
+    						parent = parent.parent;
+    					}
+    					float item = (flag ? float.MaxValue : (val2.volume / Mathf.Max(magnitude, 1f)));
+    					string[] obj = new string[9]
+    					{
+    						"[SoundProbe] ",
+    						flag ? "GLOBAL/2D " : "",
+    						"'",
+    						null,
+    						null,
+    						null,
+    						null,
+    						null,
+    						null
+    					};
+    					AudioClip clip = val2.clip;
+    					obj[3] = ((clip != null) ? ((UnityEngine.Object)clip).name : null) ?? "<procedural>";
+    					obj[4] = "' on '";
+    					obj[5] = text;
+    					obj[6] = "' ";
+    					obj[7] = $"vol={val2.volume:0.00} dist={magnitude:0.0}m blend={val2.spatialBlend:0.0} loop={val2.loop} ";
+    					object arg = val2.minDistance;
+    					object arg2 = val2.maxDistance;
+    					Scene scene = ((Component)val2).gameObject.scene;
+    					obj[8] = $"min/max={arg:0.0}/{arg2:0.0} scene='{scene.name}'";
+    					list.Add((item, string.Concat(obj)));
+    				}
+    			}
+    			list.Sort(((float score, string line) a, (float score, string line) b) => b.score.CompareTo(a.score));
+    			for (int num = 0; num < list.Count && num < 20; num++)
+    			{
+    				Plugin.Log.LogWarning((object)list[num].Item2);
+    			}
+    			Plugin.Log.LogWarning((object)$"[SoundProbe] {list.Count} playing source(s) within 60m ({Mathf.Max(list.Count - 20, 0)} not shown)");
+    		}
+    		catch
+    		{
+    		}
+    	}
+
+    	private static bool IsWeaponLight(Light l)
+    	{
+    		Transform val = ((Component)l).transform;
+    		int num = 0;
+    		while ((bool)val && num++ < 24)
+    		{
+    			string name = ((UnityEngine.Object)val).name;
+    			if (name.StartsWith("weapon_", StringComparison.OrdinalIgnoreCase) || name.StartsWith("mod_", StringComparison.OrdinalIgnoreCase) || name.StartsWith("patron_", StringComparison.OrdinalIgnoreCase) || name.StartsWith("shell_", StringComparison.OrdinalIgnoreCase))
+    			{
+    				return true;
+    			}
+    			val = val.parent;
+    		}
+    		return false;
+    	}
+
+    	internal static void DiscoverLamps()
+    	{
+    		//IL_0073: Unknown result type (might be due to invalid IL or missing references)
+    		//IL_0079: Invalid comparison between Unknown and I4
+    		//IL_00a7: Unknown result type (might be due to invalid IL or missing references)
+    		//IL_00ac: Unknown result type (might be due to invalid IL or missing references)
+    		HashSet<Light> hashSet = new HashSet<Light>();
+    		CullingLightObject[] array = UnityEngine.Object.FindObjectsOfType<CullingLightObject>();
+    		foreach (CullingLightObject val in array)
+    		{
+    			Light light = val.GetLight();
+    			if ((UnityEngine.Object)(object)light != (UnityEngine.Object)null)
+    			{
+    				hashSet.Add(light);
+    			}
+    		}
+    		int num = 0;
+    		int num2 = 0;
+    		Light[] array2 = UnityEngine.Object.FindObjectsOfType<Light>();
+    		foreach (Light val2 in array2)
+    		{
+    			if ((UnityEngine.Object)(object)val2 == (UnityEngine.Object)null || (int)val2.type == 1 || val2.intensity > 0.1f || _lamps.Contains(val2))
+    			{
+    				continue;
+    			}
+    			Scene scene = ((Component)val2).gameObject.scene;
+    			string name = scene.name;
+    			if (name != null && name.StartsWith("Terminal"))
+    			{
+    				if (hashSet.Contains(val2))
+    				{
+    					num++;
+    				}
+    				else if ((UnityEngine.Object)(object)((Component)val2).GetComponentInParent<LootItem>() != (UnityEngine.Object)null || IsWeaponLight(val2))
+    				{
+    					num2++;
+    				}
+    				else
+    				{
+    					_lamps.Add(val2);
+    				}
+    			}
+    		}
+    		if (num > 0)
+    		{
+    			Plugin.Log.LogInfo((object)$"[Lights] {num} lamps native-owned (CullingLightObject) - LampIntensity drives only the {_lamps.Count} unowned");
+    		}
+    		if (num2 > 0)
+    		{
+    			Plugin.Log.LogInfo((object)$"[Lights] {num2} light(s) on loot/weapon hierarchies skipped - guns are not map lamps");
+    		}
+    		int num3 = 0;
+    		for (int num4 = _lamps.Count - 1; num4 >= 0; num4--)
+    		{
+    			Light val3 = _lamps[num4];
+    			if (!val3)
+    			{
+    				_lamps.RemoveAt(num4);
+    			}
+    			else if ((UnityEngine.Object)(object)((Component)val3).GetComponentInParent<LootItem>() != (UnityEngine.Object)null || IsWeaponLight(val3))
+    			{
+    				val3.intensity = 0f;
+    				((Behaviour)val3).enabled = false;
+    				_lamps.RemoveAt(num4);
+    				num3++;
+    			}
+    		}
+    		if (num3 > 0)
+    		{
+    			Plugin.Log.LogInfo((object)$"[Lights] {num3} previously-revived weapon light(s) purged and darkened");
+    		}
+    	}
+
+    	private static void LoadAuthoredLights()
+    	{
+    		//IL_007c: Unknown result type (might be due to invalid IL or missing references)
+    		//IL_00a3: Unknown result type (might be due to invalid IL or missing references)
+    		//IL_00aa: Expected O, but got Unknown
+    		//IL_00b6: Unknown result type (might be due to invalid IL or missing references)
+    		//IL_00bd: Expected O, but got Unknown
+    		//IL_01ef: Unknown result type (might be due to invalid IL or missing references)
+    		if (_authoredTried)
+    		{
+    			return;
+    		}
+    		_authoredTried = true;
+    		try
+    		{
+    			string path = Path.Combine(Path.GetDirectoryName(typeof(Plugin).Assembly.Location) ?? ".", "plugin-data", "terminal_lights.json");
+    			if (!File.Exists(path))
+    			{
+    				return;
+    			}
+    			JObject val = JObject.Parse(File.ReadAllText(path));
+    			_authored = new Dictionary<(int, int, int), List<float[]>>();
+    			foreach (JToken item in (JArray)val["lights"])
+    			{
+    				JArray val2 = (JArray)item["p"];
+    				JArray val3 = (JArray)item["c"];
+    				float[] array = new float[8]
+    				{
+    					(float)val2[0],
+    					(float)val2[1],
+    					(float)val2[2],
+    					(float)item["i"],
+    					(float)val3[0],
+    					(float)val3[1],
+    					(float)val3[2],
+    					(float)(item["rng"] ?? (JToken)0f)
+    				};
+    				(int, int, int) key = ((int)Mathf.Floor(array[0]), (int)Mathf.Floor(array[1]), (int)Mathf.Floor(array[2]));
+    				if (!_authored.TryGetValue(key, out var value))
+    				{
+    					value = (_authored[key] = new List<float[]>());
+    				}
+    				value.Add(array);
+    			}
+    			Plugin.Log.LogInfo((object)string.Format("[Lights] authored light table loaded: {0} rows", ((JContainer)(JArray)val["lights"]).Count));
+    		}
+    		catch (Exception ex)
+    		{
+    			Plugin.Log.LogWarning((object)("[Lights] authored light table failed to load: " + ex.Message));
+    			_authored = null;
+    		}
+    	}
+
+    	private static float[] AuthoredFor(Vector3 pos)
+    	{
+    		//IL_001f: Unknown result type (might be due to invalid IL or missing references)
+    		//IL_002c: Unknown result type (might be due to invalid IL or missing references)
+    		//IL_0039: Unknown result type (might be due to invalid IL or missing references)
+    		//IL_009c: Unknown result type (might be due to invalid IL or missing references)
+    		//IL_00a7: Unknown result type (might be due to invalid IL or missing references)
+    		//IL_00b3: Unknown result type (might be due to invalid IL or missing references)
+    		//IL_00be: Unknown result type (might be due to invalid IL or missing references)
+    		//IL_00cb: Unknown result type (might be due to invalid IL or missing references)
+    		//IL_00d6: Unknown result type (might be due to invalid IL or missing references)
+    		if (_authored == null)
+    		{
+    			return null;
+    		}
+    		float[] result = null;
+    		float num = 0.5625f;
+    		int num2 = (int)Mathf.Floor(pos.x);
+    		int num3 = (int)Mathf.Floor(pos.y);
+    		int num4 = (int)Mathf.Floor(pos.z);
+    		for (int i = -1; i <= 1; i++)
+    		{
+    			for (int j = -1; j <= 1; j++)
+    			{
+    				for (int k = -1; k <= 1; k++)
+    				{
+    					if (!_authored.TryGetValue((num2 + i, num3 + j, num4 + k), out var value))
+    					{
+    						continue;
+    					}
+    					foreach (float[] item in value)
+    					{
+    						float num5 = (pos.x - item[0]) * (pos.x - item[0]) + (pos.y - item[1]) * (pos.y - item[1]) + (pos.z - item[2]) * (pos.z - item[2]);
+    						if (num5 < num)
+    						{
+    							num = num5;
+    							result = item;
+    						}
+    					}
+    				}
+    			}
+    		}
+    		return result;
+    	}
+
+    	private static void DriveLamp(Light l, float flatV, float scale, LightShadows shadows, ref int matched)
+    	{
+    		//IL_0016: Unknown result type (might be due to invalid IL or missing references)
+    		//IL_0096: Unknown result type (might be due to invalid IL or missing references)
+    		//IL_004f: Unknown result type (might be due to invalid IL or missing references)
+    		//IL_0073: Unknown result type (might be due to invalid IL or missing references)
+    		float[] array = (Plugin.LampAuthored.Value ? AuthoredFor(((Component)l).transform.position) : null);
+    		if (array != null)
+    		{
+    			matched++;
+    			float num = (l.intensity = array[3] * scale);
+    			l.color = new Color(array[4], array[5], array[6], 1f);
+    			if (array[7] > 0.1f)
+    			{
+    				l.range = array[7];
+    			}
+    			l.shadows = shadows;
+    			((Behaviour)l).enabled = num > 0.01f;
+    		}
+    		else
+    		{
+    			l.intensity = flatV;
+    			l.shadows = shadows;
+    			if (flatV <= 0.01f)
+    			{
+    				((Behaviour)l).enabled = false;
+    			}
+    			else if (!((Behaviour)l).enabled)
+    			{
+    				((Behaviour)l).enabled = true;
+    			}
+    		}
+    	}
+
+    	internal static void ApplyLamps()
+    	{
+    		//IL_0027: Unknown result type (might be due to invalid IL or missing references)
+    		//IL_0145: Unknown result type (might be due to invalid IL or missing references)
+    		//IL_014a: Unknown result type (might be due to invalid IL or missing references)
+    		//IL_005d: Unknown result type (might be due to invalid IL or missing references)
+    		//IL_0186: Unknown result type (might be due to invalid IL or missing references)
+    		//IL_0335: Unknown result type (might be due to invalid IL or missing references)
+    		//IL_0327: Unknown result type (might be due to invalid IL or missing references)
+    		//IL_033a: Unknown result type (might be due to invalid IL or missing references)
+    		//IL_0384: Unknown result type (might be due to invalid IL or missing references)
+    		//IL_0389: Unknown result type (might be due to invalid IL or missing references)
+    		//IL_03fd: Unknown result type (might be due to invalid IL or missing references)
+    		//IL_042a: Unknown result type (might be due to invalid IL or missing references)
+    		//IL_0448: Unknown result type (might be due to invalid IL or missing references)
+    		float value = Plugin.LampIntensity.Value;
+    		float value2 = Plugin.LampAuthoredScale.Value;
+    		LightShadows shadows = (LightShadows)(Plugin.LampShadows.Value ? 1 : 0);
+    		LoadAuthoredLights();
+    		int num = 0;
+    		int matched = 0;
+    		foreach (Light lamp in _lamps)
+    		{
+    			if ((bool)lamp)
+    			{
+    				DriveLamp(lamp, value, value2, shadows, ref matched);
+    				num++;
+    			}
+    		}
+    		int num2 = 0;
+    		int num3 = 0;
+    		FieldInfo fieldInfo = AccessTools.Field(typeof(CullingLightObject), "_maxLightIntensity");
+    		FieldInfo fieldInfo2 = AccessTools.Field(typeof(CullingLightObject), "float_1");
+    		FieldInfo fieldInfo3 = AccessTools.Field(typeof(CullingLightObject), "_fadeStartDistance");
+    		FieldInfo fieldInfo4 = AccessTools.Field(typeof(CullingLightObject), "_fadeEndDistance");
+    		float value3 = Plugin.LightCullDistance.Value;
+    		bool flag = false;
+    		try
+    		{
+    			flag = (UnityEngine.Object)(object)CullingManager.Instance != (UnityEngine.Object)null;
+    		}
+    		catch
+    		{
+    		}
+    		CullingLightObject[] array = UnityEngine.Object.FindObjectsOfType<CullingLightObject>();
+    		foreach (CullingLightObject val in array)
+    		{
+    			Light light = val.GetLight();
+    			if (!light)
+    			{
+    				continue;
+    			}
+    			Scene scene = ((Component)light).gameObject.scene;
+    			string name = scene.name;
+    			if (name == null || !name.StartsWith("Terminal"))
+    			{
+    				continue;
+    			}
+    			if (!flag)
+    			{
+    				DriveLamp(light, value, value2, shadows, ref matched);
+    			}
+    			fieldInfo?.SetValue(val, light.intensity);
+    			fieldInfo2?.SetValue(val, light.intensity);
+    			num2++;
+    			try
+    			{
+    				if (fieldInfo3 != null && fieldInfo4 != null && value3 < (float)fieldInfo4.GetValue(val))
+    				{
+    					fieldInfo3.SetValue(val, Mathf.Min((float)fieldInfo3.GetValue(val), value3 * 0.6f));
+    					fieldInfo4.SetValue(val, value3);
+    					val.method_3();
+    					num3++;
+    				}
+    			}
+    			catch
+    			{
+    			}
+    		}
+    		if (num3 > 0)
+    		{
+    			Plugin.Log.LogDebug((object)$"[Lights] native fade window tightened to {value3:0}m on {num3} lights");
+    		}
+    		_lastLamp = value;
+    		_lastShadows = Plugin.LampShadows.Value;
+    		_lastLightCull = value3;
+    		Plugin.Log.LogInfo((object)($"[Lights] drove {num} plain lamps + {num2} native culling lights - " + $"{matched} matched AUTHORED retail values (scale {value2:0.00}), rest flat {value:F2}" + (flag ? "" : " (MANAGER-LESS: Light components driven directly)")));
+    		try
+    		{
+    			Camera val2 = (((UnityEngine.Object)(object)TerminalCullingDriver.CameraRef != (UnityEngine.Object)null) ? TerminalCullingDriver.CameraRef : Camera.main);
+    			Vector3 val3 = (((UnityEngine.Object)(object)val2 != (UnityEngine.Object)null) ? ((Component)val2).transform.position : Vector3.zero);
+    			int num4 = 0;
+    			int num5 = 0;
+    			StringBuilder stringBuilder = new StringBuilder();
+    			CullingLightObject[] array2 = UnityEngine.Object.FindObjectsOfType<CullingLightObject>();
+    			foreach (CullingLightObject val4 in array2)
+    			{
+    				Light light2 = val4.GetLight();
+    				if (!((UnityEngine.Object)(object)light2 == (UnityEngine.Object)null))
+    				{
+    					float num6 = Vector3.Distance(((Component)light2).transform.position, val3);
+    					if (num6 < 30f)
+    					{
+    						num4++;
+    					}
+    					if (num5 < 5 && num6 < 60f)
+    					{
+    						num5++;
+    						stringBuilder.Append($"\n  '{((UnityEngine.Object)light2).name}' d={num6:0}m enabled={((Behaviour)light2).enabled} type={light2.type} intensity={light2.intensity:0.##} range={light2.range:0.#} color={light2.color} mask=0x{light2.cullingMask:X} shadows={light2.shadows}");
+    					}
+    				}
+    			}
+    			Plugin.Log.LogWarning((object)$"[Lights] AUTOPSY: {num4} native lights within 30m of camera, samples:{stringBuilder}");
+    		}
+    		catch (Exception ex)
+    		{
+    			Plugin.Log.LogDebug((object)("[Lights] autopsy failed: " + ex.Message));
+    		}
+    	}
+
+    	internal static void ApplyAmbient()
+    	{
+    		//IL_01e4: Unknown result type (might be due to invalid IL or missing references)
+    		//IL_01fc: Unknown result type (might be due to invalid IL or missing references)
+    		//IL_013b: Unknown result type (might be due to invalid IL or missing references)
+    		//IL_0141: Unknown result type (might be due to invalid IL or missing references)
+    		//IL_0142: Unknown result type (might be due to invalid IL or missing references)
+    		//IL_0148: Unknown result type (might be due to invalid IL or missing references)
+    		//IL_0149: Unknown result type (might be due to invalid IL or missing references)
+    		//IL_014f: Unknown result type (might be due to invalid IL or missing references)
+    		//IL_0150: Unknown result type (might be due to invalid IL or missing references)
+    		//IL_016a: Unknown result type (might be due to invalid IL or missing references)
+    		//IL_0173: Unknown result type (might be due to invalid IL or missing references)
+    		//IL_0182: Unknown result type (might be due to invalid IL or missing references)
+    		//IL_0196: Unknown result type (might be due to invalid IL or missing references)
+    		//IL_0198: Unknown result type (might be due to invalid IL or missing references)
+    		//IL_019e: Unknown result type (might be due to invalid IL or missing references)
+    		//IL_01a0: Unknown result type (might be due to invalid IL or missing references)
+    		//IL_01a6: Unknown result type (might be due to invalid IL or missing references)
+    		//IL_01a8: Unknown result type (might be due to invalid IL or missing references)
+    		//IL_01c1: Unknown result type (might be due to invalid IL or missing references)
+    		//IL_01c7: Unknown result type (might be due to invalid IL or missing references)
+    		//IL_0043: Unknown result type (might be due to invalid IL or missing references)
+    		//IL_0048: Unknown result type (might be due to invalid IL or missing references)
+    		//IL_0074: Unknown result type (might be due to invalid IL or missing references)
+    		//IL_007b: Unknown result type (might be due to invalid IL or missing references)
+    		//IL_0082: Unknown result type (might be due to invalid IL or missing references)
+    		//IL_005b: Unknown result type (might be due to invalid IL or missing references)
+    		//IL_005e: Unknown result type (might be due to invalid IL or missing references)
+    		//IL_0063: Unknown result type (might be due to invalid IL or missing references)
+    		//IL_00b4: Unknown result type (might be due to invalid IL or missing references)
+    		//IL_00b8: Unknown result type (might be due to invalid IL or missing references)
+    		//IL_00ad: Unknown result type (might be due to invalid IL or missing references)
+    		//IL_00bd: Unknown result type (might be due to invalid IL or missing references)
+    		//IL_00bf: Unknown result type (might be due to invalid IL or missing references)
+    		//IL_00c2: Unknown result type (might be due to invalid IL or missing references)
+    		//IL_00c7: Unknown result type (might be due to invalid IL or missing references)
+    		float num = (_lastAmbient = Plugin.AmbientIntensity.Value);
+    		float num2 = 0.16f * num;
+    		Color val2 = default(Color);
+    		if ((bool)_sky && _sky.Initialized)
+    		{
+    			try
+    			{
+    				Color val = _sky.SampleEquatorColor();
+    				if (Plugin.AmbientSkyLuminance.Value)
+    				{
+    					val2 = val * num;
+    					val2.a = 1f;
+    				}
+    				else
+    				{
+    					float num3 = Mathf.Max(val.r, Mathf.Max(val.g, val.b));
+    					Color val3 = (Color)((num3 > 0.005f) ? (val / num3) : new Color(0.85f, 0.85f, 1f));
+    					val2 = val3 * num2;
+    					val2.a = 1f;
+    				}
+    			}
+    			catch
+    			{
+    				val2 = new Color(0.15f * num, 0.15f * num, 0.18f * num, 1f);
+    			}
+    		}
+    		else
+    		{
+    			val2 = new Color(0.15f * num, 0.15f * num, 0.18f * num, 1f);
+    		}
+    		LevelSettings instance = Singleton<LevelSettings>.Instance;
+    		if ((UnityEngine.Object)(object)instance != (UnityEngine.Object)null)
+    		{
+    			instance.AmbientMode = (AmbientMode)3;
+    			instance.SkyColor = val2;
+    			instance.EquatorColor = val2;
+    			instance.GroundColor = val2;
+    			instance.AmbientIntensity = num;
+    			float value = Plugin.NvgAmbient.Value;
+    			Color val4 = default(Color);
+    			val4 = new Color(val2.r * value, val2.g * value * 1.1f, val2.b * value, 1f);
+    			instance.NightVisionSkyColor = val4;
+    			instance.NightVisionEquatorColor = val4;
+    			instance.NightVisionGroundColor = val4;
+    			instance.NightVisionAmbientIntensity = num * value;
+    			Plugin.Log.LogDebug((object)$"[Ambient] flat ambient -> {val2}, nvg -> {val4} (via LevelSettings, native per-frame apply)");
+    		}
+    		else
+    		{
+    			RenderSettings.ambientMode = (AmbientMode)3;
+    			RenderSettings.ambientLight = val2;
+    			RenderSettings.ambientIntensity = num;
+    			Plugin.Log.LogDebug((object)$"[Ambient] flat ambient -> {val2} (RenderSettings fallback, no LevelSettings singleton)");
+    		}
+    	}
+
+    	internal static int ForceNativeLightsOn()
+    	{
+    		if (_cloMaxIntensity == null)
+    		{
+    			_cloMaxIntensity = AccessTools.Field(typeof(CullingLightObject), "_maxLightIntensity");
+    		}
+    		int num = 0;
+    		CullingLightObject[] array = UnityEngine.Object.FindObjectsOfType<CullingLightObject>();
+    		foreach (CullingLightObject val in array)
+    		{
+    			try
+    			{
+    				((CullingObject)val).SetVisibility(true);
+    			}
+    			catch
+    			{
+    			}
+    			Light light = val.GetLight();
+    			if ((UnityEngine.Object)(object)light == (UnityEngine.Object)null)
+    			{
+    				continue;
+    			}
+    			if (!((Behaviour)light).enabled)
+    			{
+    				((Behaviour)light).enabled = true;
+    			}
+    			try
+    			{
+    				float num2 = (float)_cloMaxIntensity.GetValue(val);
+    				if (num2 > 0f && light.intensity < num2)
+    				{
+    					light.intensity = num2;
+    					num++;
+    				}
+    			}
+    			catch
+    			{
+    			}
+    		}
+    		return num;
+    	}
+
+    	internal static void CutsceneShowAll()
+    	{
+    		CutsceneHold = true;
+    		try
+    		{
+    			CullingManager instance = CullingManager.Instance;
+    			if ((UnityEngine.Object)(object)instance != (UnityEngine.Object)null)
+    			{
+    				instance.LockState(true);
+    			}
+    		}
+    		catch (Exception ex)
+    		{
+    			Plugin.Log.LogWarning((object)("[CutsceneHold] native manager lock failed: " + ex.Message));
+    		}
+    		int num = 0;
+    		foreach (Light lamp in _lamps)
+    		{
+    			if ((UnityEngine.Object)(object)lamp != (UnityEngine.Object)null && !((Behaviour)lamp).enabled)
+    			{
+    				((Behaviour)lamp).enabled = true;
+    				num++;
+    			}
+    		}
+    		int num2 = ForceNativeLightsOn();
+    		Plugin.Log.LogDebug((object)$"[CutsceneHold] armed - {num} lamps re-enabled, {num2} native lights forced on");
+    	}
+
+    	internal static void CutsceneRelease()
+    	{
+    		CutsceneHold = false;
+    		int num = 0;
+    		try
+    		{
+    			num = ForceNativeLightsOn();
+    		}
+    		catch
+    		{
+    		}
+    		try
+    		{
+    			CullingManager instance = CullingManager.Instance;
+    			if ((UnityEngine.Object)(object)instance != (UnityEngine.Object)null)
+    			{
+    				instance.LockState(false);
+    			}
+    		}
+    		catch (Exception ex)
+    		{
+    			Plugin.Log.LogWarning((object)("[CutsceneHold] release failed: " + ex.Message));
+    		}
+    		Plugin.Log.LogDebug((object)$"[CutsceneHold] released - healed {num} native lights, culling unlocked");
+    	}
     }
 }

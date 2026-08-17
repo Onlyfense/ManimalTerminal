@@ -39,7 +39,6 @@
     0.0
    ],
    "clips": [
-    "amb_sparrow_in_garbage_02",
     "arena_far_fight2_1",
     "arena_far_fight2_2",
     "arena_far_fight2_3",
@@ -47,8 +46,7 @@
     "arena_far_fight2_5",
     "arena_far_fight2_6",
     "arena_far_fight2_7",
-    "arena_far_fight2_8",
-    "amb_factory_sand_shovel_far_reflections_1"
+    "arena_far_fight2_8"
    ],
    "intervalRange": [
     1.0,
@@ -329,7 +327,6 @@
     38.0
    ],
    "clips": [
-    "amb_sparrow_in_garbage_02",
     "arena_far_fight2_1",
     "arena_far_fight2_2",
     "arena_far_fight2_3",
@@ -337,8 +334,7 @@
     "arena_far_fight2_5",
     "arena_far_fight2_6",
     "arena_far_fight2_7",
-    "arena_far_fight2_8",
-    "amb_factory_sand_shovel_far_reflections_1"
+    "arena_far_fight2_8"
    ]
   },
   {
@@ -453,7 +449,6 @@
     0.0
    ],
    "clips": [
-    "amb_sparrow_in_garbage_02",
     "arena_far_fight2_1",
     "arena_far_fight2_2",
     "arena_far_fight2_3",
@@ -461,8 +456,7 @@
     "arena_far_fight2_5",
     "arena_far_fight2_6",
     "arena_far_fight2_7",
-    "arena_far_fight2_8",
-    "amb_factory_sand_shovel_far_reflections_1"
+    "arena_far_fight2_8"
    ],
    "intervalRange": [
     1.0,
@@ -890,7 +884,6 @@
     0.0
    ],
    "clips": [
-    "amb_sparrow_in_garbage_02",
     "arena_far_fight2_1",
     "arena_far_fight2_2",
     "arena_far_fight2_3",
@@ -898,8 +891,7 @@
     "arena_far_fight2_5",
     "arena_far_fight2_6",
     "arena_far_fight2_7",
-    "arena_far_fight2_8",
-    "amb_factory_sand_shovel_far_reflections_1"
+    "arena_far_fight2_8"
    ],
    "intervalRange": [
     1.0,
@@ -990,7 +982,6 @@
     35.0
    ],
    "clips": [
-    "amb_sparrow_in_garbage_02",
     "arena_far_fight2_1",
     "arena_far_fight2_2",
     "arena_far_fight2_3",
@@ -998,8 +989,7 @@
     "arena_far_fight2_5",
     "arena_far_fight2_6",
     "arena_far_fight2_7",
-    "arena_far_fight2_8",
-    "amb_factory_sand_shovel_far_reflections_1"
+    "arena_far_fight2_8"
    ]
   },
   {
@@ -1232,7 +1222,6 @@
     0.0
    ],
    "clips": [
-    "amb_sparrow_in_garbage_02",
     "arena_far_fight2_1",
     "arena_far_fight2_2",
     "arena_far_fight2_3",
@@ -1240,8 +1229,7 @@
     "arena_far_fight2_5",
     "arena_far_fight2_6",
     "arena_far_fight2_7",
-    "arena_far_fight2_8",
-    "amb_factory_sand_shovel_far_reflections_1"
+    "arena_far_fight2_8"
    ],
    "intervalRange": [
     1.0,
@@ -1452,7 +1440,6 @@
    }
   ],
   "shotClips": [
-   "amb_sparrow_in_garbage_02",
    "arena_far_fight2_1",
    "arena_far_fight2_2",
    "arena_far_fight2_3",
@@ -1460,8 +1447,7 @@
    "arena_far_fight2_5",
    "arena_far_fight2_6",
    "arena_far_fight2_7",
-   "arena_far_fight2_8",
-   "amb_factory_sand_shovel_far_reflections_1"
+   "arena_far_fight2_8"
   ],
   "debrisClips": [
    "amb_terminal_debris_01",

@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using HarmonyLib;
+using Newtonsoft.Json.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -115,6 +117,8 @@ namespace Manimal.Terminal
                         }
                         int assets = FillSkyResources(sky);
                         int rebound = RebindSkyShaders(sky);
+                        ApplyTodAuthoring(sky); // retail lat/long/UTC + atmosphere + day length
+                        HealTodComponents(sky); // MUST precede Initialize — LightTransform or no sky at all
                         Plugin.Log.LogWarning($"[Sky] '{scene.name}': TOD rig on '{sky.name}' — {healed} null field(s) defaulted, {rewired} child ref(s) rewired, {assets} resource asset(s) reverse-filled, {rebound} shader(s) rebound to native, re-initializing");
                         try
                         {
@@ -128,6 +132,204 @@ namespace Manimal.Terminal
                     }
             }
             catch (Exception e) { Plugin.Log.LogWarning($"[Sky] heal failed: {e.Message}"); }
+        }
+
+        // THE DAYLIGHT ROOT CAUSE (2026-08-11, found via the LateUpdate NRE that had been
+        // in every log all along): TOD_Sky.method_18 — the sun/moon solver — opens with
+        //     this.Components.LightTransform.rotation = ...
+        // and TOD_Components.Init only sets LightTransform when its `Light` GameObject
+        // ref survived ("Light reference not set." otherwise). the rip dropped that ref,
+        // so method_18 threw on its FIRST LINE, every frame, forever. the sky therefore
+        // never recomputed anything after Initialize and sat frozen at the scene's
+        // authored Cycle.Hour = 13.0 — broad daylight — no matter how correct the clock,
+        // the hour sync or the world params were. every previous "the sky ignores our
+        // time" symptom traces here.
+        //
+        // heal: give it a real directional light (an existing one under the dome, the
+        // scene's own sun, or a fresh child), then set the derived refs Init would have.
+        private static void HealTodComponents(TOD_Sky sky)
+        {
+            try
+            {
+                var comps = sky.GetComponent<TOD_Components>();
+                if (!comps) return;
+
+                if (!comps.Light)
+                {
+                    GameObject lightGo = null;
+                    foreach (var l in sky.GetComponentsInChildren<Light>(true))
+                        if (l && l.type == LightType.Directional) { lightGo = l.gameObject; break; }
+                    if (!lightGo)
+                    {
+                        var sun = RenderSettings.sun;
+                        if (sun && sun.gameObject.scene.IsValid()) lightGo = sun.gameObject;
+                    }
+                    if (!lightGo)
+                    {
+                        lightGo = new GameObject("TOD Light");
+                        lightGo.transform.SetParent(sky.transform, false);
+                        var nl = lightGo.AddComponent<Light>();
+                        nl.type = LightType.Directional;
+                        nl.shadows = LightShadows.Soft;
+                        nl.intensity = 0f; // TOD drives this from the Day/Night curves
+                        Plugin.Log.LogWarning("[Sky] TOD had no light reference and the scene had no directional light — created one");
+                    }
+                    comps.Light = lightGo;
+                }
+                comps.LightTransform = comps.Light.transform;
+                comps.LightSource = comps.Light.GetComponent<Light>();
+                if (!comps.LightSource) comps.LightSource = comps.Light.AddComponent<Light>();
+                if (comps.LightSource.type != LightType.Directional) comps.LightSource.type = LightType.Directional;
+                if (!comps.DomeTransform) comps.DomeTransform = sky.transform;
+
+                // GEOMETRY SANITY (2026-08-15): the solver's SunDirection comes from
+                // SunTransform.LookAt(DomeTransform.position) — if the dome's scale
+                // collapsed in the rip (or the sun isn't parented under it), sun and
+                // dome share a point and LookAt degenerates to a CONSTANT direction, no
+                // matter what the orbital math computes. that is the observed symptom:
+                // hour advances, LerpValue changes between raids (solver runs), sunDir.y
+                // frozen at +0.115.
+                var dome = comps.DomeTransform;
+                var ds = dome.localScale;
+                if (ds.x < 0.01f || ds.y < 0.01f || ds.z < 0.01f)
+                {
+                    dome.localScale = Vector3.one * Mathf.Max(ds.x, ds.y, ds.z, 1f);
+                    Plugin.Log.LogWarning($"[Sky] dome scale was degenerate {ds} — reset to {dome.localScale} (frozen-sun fix)");
+                }
+                if (comps.SunTransform && comps.SunTransform.parent != dome)
+                {
+                    Plugin.Log.LogWarning($"[Sky] Sun parented under '{(comps.SunTransform.parent ? comps.SunTransform.parent.name : "NULL")}' "
+                        + "not the dome — reparenting (orbital positions are dome-local)");
+                    comps.SunTransform.SetParent(dome, false);
+                }
+                if (comps.MoonTransform && comps.MoonTransform.parent != dome)
+                    comps.MoonTransform.SetParent(dome, false);
+                if (!comps.SunTransform && comps.Sun) comps.SunTransform = comps.Sun.transform;
+                if (!comps.MoonTransform && comps.Moon) comps.MoonTransform = comps.Moon.transform;
+                if (!comps.SpaceTransform && comps.Space) comps.SpaceTransform = comps.Space.transform;
+
+                Plugin.Log.LogWarning($"[Sky] TOD component refs healed — light='{comps.Light.name}' "
+                    + $"lightTransform={(bool)comps.LightTransform} sun={(bool)comps.SunTransform} "
+                    + $"moon={(bool)comps.MoonTransform} dome={(bool)comps.DomeTransform}"
+                    + "  <- a null LightTransform is what froze the sky at its authored 13:00");
+            }
+            catch (Exception e) { Plugin.Log.LogWarning($"[Sky] TOD component heal failed: {e.Message}"); }
+        }
+
+        // AUTHORED TOD PARAMETERS (2026-08-11: the map renders broad daylight at a
+        // verifiably-synced 22:01). the sun comes from `Cycle.Hour - World.UTC` with
+        // World.Latitude/Longitude (TOD_Sky:978-986), and the sky's look comes from the
+        // Atmosphere/Day/Night blocks — all serialized SUB-OBJECTS, which is exactly what
+        // the rip nulls and our scrub can only default-CONSTRUCT. defaults put the sun
+        // somewhere else entirely and leave daytime atmosphere constants in place, so the
+        // hour sync lands on a sky that ignores it.
+        //
+        // retail's authored values (extract_terminal_tod.py, level600): World lat 46 /
+        // long 84 / UTC 7.24, Atmosphere brightness 0.299, and TOD_Time DayLength 3000min.
+        // NOTE the scene ships Cycle.Hour = 13.0 — the editor's daytime state; retail
+        // overrides it at runtime because the map only opens 21:00-06:00, which is why
+        // the authored hour must never be restored (TickSkyTime owns the clock).
+        private static JObject _todSidecar;
+        private static bool _todTried;
+
+        private static JObject TodSidecar()
+        {
+            if (_todTried) return _todSidecar;
+            _todTried = true;
+            try
+            {
+                var path = System.IO.Path.Combine(
+                    System.IO.Path.GetDirectoryName(typeof(Plugin).Assembly.Location) ?? ".",
+                    "plugin-data", "terminal_tod_sky.json");
+                if (System.IO.File.Exists(path)) _todSidecar = JObject.Parse(System.IO.File.ReadAllText(path));
+                else Plugin.Log.LogDebug($"[Sky] no TOD sidecar at {path}");
+            }
+            catch (Exception e) { Plugin.Log.LogWarning($"[Sky] TOD sidecar parse failed: {e.Message}"); }
+            return _todSidecar;
+        }
+
+        // the extraction emits auto-property backing fields as '<Name>k__BackingField';
+        // accept either spelling so the same row fills both shapes
+        private static System.Reflection.FieldInfo TodField(Type t, string name)
+            => AccessTools.Field(t, name) ?? AccessTools.Field(t, $"<{name}>k__BackingField");
+
+        private static int ApplyTodAuthoring(TOD_Sky sky)
+        {
+            var sc = TodSidecar();
+            var comps = sc?["components"] as JObject;
+            if (comps == null) return 0;
+            int applied = 0;
+
+            void ApplyRows(string cls, Component target)
+            {
+                if (target == null) return;
+                var row = (comps[cls] as JArray)?.FirstOrDefault()?["fields"] as JObject;
+                if (row == null) return;
+                foreach (var prop in row.Properties())
+                {
+                    var clean = prop.Name.StartsWith("<")
+                        ? prop.Name.Substring(1, prop.Name.IndexOf('>') - 1)
+                        : prop.Name;
+                    // the clock is ours — never restore the editor's 13:00
+                    if (clean == "Cycle") continue;
+                    var fi = TodField(target.GetType(), clean);
+                    if (fi == null || !(prop.Value is JObject sub)) continue;
+                    try
+                    {
+                        var inst = fi.GetValue(target);
+                        if (inst == null)
+                        {
+                            if (fi.FieldType.GetConstructor(Type.EmptyTypes) == null) continue;
+                            inst = Activator.CreateInstance(fi.FieldType);
+                            fi.SetValue(target, inst);
+                        }
+                        int before = applied;
+                        foreach (var leaf in sub.Properties())
+                        {
+                            var lf = TodField(inst.GetType(), leaf.Name);
+                            if (lf == null) continue;
+                            if (lf.FieldType == typeof(float) && leaf.Value.Type == JTokenType.Float || leaf.Value.Type == JTokenType.Integer)
+                            {
+                                if (lf.FieldType == typeof(float)) { lf.SetValue(inst, leaf.Value.Value<float>()); applied++; }
+                                else if (lf.FieldType == typeof(int)) { lf.SetValue(inst, leaf.Value.Value<int>()); applied++; }
+                                else if (lf.FieldType == typeof(bool)) { lf.SetValue(inst, leaf.Value.Value<int>() != 0); applied++; }
+                            }
+                        }
+                        if (applied > before) fi.SetValue(target, inst);
+                    }
+                    catch { }
+                }
+                // scalar (non-object) fields sit at the row's top level too
+                foreach (var prop in row.Properties())
+                {
+                    if (prop.Value is JObject || prop.Value is JArray) continue;
+                    var clean = prop.Name.StartsWith("<") ? prop.Name.Substring(1, prop.Name.IndexOf('>') - 1) : prop.Name;
+                    var fi = TodField(target.GetType(), clean);
+                    if (fi == null) continue;
+                    try
+                    {
+                        if (fi.FieldType == typeof(float)) { fi.SetValue(target, prop.Value.Value<float>()); applied++; }
+                        else if (fi.FieldType == typeof(int)) { fi.SetValue(target, prop.Value.Value<int>()); applied++; }
+                        else if (fi.FieldType == typeof(bool)) { fi.SetValue(target, prop.Value.Value<int>() != 0); applied++; }
+                        else if (fi.FieldType.IsEnum) { fi.SetValue(target, Enum.ToObject(fi.FieldType, prop.Value.Value<int>())); applied++; }
+                    }
+                    catch { }
+                }
+            }
+
+            ApplyRows("TOD_Sky", sky);
+            ApplyRows("TOD_Time", sky.GetComponent<TOD_Time>());
+
+            try
+            {
+                Plugin.Log.LogWarning($"[Sky] retail TOD authoring restored ({applied} value(s)): "
+                    + $"lat={sky.World.Latitude:0.0} long={sky.World.Longitude:0.0} UTC={sky.World.UTC:0.00} "
+                    + $"atmoBrightness={sky.Atmosphere.Brightness:0.000} "
+                    + $"dayLenMin={(sky.GetComponent<TOD_Time>() != null ? sky.GetComponent<TOD_Time>().DayLengthInMinutes : -1f):0}"
+                    + "  <- a 0 day-length or a wrong UTC is what renders night as noon");
+            }
+            catch { }
+            return applied;
         }
 
         // the reverse-filled materials carry the BUNDLE's recompiled TOD shaders — the
@@ -151,10 +353,22 @@ namespace Manimal.Terminal
                     Plugin.Log.LogWarning($"[Sky] no native shader for '{m.name}' ('{m.shader.name}') — stays on the bundle copy");
                     return;
                 }
-                if (ReferenceEquals(native, m.shader)) return;
-                m.shader = native;
-                rebound++;
-                Plugin.Log.LogDebug($"[Sky] '{m.name}' rebound to native '{native.name}'");
+                int queueBefore = m.renderQueue;
+                if (!ReferenceEquals(native, m.shader))
+                {
+                    m.shader = native;
+                    rebound++;
+                }
+                // THE BLACK-BACKED SUN: a material carries its own renderQueue override,
+                // and the rip's value survives a shader swap. the TOD sun/moon/space
+                // materials are additive-transparent (queue 3000+); stuck at Geometry
+                // they draw as opaque quads with a black background — exactly what the
+                // sky has been doing. -1 = "use the shader's own queue".
+                m.renderQueue = -1;
+                Plugin.Log.LogDebug($"[Sky] '{m.name}' -> '{native.name}' queue {queueBefore} -> {m.renderQueue}"
+                    + $" (blend src={(m.HasProperty("_SrcBlend") ? m.GetFloat("_SrcBlend").ToString() : "n/a")}"
+                    + $" dst={(m.HasProperty("_DstBlend") ? m.GetFloat("_DstBlend").ToString() : "n/a")}"
+                    + $" zwrite={(m.HasProperty("_ZWrite") ? m.GetFloat("_ZWrite").ToString() : "n/a")})");
             }
 
             var res = sky.GetComponent<TOD_Resources>();

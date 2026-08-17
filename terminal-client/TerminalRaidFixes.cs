@@ -28,25 +28,21 @@ namespace Manimal.Terminal
         }
     }
 
-    // THE second-raid matching killer: spatial audio needs per-location baked data +
-    // room/portal scene components + occlusion/pool config assets, none of which
-    // survive the rip — Initialize NREs inside TarkovApplication.method_43 and faults
-    // the whole raid-load task ("an error occurred during matching"). skip it on our
-    // map: Initialized stays false and the game's guards degrade audio gracefully.
-    // the acoustics-system port later stages real data and lets BSG's init run
-    // (icebreaker's TryPrepareSpatialAudio branch).
-    [HarmonyPatch(typeof(SpatialAudioSystem), "Initialize")]
-    internal static class Patch_SpatialAudioInit
-    {
-        private static bool Prefix(ref Task __result)
-        {
-            if (!TerminalLoaded.Check())
-                return true; // real maps: untouched
-            Plugin.Log.LogWarning("[RaidFix] skipped SpatialAudioSystem.Initialize (no acoustics staging yet — audio unoccluded this raid)");
-            __result = Task.CompletedTask;
-            return false; // skip original
-        }
-    }
+    // RETIRED 2026-08-11 — this was the pre-port stopgap: spatial audio needed baked
+    // data + room/portal components + occlusion assets that didn't survive the rip, so
+    // Initialize NRE'd and faulted the whole raid-load task, and skipping it was the
+    // only way to matching. its own comment promised "the acoustics port later stages
+    // real data and lets BSG's init run" — that port has landed
+    // (TerminalAcoustics.TryPrepareSpatialAudio), and TerminalAudioFixes.
+    // Patch_SpatialAudioInitSkip now owns this decision: stage first, and skip ONLY
+    // when staging is unavailable.
+    //
+    // leaving this class registered was the bug: it ran as a SECOND prefix after the
+    // staging one, returned false, and skipped the original for good — so every raid
+    // staged 607 components and then never initialized them
+    // (Initialized=False, rooms untracked, every ambient player ungated =
+    // "the same zone audio everywhere"). do not reintroduce it; the airbags below
+    // already cover the uninitialized case.
 
     // followup: BetterAudio.PlayAtPoint routes every impact/gunshot through
     // ProcessSourceOcclusion, which NREs on the never-initialized internals —

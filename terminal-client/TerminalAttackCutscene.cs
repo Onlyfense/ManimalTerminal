@@ -123,6 +123,7 @@ namespace Manimal.Terminal
         private IEnumerator Run()
         {
             PlayingNow = true;
+            TerminalAcoustics.SetAmbientSilenced(true); // the timeline owns these seconds
             GamePlayerOwner.SetIgnoreInputInNPCDialog(true);
             _inputLocked = true;
             yield return Fade(0f, 1f);
@@ -236,6 +237,7 @@ namespace Manimal.Terminal
             _driving = true;
 
             _director.extrapolationMode = DirectorWrapMode.Hold;
+            _director.timeUpdateMode = DirectorUpdateMode.DSPClock; // see the intro's note: a hitch must not desync audio
             _director.Play();
             Plugin.Log.LogInfo($"[AttackCutscene] playing '{_director.playableAsset.name}' " +
                                $"({_director.duration:0.0}s{(Plugin.AttackCutsceneSkippable.Value ? ", SPACE skips" : "")})");
@@ -311,8 +313,20 @@ namespace Manimal.Terminal
                     (Mathf.PerlinNoise(tt, tt) - 0.5f) * amp);
             }
             cam.transform.SetPositionAndRotation(t.position, rot);
-            cam.fieldOfView = _rigCam.fieldOfView;
+
+            // same fov-pop guard as the intro: clamp the RATE so a bad curve frame
+            // becomes a smooth correction instead of a zoom-out and back
+            // clamp reverted — see the intro's note; smoothing was worse than the pop
+            float want = _rigCam.fieldOfView;
+            if (want <= 1f || want >= 179f) { if (_lastFov > 0f) cam.fieldOfView = _lastFov; return; }
+            if (Plugin.DevMode.Value && _lastFov > 0f && Mathf.Abs(want - _lastFov) > 5f)
+                Plugin.Log.LogWarning($"[AttackCutscene] fov jump {_lastFov:0.0} -> {want:0.0} at t={_director?.time:0.00}s "
+                    + $"(frame {Time.unscaledDeltaTime * 1000f:0}ms) — passed through");
+            _lastFov = want;
+            cam.fieldOfView = want;
         }
+
+        private float _lastFov = -1f;
 
         private void Bail(string why)
         {
@@ -329,6 +343,14 @@ namespace Manimal.Terminal
             PlayingNow = false;
             if (FinishedAt < 0f) FinishedAt = Time.realtimeSinceStartup;
             if (_driving) { Camera.onPreCull -= DriveCamera; _driving = false; }
+            _lastFov = -1f;
+            try { TerminalAcoustics.SetAmbientSilenced(false); } catch { }
+            // the cutscene hides/restores props and the door beat runs right here — a
+            // door that comes back on the wrong layer has no prompt at all, so re-assert
+            // the interaction layers once the map is handed back (2026-08-11: "the door
+            // was fine before the attack cutscene, dead after")
+            try { TerminalAcoustics.RepairInteractiveLayers(); } catch { }
+            try { TerminalInteractables.ReassertDoors("after attack cutscene"); } catch { }
             try { TerminalLights.CutsceneRelease(); } catch { }
             if (_realCam != null && _savedFov > 0f) _realCam.fieldOfView = _savedFov;
             if (_director != null && _director.state == PlayState.Playing) _director.Stop();

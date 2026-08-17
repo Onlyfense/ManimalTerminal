@@ -160,5 +160,95 @@ namespace Manimal.Terminal
                 return false; // we ran the whole list
             }
         }
+        // PATROL SUB-POINTS, ported from icebreaker 08-13 (34,090 -> 45 NREs there).
+        // a follower joining a boss lands in PatrolPointChooserBasic.FindPointForFollower,
+        // which calls SetTarget(container, follower.BotFollower.Index) — a formation slot,
+        // so ALWAYS >= 0. GClass504.method_0 therefore takes its `index >= 0` branch and
+        // does `new PatrolPointContainer(p.TargetPoint.GetSubPoint(index))`. GetSubPoint is
+        // `subPoints[Mathf.Clamp(index, 0, Count-1)]`: the INDEX is safe, the CONTENTS are
+        // not. a dead entry comes back, gets wrapped, and PatrollingData.PointSetted reads
+        // .Position off a null TargetPoint — every frame, from GClass514.Update.
+        //
+        // terminal is MORE exposed than icebreaker was: its patrol points are rebuilt from
+        // the retail dump by TerminalAIBake (FillFields restoring subPoints refs), and any
+        // ref that fails to resolve leaves a hole in the list. nothing here ever called
+        // CreateSubPoints either, so a point restored with an empty list stayed empty.
+        //
+        // ORDER MATTERS (measured on icebreaker): scrub BEFORE building. a point whose
+        // entries are ALL dead still reports SubPointsCount > 0, so a build-then-scrub pass
+        // skips regeneration and then empties the list — that run stripped 546 dead entries
+        // and left 63 points with no formation offsets at all.
+        [HarmonyPatch(typeof(GameWorld), nameof(GameWorld.OnGameStarted))]
+        internal static class Patch_PatrolSubPoints
+        {
+            private static readonly FieldInfo SubPointsField = AccessTools.Field(typeof(PatrolPoint), "subPoints");
+
+            [HarmonyPostfix]
+            private static void Postfix()
+            {
+                if (!TerminalGate.On) return;
+                int ways = 0, built = 0, failed = 0, scrubbed = 0, emptied = 0;
+                try
+                {
+                    foreach (var zone in UnityEngine.Object.FindObjectsOfType<BotZone>(true))
+                    {
+                        if (zone.PatrolWays == null) continue;
+                        foreach (var way in zone.PatrolWays)
+                        {
+                            if (way == null || way.Points == null) continue;
+                            ways++;
+                            foreach (var p in way.Points)
+                            {
+                                if (p == null) continue;
+                                scrubbed += Scrub(p);
+                                if (p.SubPointsCount == 0)
+                                {
+                                    try { p.CreateSubPoints(way); built++; }
+                                    catch { failed++; }
+                                    scrubbed += Scrub(p);
+                                }
+                                if (p.SubPointsCount == 0) emptied++;
+                            }
+                        }
+                    }
+                }
+                catch (Exception e) { Plugin.Log.LogWarning($"[SubPoints] sweep failed: {e.Message}"); }
+                Plugin.Log.LogWarning($"[SubPoints] built formation sub-points on {built} patrol point(s) ({ways} ways, {failed} failed)"
+                    + $"; scrubbed {scrubbed} dead sub-point(s)"
+                    + (emptied > 0 ? $", {emptied} point(s) left with none (GetSubPoint returns the point itself)" : ""));
+            }
+
+            // `x == null` is Unity's overload deliberately: it catches a destroyed-but-
+            // still-referenced component as well as a real null, and CreateSubPoints
+            // DestroyImmediates the previous generation before rebuilding.
+            private static int Scrub(PatrolPoint p)
+            {
+                try
+                {
+                    if (SubPointsField == null) return 0;
+                    if (!(SubPointsField.GetValue(p) is List<PatrolPoint> list) || list.Count == 0) return 0;
+                    int before = list.Count;
+                    list.RemoveAll(x => x == null);
+                    return before - list.Count;
+                }
+                catch { return 0; }
+            }
+        }
+
+        // backstop for a point the generator genuinely cannot fix (no navmesh around it):
+        // an empty sub-point list returns the point ITSELF rather than indexing [-1], so
+        // the follower stands on the point and the formation degrades instead of throwing
+        [HarmonyPatch(typeof(PatrolPoint), nameof(PatrolPoint.GetSubPoint))]
+        internal static class Patch_GetSubPointEmptyGuard
+        {
+            [HarmonyPrefix]
+            private static bool Prefix(PatrolPoint __instance, ref PatrolPoint __result)
+            {
+                if (__instance.SubPointsCount > 0) return true;
+                __result = __instance;
+                return false;
+            }
+        }
+
     }
 }

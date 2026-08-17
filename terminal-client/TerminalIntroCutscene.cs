@@ -83,6 +83,90 @@ namespace Manimal.Terminal
         private Camera _rigCam;            // the scene's animated camera (disabled, pose source)
         private Camera _realCam;
         private GameObject _fadeCanvas;    // CutsceneRoot/UI_FadeToBlack — retail's own fade rig
+
+        // THE PLAYER'S OWN TOP ON THE CUTSCENE ACTOR (user 2026-08-15): Actor_Top ships
+        // a generic packed torso mesh; the PMC's equipped top rides the same skeleton,
+        // so the swap is sharedMesh + materials + bones REMAPPED BY NAME onto the actor
+        // rig (a SkinnedMeshRenderer's bones array points at ITS OWN skeleton's
+        // transforms — copying the mesh without remapping explodes the deformation).
+        // any missing bone aborts cleanly: generic top beats a broken one.
+        private void TrySwapActorTop()
+        {
+            if (!Plugin.CutscenePlayerTop.Value) return;
+            try
+            {
+                var body = Singleton<GameWorld>.Instance?.MainPlayer?.PlayerBody;
+                EFT.Visual.LoddedSkin skin = null;
+                if (!body || !body.BodySkins.TryGetValue(EBodyModelPart.Body, out skin) || !skin)
+                { Plugin.Log.LogDebug("[IntroCutscene] no player Body skin — actor keeps the packed top"); return; }
+
+                SkinnedMeshRenderer src = null;
+                foreach (var r in skin.GetRenderers())
+                    if (r is SkinnedMeshRenderer s && s.sharedMesh
+                        && (!src || s.sharedMesh.vertexCount > src.sharedMesh.vertexCount))
+                        src = s; // highest-detail LOD
+                if (!src) { Plugin.Log.LogDebug("[IntroCutscene] Body skin has no skinned mesh — packed top kept"); return; }
+
+                Transform actorTop = null, actorRoot = null;
+                foreach (var rgo in _scene.GetRootGameObjects())
+                {
+                    actorTop = FindDeep(rgo.transform, "Actor_Top");
+                    if (actorTop)
+                    {
+                        actorRoot = FindDeep(rgo.transform, "Actor_Player");
+                        if (!actorRoot) actorRoot = actorTop.root;
+                        break;
+                    }
+                }
+                SkinnedMeshRenderer dst = null;
+                if (actorTop)
+                {
+                    dst = actorTop.GetComponent<SkinnedMeshRenderer>();
+                    if (!dst) dst = actorTop.GetComponentInChildren<SkinnedMeshRenderer>(true);
+                }
+                if (!dst) { Plugin.Log.LogDebug("[IntroCutscene] Actor_Top has no SkinnedMeshRenderer — packed top kept"); return; }
+
+                var boneByName = new Dictionary<string, Transform>();
+                foreach (var t in actorRoot.GetComponentsInChildren<Transform>(true))
+                    if (!boneByName.ContainsKey(t.name)) boneByName[t.name] = t;
+
+                var srcBones = src.bones;
+                var mapped = new Transform[srcBones.Length];
+                var missing = new List<string>();
+                for (int i = 0; i < srcBones.Length; i++)
+                {
+                    var n = srcBones[i] ? srcBones[i].name : null;
+                    if (n == null || !boneByName.TryGetValue(n, out mapped[i])) missing.Add(n ?? $"#{i}");
+                }
+                if (missing.Count > 0)
+                {
+                    Plugin.Log.LogWarning($"[IntroCutscene] top swap aborted — {missing.Count} bone(s) not on the actor rig "
+                        + $"({string.Join(", ", missing.GetRange(0, Math.Min(8, missing.Count)))}"
+                        + (missing.Count > 8 ? "...)" : ")") + " — skeleton mismatch, packed top kept");
+                    return;
+                }
+
+                dst.sharedMesh = src.sharedMesh;
+                dst.sharedMaterials = src.sharedMaterials;
+                dst.bones = mapped;
+                if (src.rootBone && boneByName.TryGetValue(src.rootBone.name, out var rb)) dst.rootBone = rb;
+                dst.localBounds = src.localBounds;
+                Plugin.Log.LogInfo($"[IntroCutscene] actor wears the player's top: '{src.sharedMesh.name}' "
+                    + $"({srcBones.Length} bones remapped, {src.sharedMaterials.Length} material(s))");
+            }
+            catch (Exception e) { Plugin.Log.LogWarning($"[IntroCutscene] top swap failed: {e.Message}"); }
+        }
+
+        private static Transform FindDeep(Transform t, string name)
+        {
+            if (t.name == name) return t;
+            for (int i = 0; i < t.childCount; i++)
+            {
+                var r = FindDeep(t.GetChild(i), name);
+                if (r != null) return r;
+            }
+            return null;
+        }
         private UnityEngine.UI.Image _fadeImage;
         private bool _driving;
         private bool _inputLocked;
@@ -174,7 +258,7 @@ namespace Manimal.Terminal
             // AND the image color (first raid: WHITE fade in a screen-corner rect) —
             // rebuild both: overlay canvas, stretch rect, black rgb.
             var fadeTf = FindInScene(_scene, "UI_FadeToBlack");
-            _fadeCanvas = fadeTf != null ? fadeTf : null;
+            _fadeCanvas = fadeTf ? fadeTf : null;
             if (_fadeCanvas != null)
             {
                 _fadeCanvas.SetActive(true);
@@ -215,6 +299,8 @@ namespace Manimal.Terminal
                 }
 
             // hide the player — the flying camera would film them standing at spawn
+            TrySwapActorTop(); // before the body hides — its renderers must be readable
+
             var player = Singleton<GameWorld>.Instance?.MainPlayer;
             if (player != null)
                 foreach (var r in player.gameObject.GetComponentsInChildren<Renderer>(false))
@@ -234,7 +320,34 @@ namespace Manimal.Terminal
             Camera.onPreCull += DriveCamera;
             _driving = true;
 
+            // STAGING BARRIER (2026-08-15: "huge stutter at raid start freezes the
+            // cutscene" — the log convicts us: AMBIENT LAYER STAGED (1105 components,
+            // one frame) lands AFTER 'playing ...' every raid, plus the weather stack
+            // and the 7585-row lamp table, all in the cutscene's opening seconds).
+            // the screen is already black here — burn that cost invisibly before the
+            // first frame of picture instead of on-camera. capped so a broken staging
+            // path can't hold the intro hostage; staging keeps retrying on its own
+            // cadence during the wait.
+            {
+                float barrier = Time.realtimeSinceStartup + 12f;
+                while (Time.realtimeSinceStartup < barrier
+                       && !(TerminalAcoustics.AmbientStaged && TerminalWeather.Staged))
+                    yield return null;
+                // settle frames: let the reactivation Awakes finish off-camera
+                yield return null;
+                yield return null;
+                Plugin.Log.LogInfo($"[IntroCutscene] staging barrier released — ambient={TerminalAcoustics.AmbientStaged} "
+                    + $"weather={TerminalWeather.Staged} (waited {(12f - (barrier - Time.realtimeSinceStartup)):0.0}s)");
+            }
+
             _director.extrapolationMode = DirectorWrapMode.Hold; // no loop surprises
+            // AUDIO CLOCK, not frame time (2026-08-11: a hitch mid-cutscene left the
+            // picture running behind its own soundtrack for the rest of the take).
+            // GameTime advances by delta, so every dropped frame is picture time LOST
+            // and the drift never recovers; DSPClock drives the timeline off the same
+            // clock the audio plays on, so a hitch costs frames, not sync.
+            _director.timeUpdateMode = DirectorUpdateMode.DSPClock;
+            TerminalAcoustics.SetAmbientSilenced(true); // the timeline owns these seconds
             _director.Play();
             Plugin.Log.LogInfo($"[IntroCutscene] playing '{_director.playableAsset.name}' " +
                                $"({_director.duration:0.0}s, unskippable)");
@@ -288,12 +401,38 @@ namespace Manimal.Terminal
             return null;
         }
 
+        // FOV POP GUARD (2026-08-11: "the cutscene camera sometimes zooms out and comes
+        // back"). the rig camera's own fov is timeline-animated, and a rip-damaged curve
+        // (or a frame where the binding hasn't evaluated yet) reads as a wild value for
+        // a few frames. retail cutscene framing never swings more than a few degrees per
+        // frame, so clamp the RATE: big jumps are followed smoothly instead of snapping,
+        // which turns a jarring zoom into an imperceptible correction. DevMode logs the
+        // outliers so the offending curve can be found if it's authored damage.
+        private float _lastFov = -1f;
+
         private void DriveCamera(Camera cam)
         {
             if (cam != _realCam || _rigCam == null) return;
             var t = _rigCam.transform;
             cam.transform.SetPositionAndRotation(t.position, t.rotation);
-            cam.fieldOfView = _rigCam.fieldOfView;
+
+            // RATE CLAMP REVERTED 2026-08-11 (user: "the fov thing got made worse, i saw
+            // the zoom MORE frequently"). smoothing turned a one-frame flicker into a
+            // multi-frame ramp — far more visible than the artefact it was hiding. take
+            // the authored value straight, and only reject values that cannot be real.
+            float want = _rigCam.fieldOfView;
+            if (want <= 1f || want >= 179f)
+            {
+                if (Plugin.DevMode.Value)
+                    Plugin.Log.LogWarning($"[IntroCutscene] rig fov absurd ({want:0.0}) at t={_director?.time:0.00}s — holding {_lastFov:0.0}");
+                if (_lastFov > 0f) cam.fieldOfView = _lastFov;
+                return;
+            }
+            if (Plugin.DevMode.Value && _lastFov > 0f && Mathf.Abs(want - _lastFov) > 5f)
+                Plugin.Log.LogWarning($"[IntroCutscene] fov jump {_lastFov:0.0} -> {want:0.0} at t={_director?.time:0.00}s "
+                    + $"(frame {Time.unscaledDeltaTime * 1000f:0}ms) — passed through");
+            _lastFov = want;
+            cam.fieldOfView = want;
         }
 
         private void Bail(string why)
@@ -312,6 +451,10 @@ namespace Manimal.Terminal
             _restored = true;
             if (FinishedAt < 0f) FinishedAt = Time.realtimeSinceStartup;
             if (_driving) { Camera.onPreCull -= DriveCamera; _driving = false; }
+            _lastFov = -1f;
+            try { TerminalAcoustics.SetAmbientSilenced(false); } catch { }
+            try { TerminalAcoustics.RepairInteractiveLayers(); } catch { }
+            try { TerminalInteractables.ReassertDoors("after intro cutscene"); } catch { }
             try { TerminalLights.CutsceneRelease(); } catch { }
             if (_realCam != null && _savedFov > 0f) _realCam.fieldOfView = _savedFov;
             if (_director != null && _director.state == PlayState.Playing) _director.Stop();

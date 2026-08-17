@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Comfort.Common;
 using EFT;
@@ -51,10 +50,10 @@ namespace Manimal.Terminal
                 if (hold == null) return;
                 BotZone zone = null;
                 foreach (var z in FindObjectsOfType<BotZone>())
-                    if (z != null && z.name == "Zone1BD1HangarBD11") { zone = z; break; }
-                if (zone?.SpawnPointMarkers == null || zone.SpawnPointMarkers.Count == 0) return;
+                    if (z && z.name == "Zone1BD1HangarBD11") { zone = z; break; }
+                if (!zone || zone.SpawnPointMarkers == null || zone.SpawnPointMarkers.Count == 0) return;
                 var template = zone.SpawnPointMarkers[0];
-                if (template == null) return;
+                if (!template) return;
 
                 var b = hold.Value;
                 var spots = new[]
@@ -71,9 +70,9 @@ namespace Manimal.Terminal
                     var go = Instantiate(template.gameObject, hit.position, Quaternion.identity, template.transform.parent);
                     go.name = $"BP.Terminal_HangarInterior_{added}";
                     var m = go.GetComponent<EFT.Game.Spawning.SpawnPointMarker>();
-                    if (m == null) { Destroy(go); continue; }
+                    if (!m) { Destroy(go); continue; }
                     var scol = go.GetComponent<SphereCollider>();
-                    if (scol != null) scol.radius = 3f; // authored rad:35 is the out-the-door scatter
+                    if (scol) scol.radius = 3f; // authored rad:35 is the out-the-door scatter
                     m.BotZone = zone;
                     zone.SpawnPointMarkers.Add(m);
                     added++;
@@ -93,42 +92,62 @@ namespace Manimal.Terminal
         private IEnumerator Run()
         {
             yield return new WaitForSeconds(15f);
+            // CONFIRM BEFORE TOPPING (2026-08-15 raid: 5 BD in the hangar). now that the
+            // escort fix delivers the whole TB8 squad, the topper's old single count was
+            // racing the last escort's walk-in — one slow spawn at +15s read as a
+            // shortfall and bought a fifth man. a shortfall must survive a second count
+            // 20s later before anything spawns.
+            int firstShort = CountShortfall(out _);
+            if (firstShort <= 0)
+            {
+                Done($"squad complete on first count — no top-up");
+                yield break;
+            }
+            Plugin.Log.LogInfo($"[HangarCrew] short {firstShort} on first count — confirming in 20s before topping");
+            yield return new WaitForSeconds(20f);
             try { CountAndTop(); }
             catch (Exception e) { Plugin.Log.LogWarning($"[HangarCrew] top-up failed: {e.Message}"); }
+        }
+
+        // living blackdiv ANYWHERE, not just in the hold box — a wave escort still
+        // pathing toward the hangar is delivered, and counting him out is exactly the
+        // over-spawn. exemplar preference still goes to a bot inside the box.
+        private int CountShortfall(out BotOwner exemplar)
+        {
+            exemplar = null;
+            var hold = TerminalCrewJobs.BdHoldBoundsPublic();
+            var bounds = hold ?? default;
+            if (hold != null) bounds.Expand(new Vector3(30f, 12f, 30f));
+
+            int present = 0;
+            foreach (var b in FindObjectsOfType<BotOwner>())
+            {
+                if (!b || b.IsDead) continue;
+                var role = b.Profile?.Info?.Settings?.Role.ToString() ?? "";
+                if (role.IndexOf("blackdiv", StringComparison.OrdinalIgnoreCase) < 0) continue;
+                present++;
+                if (!exemplar || (hold != null && bounds.Contains(b.Position))) exemplar = b;
+            }
+            return Plugin.BdHangarSquad.Value - present;
         }
 
         private void CountAndTop()
         {
             var hold = TerminalCrewJobs.BdHoldBoundsPublic();
             if (hold == null) { Done("no BD_hold bounds"); return; }
-            // same reach margin as the guard assignment — the zone's spawn points sit
-            // at the hangar mouth just outside the box, and a guard mid-walk-in must
-            // count as present or the topper over-delivers
-            var bounds = hold.Value;
-            bounds.Expand(new Vector3(30f, 12f, 30f));
 
-            BotOwner exemplar = null;
-            int present = 0;
-            foreach (var b in FindObjectsOfType<BotOwner>())
-            {
-                if (b == null || b.IsDead) continue;
-                var role = b.Profile?.Info?.Settings?.Role.ToString() ?? "";
-                if (role.IndexOf("blackdiv", StringComparison.OrdinalIgnoreCase) < 0) continue;
-                if (!bounds.Contains(b.Position)) continue;
-                present++;
-                exemplar = b;
-            }
+            int need = CountShortfall(out var exemplar);
             int want = Plugin.BdHangarSquad.Value;
-            int need = want - present;
+            int present = want - need;
             if (need <= 0)
             {
-                Done($"squad at {present}/{want} — no top-up");
+                Done($"squad at {present}/{want} on confirm count — no top-up (first count raced a walking escort)");
                 return;
             }
             // the boss dying before the count used to kill the top-up with it ("no
             // exemplar bot"), which is exactly the raid where the squad is missing —
             // fall back to the role CrewLayer recorded when it first saw a blackdiv
-            if (exemplar == null && TerminalCrewJobs.LastBlackDivRole == null)
+            if (!exemplar && TerminalCrewJobs.LastBlackDivRole == null)
             {
                 Done($"squad at {present}/{want} but no blackdiv role seen yet — no top-up");
                 return;
@@ -136,10 +155,10 @@ namespace Manimal.Terminal
 
             BotZone zone = null;
             foreach (var z in FindObjectsOfType<BotZone>())
-                if (z != null && z.name == "Zone1BD1HangarBD11") { zone = z; break; }
-            if (zone == null) { Done("hangar BotZone not found"); return; }
+                if (z && z.name == "Zone1BD1HangarBD11") { zone = z; break; }
+            if (!zone) { Done("hangar BotZone not found"); return; }
 
-            var role0 = exemplar != null
+            var role0 = exemplar
                 ? exemplar.Profile.Info.Settings.Role
                 : TerminalCrewJobs.LastBlackDivRole.Value;
             Plugin.Log.LogInfo($"[HangarCrew] hangar squad {present}/{want} — force-spawning {need}x {role0}");
@@ -157,15 +176,25 @@ namespace Manimal.Terminal
                 // that radius = out the hangar door (2026-08-10: all 3 deliveries
                 // landed at the mouth). points inside the box pin the spawn to the
                 // building; when none qualify, nearest-to-box-center beats random.
-                var pts = (zone.SpawnPoints ?? Array.Empty<EFT.Game.Spawning.ISpawnPoint>())
-                    .Where(p => p != null && holdTight.Contains(p.Position))
-                    .ToList();
+                // no LINQ (client code style): in-box filter, else nearest-2 selection
+                var all = zone.SpawnPoints ?? Array.Empty<EFT.Game.Spawning.ISpawnPoint>();
+                var pts = new List<EFT.Game.Spawning.ISpawnPoint>();
+                foreach (var sp in all)
+                    if (sp != null && holdTight.Contains(sp.Position)) pts.Add(sp);
                 if (pts.Count == 0)
-                    pts = (zone.SpawnPoints ?? Array.Empty<EFT.Game.Spawning.ISpawnPoint>())
-                        .Where(p => p != null)
-                        .OrderBy(p => (p.Position - holdTight.center).sqrMagnitude)
-                        .Take(2)
-                        .ToList();
+                {
+                    EFT.Game.Spawning.ISpawnPoint b1 = null, b2 = null;
+                    float d1 = float.MaxValue, d2 = float.MaxValue;
+                    foreach (var sp in all)
+                    {
+                        if (sp == null) continue;
+                        float d = (sp.Position - holdTight.center).sqrMagnitude;
+                        if (d < d1) { b2 = b1; d2 = d1; b1 = sp; d1 = d; }
+                        else if (d < d2) { b2 = sp; d2 = d; }
+                    }
+                    if (b1 != null) pts.Add(b1);
+                    if (b2 != null) pts.Add(b2);
+                }
                 Plugin.Log.LogDebug($"[HangarCrew] {pts.Count} pick point(s) for the hangar interior");
 
                 var spawnParams = new BotSpawnParams { ShallBeGroup = new ShallBeGroupParams(false, false, 1) };

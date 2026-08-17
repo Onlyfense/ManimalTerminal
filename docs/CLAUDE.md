@@ -38,3 +38,24 @@ instead of reinventing systems.
 - Attach Harmony patches per-class in isolated try/catch — one
   AmbiguousMatchException kills a whole PatchAll batch.
 - Build Release for deploys.
+
+
+## Code style
+
+- `var` when the right-hand side names the type or makes it unambiguous;
+  explicit type when C# requires it (null-init/late-assign locals), when
+  reflection erases it (`GetValue`/`GetComponent(Type)` results), or when the
+  type itself is information the reader needs. Necessity over uniformity.
+- Unity null checks: `if (obj)` / `if (!obj)` on UnityEngine.Object types (the
+  `==` overload silently degrades to reference equality on erased static types);
+  no `?.`/`??` on Unity types; null refs after Destroy. NOTE: EFT's bot
+  subsystems (BotMover/BotSteering/BotCoversData/BotMemory — the GClass429
+  family) are PLAIN classes, `?.` is fine there; BotOwner/Player/BotZone/
+  LoddedSkin and friends are Components — truthiness checks only.
+- No LINQ in terminal-client (game extension methods shadow it — removing
+  `using System.Linq` surfaced `GClass1518.Distinct` with a different signature
+  at compile time, the shadow is REAL; allocation discipline for per-frame
+  paths). Server-side LINQ is fine. Legacy files still carrying LINQ
+  (AIBake/Acoustics/AudioFixes/CameraDonor/Flares/GearTax/RaidFixes/SceneScrub)
+  are load-time-only paths — sweep them opportunistically when touched, not as
+  churn.

@@ -139,7 +139,14 @@ namespace Manimal.Terminal
                         it.BunkerDepth = f.Value<float?>("BunkerDepth") ?? -15f;
                         it.BunkerLowPass = f.Value<float?>("BunkerLowPass") ?? 300f;
                         it.ExposureSpeed = f.Value<float?>("ExposureSpeed") ?? 4f;
-                        it.ExposureOffset = f.Value<float?>("ExposureOffset") ?? 0.14f;
+                        // EXPOSURE IS OFF BY DEFAULT (2026-08-11: night raids started
+                        // looking like daylight the moment this layer went live). retail
+                        // authors these offsets against BAKED lighting we don't have —
+                        // our night is synthesized by TerminalLights, so retail's
+                        // brightening lands on top of an already-lit scene and washes it
+                        // out. the layer's real job here is indoor/outdoor STATE for the
+                        // ambient gating; EnvironmentExposure=1 restores retail's values.
+                        it.ExposureOffset = (f.Value<float?>("ExposureOffset") ?? 0.14f) * Plugin.EnvironmentExposure.Value;
                         it.RainVolume = f.Value<float?>("RainVolume") ?? 0.7f;
                         it.Reinit();
                     }
@@ -153,6 +160,18 @@ namespace Manimal.Terminal
                 var emRow = (sc["scenes"]?["Terminal_Scripts"]?["EnvironmentManager"] as JArray)?.FirstOrDefault();
                 if (emRow?["fields"] is JObject emFields)
                     FillFields(em, emFields, name => name != "Bounds");
+                // same reasoning as the per-trigger offsets above: don't let the manager
+                // push the camera's exposure on a map whose lighting we synthesize
+                float expo = Plugin.EnvironmentExposure.Value;
+                var fOut = AccessTools.Field(typeof(EnvironmentManager), "OutdoorExposureOffset");
+                if (fOut != null)
+                {
+                    float authored = (float)fOut.GetValue(em);
+                    fOut.SetValue(em, authored * expo);
+                    if (expo <= 0.001f)
+                        Plugin.Log.LogInfo($"[Acoustics] environment exposure neutralised (retail outdoor offset {authored:0.00} -> 0) "
+                            + "— set EnvironmentExposure=1 for retail's authored brightness");
+                }
                 root.SetActive(true);
 
                 _envRoot = root;
@@ -218,6 +237,31 @@ namespace Manimal.Terminal
         }
 
         internal static bool AmbientStaged => _ambientRoot != null;
+
+        // the cutscenes carry their own mixed soundtrack — retail's ambient layer must
+        // not play under them (2026-08-11: "i was hearing the ambient audio during the
+        // cutscene"). the sound RIG silences its own groups by phase; this is the same
+        // beat for the resurrected layer. deactivating the root stops every player and
+        // emitter under it without disturbing their wired state (OnDisable/OnEnable, no
+        // second Awake), so it resumes exactly where the phase machine expects.
+        // STICKY (2026-08-15: "ambient isnt muted during the intro cutscene" — the
+        // intro silences at raid start, BEFORE the layer has staged; the old version
+        // no-opped on the missing root, then staging brought the root up loud mid-
+        // cutscene. the flag survives until staging, which applies it on activation.)
+        private static bool _ambientSilenced;
+
+        internal static void SetAmbientSilenced(bool silent)
+        {
+            _ambientSilenced = silent;
+            try
+            {
+                if (_ambientRoot == null) return; // staging honors the flag later
+                if (_ambientRoot.activeSelf == !silent) return;
+                _ambientRoot.SetActive(!silent);
+                Plugin.Log.LogDebug($"[Ambient] retail layer {(silent ? "silenced for the cutscene" : "back up")}");
+            }
+            catch { }
+        }
 
         // EFT.SoundBank instances from the carved retail data. only PickSingleClip ->
         // Environments[0][0] matters to the players, so one variety carrying the whole
@@ -325,6 +369,8 @@ namespace Manimal.Terminal
                         if (t == null) { missing++; continue; }
                         // the cutscene rig may already own this GO — first attach wins,
                         // two players on one object is doubled audio
+                        // same interactive-object guard as the spatial tier
+                        if (t.gameObject.GetComponent<WorldInteractiveObject>() != null) { occupied++; continue; }
                         var existing = t.gameObject.GetComponent(type);
                         if (existing != null)
                         {
@@ -395,7 +441,15 @@ namespace Manimal.Terminal
                 }
                 catch (Exception e) { Plugin.Log.LogWarning($"[Ambient] system init failed: {e.Message}"); }
 
+                RepairInteractiveLayers();
                 _ambientRoot = root;
+                // a cutscene may already own the audio (intro at raid start) — come up
+                // silenced when the sticky flag says so, resume on its Restore
+                if (_ambientSilenced && root.activeSelf)
+                {
+                    root.SetActive(false);
+                    Plugin.Log.LogDebug("[Ambient] staged silenced — a cutscene is running");
+                }
                 Plugin.Log.LogInfo($"[Ambient] AMBIENT LAYER STAGED: {created} component(s) rebuilt, {filled} filled, "
                     + $"{_banks.Count} banks"
                     + (occupied > 0 ? $", {occupied} left to the sound rig" : "")
@@ -749,12 +803,23 @@ namespace Manimal.Terminal
             var sound = sc?["scenes"]?["Terminal_Sound"] as JObject;
             if (sound == null) return false;
 
+            // the sidecar loads long before the map does — without the Sound scene there
+            // is nothing to attach to, and reporting success would wave the loader's
+            // Initialize through to NRE on empty internals. no scene, no staging.
+            var soundScene = SceneManager.GetSceneByName("Terminal_Sound");
+            if (!soundScene.IsValid() || !soundScene.isLoaded)
+            {
+                Plugin.Log.LogDebug("[Acoustics] Terminal_Sound not loaded yet — staging deferred");
+                return false;
+            }
+
             try
             {
                 if (!EnsureBakeFile(sc)) return false;
 
                 _clipCache = null; // per-raid clip instances
                 _roomTonesBound = 0;
+                _volumesFixed = 0;
                 _roomToneMisses.Clear();
 
                 var goIndex = BuildGoIndex();
@@ -780,6 +845,15 @@ namespace Manimal.Terminal
                 foreach (var row in Rows(sound, "SpatialAudioRoom"))
                     if (Comp<SpatialAudioRoom>(comps, row) is SpatialAudioRoom r)
                         FillRoom(r, row, comps);
+
+                // nothing bound = the bundle/scene isn't what we think it is; let the
+                // caller skip the real Initialize rather than run it on empty internals
+                if (comps.Count == 0)
+                {
+                    foreach (var go in reactivate) go.SetActive(true);
+                    Plugin.Log.LogWarning("[Acoustics] no acoustic components resolved in the scene — staging abandoned");
+                    return false;
+                }
 
                 // pass 3 — wake everything with wired state
                 foreach (var go in reactivate) go.SetActive(true);
@@ -825,10 +899,12 @@ namespace Manimal.Terminal
                         FillFields(system.poolsConfig, pc, null);
                 }
 
+                if (_volumesFixed > 0)
+                    Plugin.Log.LogWarning($"[Acoustics] {_volumesFixed} acoustic collider(s) were SOLID — made triggers "
+                        + "(a solid portal in a doorway blocks the interaction ray and the door goes promptless)");
+                RepairInteractiveLayers();
                 _spatialMarker = new GameObject("Terminal_AcousticsStaged");
-                var soundScene = SceneManager.GetSceneByName("Terminal_Sound");
-                if (soundScene.IsValid() && soundScene.isLoaded)
-                    SceneManager.MoveGameObjectToScene(_spatialMarker, soundScene);
+                SceneManager.MoveGameObjectToScene(_spatialMarker, soundScene); // validated above
                 Plugin.Log.LogInfo($"[Acoustics] SPATIAL AUDIO STAGED: {comps.Count} components rehydrated — letting BSG's Initialize run for real");
                 return true;
             }
@@ -902,23 +978,61 @@ namespace Manimal.Terminal
             return best;
         }
 
+        // BELT AND BRACES for the layer trap above: whatever else runs, an interactive
+        // object sitting on the Triggers layer can't be prompted, so sweep them back.
+        // cheap (one pass over the interactive objects), and it logs when it fires so a
+        // future regression names itself instead of reading as "the map is broken".
+        internal static void RepairInteractiveLayers()
+        {
+            try
+            {
+                int interactive = LayerMask.NameToLayer("Interactive");
+                int triggers = LayerMask.NameToLayer("Triggers");
+                if (interactive < 0 || triggers < 0) return;
+                int fixedUp = 0;
+                foreach (var w in UnityEngine.Object.FindObjectsOfType<WorldInteractiveObject>())
+                {
+                    if (w == null || w.gameObject.layer != triggers) continue;
+                    w.gameObject.layer = interactive;
+                    fixedUp++;
+                }
+                if (fixedUp > 0)
+                    Plugin.Log.LogWarning($"[Acoustics] {fixedUp} interactive object(s) had been moved to the Triggers "
+                        + "layer — put back on Interactive so their prompts work");
+            }
+            catch { }
+        }
+
         private static IEnumerable<JToken> Rows(JObject scene, string cls)
             => (scene[cls] as JArray) ?? Enumerable.Empty<JToken>();
 
         private static void CreateAll<T>(JObject scene, string cls, Dictionary<string, List<Transform>> goIndex,
             Dictionary<long, Component> comps, List<GameObject> reactivate) where T : Component
         {
-            int missing = 0;
+            int missing = 0, guarded = 0;
             foreach (var row in Rows(scene, cls))
             {
                 var t = FindGo(goIndex, row);
                 if (t == null) { missing++; continue; }
                 var go = t.gameObject;
+                // NEVER acousticise an interactive object: ServerRoomColliderArea.Awake
+                // (AudioTriggerArea's base) rewrites gameObject.layer to Triggers, which
+                // takes the object off the Interactive layer the interaction raycast
+                // uses — 2026-08-11: doors silently lost their prompt entirely, "as if
+                // it was a fake door". a path collision is all it takes.
+                if (go.GetComponent<WorldInteractiveObject>() != null)
+                {
+                    guarded++;
+                    continue;
+                }
                 if (go.activeSelf) { go.SetActive(false); reactivate.Add(go); }
                 comps[row.Value<long>("path_id")] = go.AddComponent<T>();
             }
             if (missing > 0)
                 Plugin.Log.LogWarning($"[Acoustics] {cls}: {missing} GOs not found in scene (bundle drift?)");
+            if (guarded > 0)
+                Plugin.Log.LogWarning($"[Acoustics] {cls}: {guarded} skipped — the GO carries an interactive object "
+                    + "(attaching would move it to the Triggers layer and kill its prompt)");
         }
 
         private static T Comp<T>(Dictionary<long, Component> comps, JToken row) where T : Component
@@ -930,10 +1044,38 @@ namespace Manimal.Terminal
             return id.HasValue && comps.TryGetValue(id.Value, out var c) ? c : null;
         }
 
+        // ACOUSTIC VOLUMES ARE VOLUMES, NEVER GEOMETRY (user call 2026-08-11, remembered
+        // from icebreaker): portals sit IN doorways by definition, so a portal collider
+        // left solid — and on a layer the interaction raycast reads — stands between the
+        // player and the door. the door then probes perfectly healthy (Shut, unlocked,
+        // Interactive, collider on) and still offers no prompt, because the ray never
+        // reaches it. BSG's own ServerRoomColliderArea.Awake moves itself to the Triggers
+        // layer; portals and rooms never got that treatment in our rebuild. do both:
+        // isTrigger so physics passes through, Triggers layer so interaction ignores it.
+        private static int _volumesFixed;
+
+        private static void MakeAcousticVolume(Component c)
+        {
+            try
+            {
+                if (c == null) return;
+                int triggers = LayerMask.NameToLayer("Triggers");
+                if (triggers >= 0 && c.gameObject.layer != triggers) c.gameObject.layer = triggers;
+                foreach (var col in c.GetComponents<Collider>())
+                {
+                    if (col == null || col.isTrigger) continue;
+                    col.isTrigger = true;
+                    _volumesFixed++;
+                }
+            }
+            catch { }
+        }
+
         // ------------------------------------------------------------------- fillers
         private static void FillArea(AudioTriggerArea area, JToken row)
         {
             var f = row["fields"];
+            MakeAcousticVolume(area);
             AccessTools.Field(typeof(ServerRoomColliderArea), "areaCollider")
                 ?.SetValue(area, area.GetComponent<BoxCollider>());
             var validate = f?.Value<int?>("_validatePlayerCenterInside");
@@ -957,6 +1099,7 @@ namespace Manimal.Terminal
             p.closeFadeTime = f.Value<float?>("closeFadeTime") ?? 0.1f;
             p.openEnvelope = Curve(f["openEnvelope"]) ?? p.openEnvelope;
             p.closeEnvelope = Curve(f["closeEnvelope"]) ?? p.closeEnvelope;
+            MakeAcousticVolume(p); // a portal in a doorway must not block the door
             p.portalCollider = p.GetComponent<BoxCollider>();
 
             AccessTools.Field(typeof(BaseSpatialAudioPortal), "_iD").SetValue(p, (short)(f.Value<int?>("_iD") ?? 0));
@@ -1007,6 +1150,7 @@ namespace Manimal.Terminal
             var f = row["fields"] as JObject;
             if (f == null) return;
 
+            MakeAcousticVolume(r);
             r.priority = f.Value<int?>("priority") ?? 0;
             r.WallOcclusion = f.Value<float?>("WallOcclusion") ?? 0.5f;
             r.FitToGeometry = (f.Value<int?>("FitToGeometry") ?? 0) != 0;

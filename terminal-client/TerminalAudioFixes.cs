@@ -27,10 +27,21 @@ namespace Manimal.Terminal
             [HarmonyPrefix]
             private static bool Prefix(SpatialAudioSystem __instance, ref Task __result)
             {
-                if (!TerminalGate.On) return true;
+                // MAP TEST MUST WORK DURING LOAD. TerminalGate.On reads the raid's
+                // location id, which isn't set yet when TarkovApplication.method_43
+                // calls Initialize — so gating on it alone let the LOADER's premature
+                // call through, and method_0 NRE'd and faulted the whole raid-load task
+                // ("couldnt even load in", 2026-08-11). the scene-name check is the one
+                // that answers correctly that early; keep both.
+                if (!TerminalGate.On && !TerminalLoaded.Check()) return true; // real maps: untouched
                 if (Plugin.SpatialAudio.Value && TerminalAcoustics.TryPrepareSpatialAudio(__instance))
                     return true; // staged — run the real init
-                Plugin.Log.LogInfo("[AudioFix] SpatialAudioSystem.Initialize skipped (acoustics staging unavailable) — occlusion airbags active");
+
+                // NOT staged yet (the loader beats our scenes/sidecar): skipping here is
+                // what keeps raid start alive. our own TickSpatialInit drives Initialize
+                // again in-raid once staging can actually succeed.
+                Plugin.Log.LogInfo("[AudioFix] SpatialAudioSystem.Initialize skipped (staging not ready yet) — "
+                    + "occlusion airbags active until we drive it in-raid");
                 __result = Task.CompletedTask;
                 return false;
             }

@@ -83,6 +83,38 @@ namespace Manimal.Terminal
             // let the raid-start frame pass — the attach does a world sweep
             yield return null;
             AttachCullingCamera();
+            // loot tracking is per-raid state — a stale list from the last raid would hold
+            // destroyed renderers and a stale hidden flag
+            TerminalLootBounds.ResetForRaid();
+            // the LODGroup census is its own multi-frame sweep (it yields every 4ms),
+            // so it runs after the culling attach rather than racing it
+            yield return Instance.StartCoroutine(TerminalLodCullFloor.Apply());
+        }
+
+        // LOD BIAS + CULL FLOORS (ported from icebreaker). the bias is re-asserted every
+        // frame on purpose: EFT's own settings apply writes QualitySettings.lodBias from
+        // GameGraphicsClass whenever the graphics menu is touched, so a one-shot write
+        // silently loses the moment a player opens settings mid-raid. -1 means hands off.
+        private static float _lastBiasWritten = float.NaN;
+
+        private void TickLodClamps()
+        {
+            try
+            {
+                float want = Plugin.LodBiasClamp.Value;
+                if (want > 0f)
+                {
+                    // only write when it actually differs — this runs every frame
+                    if (!Mathf.Approximately(QualitySettings.lodBias, want) || !Mathf.Approximately(_lastBiasWritten, want))
+                    {
+                        QualitySettings.lodBias = want;
+                        _lastBiasWritten = want;
+                    }
+                }
+                if (CameraRef != null) TerminalLodCullFloor.Tick(CameraRef.transform.position);
+                TerminalLootBounds.Tick();
+            }
+            catch (Exception e) { Plugin.Log.LogWarning($"[LodCullFloor] tick failed: {e.Message}"); }
         }
 
         private void Update()
@@ -94,6 +126,7 @@ namespace Manimal.Terminal
 
             if (!TerminalGate.On) return;
             _frames++;
+            TickLodClamps();
             TickPcDriver();
             DrainPcGroupToggles();
             DrainPcToggles();

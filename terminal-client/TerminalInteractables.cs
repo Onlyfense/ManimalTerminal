@@ -22,6 +22,130 @@ namespace Manimal.Terminal
     // bundle and the build needs the unstatic pass.
     internal static class TerminalInteractables
     {
+        // re-run the door heal after anything that hands the map back (cutscenes hide
+        // and restore props, load scenes, and run the door beat). cheap, idempotent,
+        // and it reports what it had to fix so a silent prompt loss names its cause.
+        internal static void ReassertDoors(string when)
+        {
+            if (!TerminalGate.On) return;
+            try
+            {
+                int interactive = UnityEngine.LayerMask.NameToLayer("Interactive");
+                int relayered = 0, reactivated = 0, unstuck = 0;
+                foreach (var d in UnityEngine.Object.FindObjectsOfType<Door>(true))
+                {
+                    if (d == null) continue;
+                    if (interactive >= 0 && d.gameObject.layer != interactive
+                        && d.gameObject.layer != UnityEngine.LayerMask.NameToLayer("Default"))
+                    { d.gameObject.layer = interactive; relayered++; }
+                    var col = d.GetComponent<Collider>();
+                    if (col != null && !col.enabled) { col.enabled = true; reactivated++; }
+                    // a door left mid-interaction offers nothing at all
+                    if (d.DoorState == EDoorState.Interacting) { d.DoorState = EDoorState.Shut; unstuck++; }
+                }
+                if (relayered + reactivated + unstuck > 0)
+                    Plugin.Log.LogWarning($"[Interactables] doors re-asserted {when}: {relayered} relayered, "
+                        + $"{reactivated} collider(s) re-enabled, {unstuck} unstuck from Interacting");
+                else
+                    Plugin.Log.LogDebug($"[Interactables] doors checked {when} — all healthy");
+            }
+            catch (Exception e) { Plugin.Log.LogWarning($"[Interactables] door re-assert failed: {e.Message}"); }
+        }
+
+        // THE WHAT-IS-WRONG-WITH-THIS-DOOR BUTTON (F9). dumps every interactive object
+        // within 6m with the full set of things that can silence a prompt: layer, active
+        // state, collider, door state, key, operability and the interaction flags. one
+        // press beats another round of theories.
+        internal class ProbeHost : MonoBehaviour
+        {
+            private void Update()
+            {
+                if (!Plugin.InteractProbeKey.Value.IsDown()) return;
+                try
+                {
+                    var mp = Comfort.Common.Singleton<GameWorld>.Instance?.MainPlayer;
+                    if (mp == null) { Plugin.Log.LogWarning("[InteractProbe] no player"); return; }
+                    int interactive = LayerMask.NameToLayer("Interactive");
+                    int found = 0;
+                    foreach (var w in UnityEngine.Object.FindObjectsOfType<WorldInteractiveObject>(true))
+                    {
+                        if (w == null) continue;
+                        float d = (w.transform.position - mp.Position).magnitude;
+                        if (d > 6f) continue;
+                        found++;
+                        var col = w.GetComponent<Collider>();
+                        string path = w.name;
+                        for (var t = w.transform.parent; t != null; t = t.parent) path = t.name + "/" + path;
+                        Plugin.Log.LogWarning($"[InteractProbe] '{path}' ({w.GetType().Name}) d={d:0.0}m "
+                            + $"layer={LayerMask.LayerToName(w.gameObject.layer)}({w.gameObject.layer}"
+                            + $"{(w.gameObject.layer == interactive ? "=Interactive OK" : " NOT Interactive")}) "
+                            + $"activeInHierarchy={w.gameObject.activeInHierarchy} "
+                            + $"collider={(col == null ? "NONE" : col.enabled ? "on" : "OFF")} "
+                            + $"state={w.DoorState} snap={w.Snap} keyId='{w.KeyId}' "
+                            + $"OPERATABLE={w.Operatable} "   // false = the prompt exists but greys out
+                            + $"noInteractions={w.NoInteractionsAllowed} id='{w.Id}'");
+                    }
+                    Plugin.Log.LogWarning($"[InteractProbe] {found} interactive object(s) within 6m");
+
+                    // REPLAY THE ENGINE'S OWN DECISION, GATE BY GATE. Player.InteractionRaycast
+                    // -> GameWorld.FindInteractable is a chain of five separate "no"s, and
+                    // from outside you can't tell which one fired — the door looks perfect
+                    // either way. masks are BSG's own (GameWorld line 1413/1415).
+                    try
+                    {
+                        var pl = mp;
+                        int maskFind = LayerMask.GetMask("Interactive", "Deadbody", "Player", "Loot");
+                        int maskBlock = LayerMask.GetMask("HighPolyCollider", "TransparentCollider");
+                        Plugin.Log.LogWarning($"[InteractProbe] GATE 1 CanInteract={pl.CurrentState?.CanInteract} "
+                            + $"handsController={(pl.HandsController == null ? "NULL" : pl.HandsController.CanInteract().ToString())}"
+                            + "  <- both must be true or NOTHING is interactable");
+                        var camT = Camera.main;
+                        if (camT != null)
+                        {
+                            var ray = new Ray(camT.transform.position, camT.transform.forward);
+                            if (Physics.Raycast(ray, out var fh, 3f, maskFind, QueryTriggerInteraction.Ignore))
+                            {
+                                var io = fh.collider.gameObject.GetComponentInParent<InteractableObject>();
+                                bool blocked = Physics.Linecast(ray.origin, fh.point, maskBlock);
+                                Plugin.Log.LogWarning($"[InteractProbe] GATE 2 raycast hit '{fh.collider.name}' at {fh.distance:0.00}m "
+                                    + $"layer={LayerMask.LayerToName(fh.collider.gameObject.layer)}");
+                                Plugin.Log.LogWarning($"[InteractProbe] GATE 3 occlusion linecast blocked={blocked}"
+                                    + (blocked ? "  <- THIS kills the prompt (something on HighPoly/TransparentCollider is in the way)" : ""));
+                                Plugin.Log.LogWarning($"[InteractProbe] GATE 4 InteractableObject={(io == null ? "NONE FOUND" : io.GetType().Name)}");
+                                if (io != null)
+                                    Plugin.Log.LogWarning($"[InteractProbe] GATE 5 InteractsFromAppropriateDirection="
+                                        + $"{io.InteractsFromAppropriateDirection(pl.LookDirection)}"
+                                        + "  <- false = authored interaction direction/dot rejects your angle");
+                            }
+                            else Plugin.Log.LogWarning("[InteractProbe] GATE 2 raycast (Interactive/Deadbody/Player/Loot) hit NOTHING within 3m");
+                        }
+                        Plugin.Log.LogWarning($"[InteractProbe] engine currently holds InteractableObject="
+                            + $"{(pl.InteractableObject == null ? "NULL (no prompt)" : pl.InteractableObject.GetType().Name)}");
+                    }
+                    catch (Exception e) { Plugin.Log.LogWarning($"[InteractProbe] gate replay failed: {e.Message}"); }
+
+                    var cam = Camera.main;
+                    if (cam != null)
+                    {
+                        var hits = Physics.RaycastAll(cam.transform.position, cam.transform.forward, 6f,
+                            ~0, QueryTriggerInteraction.Collide);
+                        System.Array.Sort(hits, (a, b) => a.distance.CompareTo(b.distance));
+                        if (hits.Length == 0) Plugin.Log.LogWarning("[InteractProbe] crosshair ray hit NOTHING within 6m");
+                        for (int i = 0; i < hits.Length && i < 6; i++)
+                        {
+                            var h = hits[i];
+                            var owner = h.collider.GetComponentInParent<WorldInteractiveObject>();
+                            Plugin.Log.LogWarning($"[InteractProbe]   ray[{i}] {h.distance:0.00}m '{h.collider.name}' "
+                                + $"layer={LayerMask.LayerToName(h.collider.gameObject.layer)} "
+                                + $"trigger={h.collider.isTrigger} "
+                                + $"owner={(owner == null ? "none" : owner.GetType().Name + " '" + owner.Id + "'")}");
+                        }
+                    }
+                }
+                catch (Exception e) { Plugin.Log.LogWarning($"[InteractProbe] failed: {e.Message}"); }
+            }
+        }
+
         [HarmonyPatch(typeof(GameWorld), nameof(GameWorld.OnGameStarted))]
         internal static class Patch_HealInteractables
         {
@@ -29,6 +153,8 @@ namespace Manimal.Terminal
             private static void Postfix()
             {
                 if (!TerminalGate.On) return;
+                if (UnityEngine.Object.FindObjectOfType<ProbeHost>() == null)
+                    new GameObject("Terminal_InteractProbe").AddComponent<ProbeHost>();
                 try
                 {
                     int healed = 0, remapped = 0;
