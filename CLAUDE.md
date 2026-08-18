@@ -1,0 +1,1 @@
+- **Every new [HarmonyPatch] class must be added to Plugin.cs's explicit Patch(typeof(...)) list** — this repo deliberately avoids PatchAll (ambiguous-match batch-kill trap), so a patch class that compiles but is not listed silently never applies (cost a full raid-test cycle 2026-08-17).

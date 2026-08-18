@@ -46,6 +46,9 @@
     <Reference Include="UnityEngine.UIModule">
       <HintPath>$(SPTPath)\EscapeFromTarkov_Data\Managed\UnityEngine.UIModule.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEngine.ParticleSystemModule">
+      <HintPath>$(SPTPath)\EscapeFromTarkov_Data\Managed\UnityEngine.ParticleSystemModule.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine.IMGUIModule">
       <HintPath>$(SPTPath)\EscapeFromTarkov_Data\Managed\UnityEngine.IMGUIModule.dll</HintPath>
     </Reference>

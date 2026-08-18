@@ -1,0 +1,181 @@
+{
+ "source": "retail 1.0 level628 FinalExitZone/Gate3OpenTrigger/ArtilleryTriggers",
+ "rows": [
+  {
+   "cls": "FinallExitZone",
+   "path": "FinalExitZone",
+   "cocc": 0,
+   "active": true,
+   "unparsed": true
+  },
+  {
+   "cls": "FinalGateOpenHandler",
+   "path": "Gate3OpenTrigger",
+   "cocc": 0,
+   "active": true,
+   "fields": {
+    "m_Enabled": 1,
+    "doorID": "door_plastic2_door_plastic_prefab_10",
+    "finalExitZone": {
+     "$ref": {
+      "kind": "comp",
+      "cls": "FinallExitZone",
+      "path": "FinalExitZone",
+      "cocc": 0
+     }
+    }
+   }
+  },
+  {
+   "cls": "ArtilleryChangeTriggerHandler",
+   "path": "ArtilleryTriggers/ArtilleryTriggerZone1",
+   "cocc": 0,
+   "active": true,
+   "unparsed": true
+  },
+  {
+   "cls": "TriggerZone",
+   "path": "ArtilleryTriggers/ArtilleryTriggerZone1",
+   "cocc": 0,
+   "active": true,
+   "fields": {
+    "m_Enabled": 1,
+    "_mode": 4,
+    "_triggerId": "artillery_trigger_1",
+    "_triggerTag": 0,
+    "_botPolitic": 1,
+    "_moveDistanceToTrigger": 0.0
+   }
+  },
+  {
+   "cls": "ArtilleryChangeTriggerHandler",
+   "path": "ArtilleryTriggers/ArtilleryTriggerZone3",
+   "cocc": 0,
+   "active": true,
+   "unparsed": true
+  },
+  {
+   "cls": "TriggerZone",
+   "path": "ArtilleryTriggers/ArtilleryTriggerZone3",
+   "cocc": 0,
+   "active": true,
+   "fields": {
+    "m_Enabled": 1,
+    "_mode": 4,
+    "_triggerId": "artillery_trigger_3",
+    "_triggerTag": 0,
+    "_botPolitic": 1,
+    "_moveDistanceToTrigger": 0.0
+   }
+  },
+  {
+   "cls": "TriggerZone",
+   "path": "ArtilleryTriggers/ArtilleryTriggerZone2",
+   "cocc": 0,
+   "active": true,
+   "fields": {
+    "m_Enabled": 1,
+    "_mode": 4,
+    "_triggerId": "artillery_trigger_2",
+    "_triggerTag": 0,
+    "_botPolitic": 1,
+    "_moveDistanceToTrigger": 0.0
+   }
+  },
+  {
+   "cls": "ArtilleryChangeTriggerHandler",
+   "path": "ArtilleryTriggers/ArtilleryTriggerZone2",
+   "cocc": 0,
+   "active": true,
+   "unparsed": true
+  },
+  {
+   "cls": "TriggerZone",
+   "path": "ArtilleryTriggers/ArtilleryTriggerZone4",
+   "cocc": 0,
+   "active": true,
+   "fields": {
+    "m_Enabled": 1,
+    "_mode": 4,
+    "_triggerId": "artillery_trigger_4",
+    "_triggerTag": 0,
+    "_botPolitic": 1,
+    "_moveDistanceToTrigger": 0.0
+   }
+  },
+  {
+   "cls": "ArtilleryChangeTriggerHandler",
+   "path": "ArtilleryTriggers/ArtilleryTriggerZone4",
+   "cocc": 0,
+   "active": true,
+   "unparsed": true
+  }
+ ],
+ "worldBoxes": {
+  "FinalExitZone": {
+   "pos": {
+    "x": -298.9000244140625,
+    "y": -59.2400016784668,
+    "z": 72.42999267578125
+   },
+   "size": {
+    "x": 5.713041305541992,
+    "y": 4.434554100036621,
+    "z": 14.323833465576172
+   },
+   "rotY": -15.371075548332973
+  },
+  "ArtilleryTriggers/ArtilleryTriggerZone1": {
+   "pos": {
+    "x": 125.28997802734375,
+    "y": -56.58000183105469,
+    "z": -402.9700012207031
+   },
+   "size": {
+    "x": 10.900001525878906,
+    "y": 8.288984298706055,
+    "z": 9.037789344787598
+   },
+   "rotY": -15.064041857275688
+  },
+  "ArtilleryTriggers/ArtilleryTriggerZone3": {
+   "pos": {
+    "x": 122.70001220703125,
+    "y": -56.380001068115234,
+    "z": 15.15997314453125
+   },
+   "size": {
+    "x": 20.918123245239258,
+    "y": 8.736390113830566,
+    "z": 10.458234786987305
+   },
+   "rotY": 0.7343090250557877
+  },
+  "ArtilleryTriggers/ArtilleryTriggerZone2": {
+   "pos": {
+    "x": 65.0899658203125,
+    "y": -57.58000183105469,
+    "z": -141.22998046875
+   },
+   "size": {
+    "x": 7.280488014221191,
+    "y": 4.525923252105713,
+    "z": 8.14943790435791
+   },
+   "rotY": -0.4385458756523929
+  },
+  "ArtilleryTriggers/ArtilleryTriggerZone4": {
+   "pos": {
+    "x": -87.5,
+    "y": -42.29999923706055,
+    "z": 209.199951171875
+   },
+   "size": {
+    "x": 233.99661254882812,
+    "y": 77.25286102294922,
+    "z": 27.452865600585938
+   },
+   "rotY": -14.01250161215351
+  }
+ }
+}

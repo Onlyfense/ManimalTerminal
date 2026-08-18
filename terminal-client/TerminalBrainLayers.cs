@@ -127,8 +127,28 @@ namespace Manimal.Terminal
                     Plugin.Log.LogDebug($"[CrewLayer] {bot.name}: role '{role}' not a push role — left to its own brain");
                     return;
                 }
-                ByProfile[bot.ProfileId] = new Rec { Job = Job.Hunt, RushUntil = Time.time + 60f };
-                Plugin.Log.LogDebug($"[CrewLayer] {bot.name}: HUNT (event wave, 60s rush) role='{role}' brain='{bot.Brain?.BaseBrain?.ShortName()}'");
+                // NATIVE PUSH (user calls 2026-08-18, replaces our Hunt rush for scavs):
+                // BSG ships dormant ForceAttack/ForcePersuit brain layers (501/502),
+                // activated per-bot through BotsForceAttackEvent. STRICTLY BSG-design:
+                // the bot's own Mind.ACTIVE_FORCE_ATTACK_EVENTS gate (from its server
+                // bot config) decides eligibility — we never flip it, only start the
+                // event for bots BSG authored to answer it.
+                try
+                {
+                    var bc = Comfort.Common.Singleton<IBotGame>.Instance?.BotsController;
+                    var ev = bc?.EventsController?.ForceAttackEvent;
+                    if (ev == null)
+                        Plugin.Log.LogWarning($"[CrewLayer] no ForceAttackEvent controller — {bot.name} left passive");
+                    else if (ev.CanActivate(bot))
+                    {
+                        ev.ExternalStart();
+                        ev.BotEventActive(bot);
+                        Plugin.Log.LogDebug($"[CrewLayer] {bot.name}: NATIVE FORCE ATTACK (event wave) role='{role}'");
+                    }
+                    else
+                        Plugin.Log.LogDebug($"[CrewLayer] {bot.name}: not force-attack eligible by BSG design — left to its own brain");
+                }
+                catch (Exception fe) { Plugin.Log.LogWarning($"[CrewLayer] force-attack activation failed for {bot.name}: {fe.Message}"); }
             }
             catch (Exception e) { Plugin.Log.LogWarning($"[CrewLayer] assign failed: {e.Message}"); }
         }

@@ -46,6 +46,24 @@ namespace Manimal.Terminal
                 TerminalCullingDriver.ResetForNewRaid();
                 TerminalSoundRig.ResetForNewRaid();
                 TerminalAIPlaces.ResetForNewRaid();
+                TerminalGatesExplosion.ResetForRaid();
+                TerminalCraneFalling.ResetForRaid();
+                TerminalFinalExit.ResetForRaid();
+                TerminalArtillery.ResetForRaid();
+                TerminalPumpStation.ResetForRaid();
+                TerminalEndingCutscene.ResetForRaid();
+                TerminalWater.ResetForRaid();
+                TerminalLootBind.ResetForRaid();
+                TerminalDryPlanes.ResetForRaid();
+                TerminalRainAudio.ResetForRaid();
+                TerminalHoldLock.ResetForRaid();
+                TerminalPerfWatch.ResetForRaid();
+                TerminalSceneScrub.ResetForRaid();
+                if (PendingLocationId == "Terminal")
+                {
+                    TerminalArtillery.InjectConfig();
+                    TerminalBossRoll.Roll(location);
+                }
                 Plugin.Log.LogInfo($"[TerminalGate] raid location: '{PendingLocationId ?? "<null>"}'");
             }
         }

@@ -289,8 +289,9 @@ namespace Manimal.Terminal
 
         // retail's post-attack beat (ClientInteractiveTriggerEventFilter, dead in 4.0):
         // the checkpoint cutscene door unlocks and the AdditionalSounds tableau plays —
-        // cardlock release, then the door-push foley. the VSRF voice line came from the
-        // dead localized player and was never serialized; it stays silent.
+        // cardlock release, door-push foley, VSRF voice. only the voice's clip survived
+        // on its scene source (2026-08-18 report); the other two now resolve from the
+        // fx bundle.
         private System.Collections.IEnumerator DoorOpenBeat()
         {
             if (_doorOpen == null) yield break;
@@ -331,6 +332,10 @@ namespace Manimal.Terminal
                 var clipName = s.Value<string>("clip");
                 if (src.clip == null && clipName != null && _clips.TryGetValue(clipName, out var clip))
                     src.clip = clip;
+                if (src.clip == null && clipName != null)
+                    src.clip = TerminalFxBundle.FindClip(clipName);
+                if (src.clip == null)
+                    Plugin.Log.LogWarning($"[SoundRig] doorOpen sound '{clipName}' has no clip anywhere — silent");
                 if (src.clip != null)
                 {
                     src.loop = false;

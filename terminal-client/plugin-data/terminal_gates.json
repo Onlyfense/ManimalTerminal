@@ -1,0 +1,844 @@
+{
+ "source": "retail 1.0 level629 Gates_explosion subtree",
+ "rows": [
+  {
+   "cls": "TriggersPrefab",
+   "path": "Gates_explosion",
+   "cocc": 0,
+   "active": true,
+   "fields": {
+    "m_Enabled": 1,
+    "_processed": 1,
+    "_postfix": "3037225082"
+   }
+  },
+  {
+   "cls": "AnimatorSync",
+   "path": "Gates_explosion",
+   "cocc": 0,
+   "active": true,
+   "fields": {
+    "m_Enabled": 1,
+    "_random": 699870215,
+    "_animator": {
+     "$ref": {
+      "kind": "comp",
+      "cls": "Animator",
+      "path": "Gates_explosion",
+      "cocc": 0
+     }
+    }
+   }
+  },
+  {
+   "cls": "HandlerAnimator",
+   "path": "Gates_explosion",
+   "cocc": 0,
+   "active": true,
+   "fields": {
+    "m_Enabled": 1,
+    "_animatorActions": [
+     {
+      "TriggerId": "gates_opened_solo_3037225082",
+      "BoolAction": {
+       "Name": "IsRemoved",
+       "Value": 1
+      },
+      "IntAction": {
+       "Name": "",
+       "Value": 0
+      },
+      "FloatAction": {
+       "Name": "",
+       "Value": 0.0
+      },
+      "AnimationTriggerAction": {
+       "TriggerName": ""
+      }
+     },
+     {
+      "TriggerId": "gates_opened_duo_confirmed_3037225082",
+      "BoolAction": {
+       "Name": "IsRemoved",
+       "Value": 1
+      },
+      "IntAction": {
+       "Name": "",
+       "Value": 0
+      },
+      "FloatAction": {
+       "Name": "",
+       "Value": 0.0
+      },
+      "AnimationTriggerAction": {
+       "TriggerName": ""
+      }
+     },
+     {
+      "TriggerId": "bomb_explosion_3037225082",
+      "BoolAction": {
+       "Name": "IsExplosion",
+       "Value": 1
+      },
+      "IntAction": {
+       "Name": "",
+       "Value": 0
+      },
+      "FloatAction": {
+       "Name": "",
+       "Value": 0.0
+      },
+      "AnimationTriggerAction": {
+       "TriggerName": ""
+      }
+     }
+    ],
+    "_target": {
+     "$ref": {
+      "kind": "comp",
+      "cls": "Animator",
+      "path": "Gates_explosion",
+      "cocc": 0
+     }
+    }
+   }
+  },
+  {
+   "cls": "GameObjectStateSync",
+   "path": "Gates_explosion/Triggers/ExpoldeTriggers/Explosion",
+   "cocc": 0,
+   "active": true,
+   "fields": {
+    "m_Enabled": 1,
+    "_random": 1227501975
+   }
+  },
+  {
+   "cls": "HandlerGameObjectState",
+   "path": "Gates_explosion/Triggers/ExpoldeTriggers/Explosion",
+   "cocc": 0,
+   "active": true,
+   "fields": {
+    "m_Enabled": 1,
+    "_triggerId": "bomb_explosion_3037225082",
+    "_controlledGameObjects": [
+     {
+      "$ref": {
+       "kind": "go",
+       "path": "Gates_explosion/Triggers/ExpoldeTriggers/item_spec_sz_1"
+      }
+     }
+    ],
+    "_targetState": 0,
+    "_resetStateOnAwake": 0
+   }
+  },
+  {
+   "cls": "HandlerExplosion",
+   "path": "Gates_explosion/Triggers/ExpoldeTriggers/Explosion",
+   "cocc": 0,
+   "active": true,
+   "fields": {
+    "m_Enabled": 1,
+    "_triggerId": "bomb_explosion_3037225082",
+    "_mineSettings": {
+     "_blindness": {
+      "x": 10.0,
+      "y": 10.0,
+      "z": 10.0
+     },
+     "_contusion": {
+      "x": 10.0,
+      "y": 10.0,
+      "z": 10.0
+     },
+     "_armorDistanceDistanceDamage": {
+      "x": 10.0,
+      "y": 10.0,
+      "z": 10.0
+     },
+     "_minExplosionDistance": 5.0,
+     "_maxExplosionDistance": 10.0,
+     "_fragmentsCount": 3,
+     "_strength": 6.0,
+     "_tag": "default",
+     "_armorDamage": 0.699999988079071,
+     "_staminaBurnRate": 5.0,
+     "_penetrationPower": 32.0,
+     "_fragmentType": "5996f6d686f77467977ba6cc",
+     "_fxName": "Fire",
+     "_ignoreRole": 0,
+     "_directionalDamageAngle": 360.0,
+     "_directionalDamageMultiplier": 7.0
+    },
+    "_damageType": 16777216
+   }
+  },
+  {
+   "cls": "HandlerDelay",
+   "path": "Gates_explosion/Triggers/ExpoldeTriggers/Explosion",
+   "cocc": 0,
+   "active": true,
+   "fields": {
+    "m_Enabled": 1,
+    "_secondsDelay": 10.0,
+    "_inputTrigger": "place_bomb_3037225082",
+    "_outputTrigger": "bomb_explosion_3037225082"
+   }
+  },
+  {
+   "cls": "HandlerCompleteQuestCondition",
+   "path": "Gates_explosion/Triggers/ExpoldeTriggers/Explosion",
+   "cocc": 0,
+   "active": true,
+   "unparsed": true
+  },
+  {
+   "cls": "HandlerPlaySoundAdvanced",
+   "path": "Gates_explosion/Triggers/ExpoldeTriggers/Explosion",
+   "cocc": 0,
+   "active": true,
+   "unparsed": true
+  },
+  {
+   "cls": "Switch",
+   "path": "Gates_explosion/Triggers/ExpoldeTriggers/Switch_bomb",
+   "cocc": 0,
+   "active": true,
+   "unparsed": true
+  },
+  {
+   "cls": "GameObjectStateSync",
+   "path": "Gates_explosion/Triggers/ExpoldeTriggers/Switch_bomb",
+   "cocc": 0,
+   "active": true,
+   "fields": {
+    "m_Enabled": 1,
+    "_random": 3205082313
+   }
+  },
+  {
+   "cls": "GameObjectStateSync",
+   "path": "Gates_explosion/Triggers/ExpoldeTriggers/Logic_bomb",
+   "cocc": 0,
+   "active": true,
+   "fields": {
+    "m_Enabled": 1,
+    "_random": 1524028761
+   }
+  },
+  {
+   "cls": "HandlerInteractable",
+   "path": "Gates_explosion/Triggers/ExpoldeTriggers/Logic_bomb",
+   "cocc": 0,
+   "active": true,
+   "fields": {
+    "m_Enabled": 1,
+    "_triggerId": "dropped_place_bomb_3037225082",
+    "_interactable": {
+     "$ref": {
+      "kind": "comp",
+      "cls": "Switch",
+      "path": "Gates_explosion/Triggers/ExpoldeTriggers/Switch_bomb",
+      "cocc": 0
+     }
+    },
+    "_interactableId": "switch_bomb_place_194088584",
+    "_interactionType": 1
+   }
+  },
+  {
+   "cls": "HandlerInteractable",
+   "path": "Gates_explosion/Triggers/ExpoldeTriggers/Logic_bomb",
+   "cocc": 1,
+   "active": true,
+   "fields": {
+    "m_Enabled": 1,
+    "_triggerId": "failed_place_bomb_3037225082",
+    "_interactable": {
+     "$ref": {
+      "kind": "comp",
+      "cls": "Switch",
+      "path": "Gates_explosion/Triggers/ExpoldeTriggers/Switch_bomb",
+      "cocc": 0
+     }
+    },
+    "_interactableId": "switch_bomb_place_194088584",
+    "_interactionType": 1
+   }
+  },
+  {
+   "cls": "HandlerPlantAction",
+   "path": "Gates_explosion/Triggers/ExpoldeTriggers/Logic_bomb",
+   "cocc": 0,
+   "active": true,
+   "unparsed": true
+  },
+  {
+   "cls": "HandlerPlayerNotification",
+   "path": "Gates_explosion/Triggers/ExpoldeTriggers/Logic_bomb",
+   "cocc": 0,
+   "active": true,
+   "unparsed": true
+  },
+  {
+   "cls": "HandlerRequirementsWithFailedTrigger",
+   "path": "Gates_explosion/Triggers/ExpoldeTriggers/Logic_bomb",
+   "cocc": 0,
+   "active": true,
+   "unparsed": true
+  },
+  {
+   "cls": "HandlerGOState",
+   "path": "Gates_explosion/Triggers/ExpoldeTriggers/Logic_bomb",
+   "cocc": 0,
+   "active": true,
+   "fields": {
+    "m_Enabled": 1,
+    "_triggerIdEnable": "",
+    "_triggerIdDisable": "place_bomb_3037225082",
+    "_target": {
+     "$ref": {
+      "kind": "go",
+      "path": "Gates_explosion/Triggers/ExpoldeTriggers/Switch_bomb"
+     }
+    }
+   }
+  },
+  {
+   "cls": "HandlerGOState",
+   "path": "Gates_explosion/Triggers/ExpoldeTriggers/Logic_bomb",
+   "cocc": 1,
+   "active": true,
+   "fields": {
+    "m_Enabled": 1,
+    "_triggerIdEnable": "dropped_place_bomb_3037225082",
+    "_triggerIdDisable": "start_place_bomb_3037225082",
+    "_target": {
+     "$ref": {
+      "kind": "go",
+      "path": "Gates_explosion/Triggers/OpeningTriggers/Switch"
+     }
+    }
+   }
+  },
+  {
+   "cls": "HandlerRemoveItem",
+   "path": "Gates_explosion/Triggers/ExpoldeTriggers/Logic_bomb",
+   "cocc": 0,
+   "active": true,
+   "unparsed": true
+  },
+  {
+   "cls": "HandlerPlaySoundAdvanced",
+   "path": "Gates_explosion/Triggers/ExpoldeTriggers/Logic_bomb",
+   "cocc": 0,
+   "active": true,
+   "unparsed": true
+  },
+  {
+   "cls": "HandlerPlaySoundAdvanced",
+   "path": "Gates_explosion/Triggers/ExpoldeTriggers/Logic_bomb",
+   "cocc": 1,
+   "active": true,
+   "unparsed": true
+  },
+  {
+   "cls": "HandlerGameObjectState",
+   "path": "Gates_explosion/Triggers/ExpoldeTriggers/Logic_bomb",
+   "cocc": 0,
+   "active": true,
+   "fields": {
+    "m_Enabled": 1,
+    "_triggerId": "place_bomb_3037225082",
+    "_controlledGameObjects": [
+     {
+      "$ref": {
+       "kind": "go",
+       "path": "Gates_explosion/Triggers/ExpoldeTriggers/item_spec_sz_1"
+      }
+     }
+    ],
+    "_targetState": 1,
+    "_resetStateOnAwake": 1
+   }
+  },
+  {
+   "cls": "GameObjectStateSync",
+   "path": "Gates_explosion/Triggers/ExpoldeTriggers/item_spec_sz_1",
+   "cocc": 0,
+   "active": true,
+   "fields": {
+    "m_Enabled": 1,
+    "_random": 1252200746
+   }
+  },
+  {
+   "cls": "PreviewPivot",
+   "path": "Gates_explosion/Triggers/ExpoldeTriggers/item_spec_sz_1",
+   "cocc": 0,
+   "active": true,
+   "fields": {
+    "m_Enabled": 1,
+    "pivotPosition": {
+     "x": 0.020314037799835205,
+     "y": 0.0025604218244552612,
+     "z": 0.04269890859723091
+    },
+    "pivotRotation": {
+     "x": 0.0,
+     "y": 0.0,
+     "z": 0.0,
+     "w": 1.0
+    },
+    "scale": {
+     "x": 1.0,
+     "y": 1.0,
+     "z": 1.0
+    },
+    "SpawnPosition": {
+     "x": 0.0,
+     "y": 0.0,
+     "z": 0.0
+    },
+    "Icon": {
+     "position": {
+      "x": 0.012000002898275852,
+      "y": -6.984919309616089e-10,
+      "z": 0.0
+     },
+     "hasOffset": 1,
+     "rotation": {
+      "x": -0.9100590944290161,
+      "y": -0.042985349893569946,
+      "z": -0.10721233487129211,
+      "w": 0.3980581760406494
+     },
+     "boundsScale": 1.0,
+     "perspective": 15.0,
+     "orthographic": 0,
+     "orthographicSize": 10.0,
+     "overrideIcon": {
+      "$ref": null
+     }
+    }
+   }
+  },
+  {
+   "cls": "HandlerRequirementsWithFailedTrigger",
+   "path": "Gates_explosion/Triggers/OpeningTriggers/Switch",
+   "cocc": 0,
+   "active": true,
+   "unparsed": true
+  },
+  {
+   "cls": "GameObjectStateSync",
+   "path": "Gates_explosion/Triggers/OpeningTriggers/Switch",
+   "cocc": 0,
+   "active": true,
+   "fields": {
+    "m_Enabled": 1,
+    "_random": 509572361
+   }
+  },
+  {
+   "cls": "GameObjectStateSync",
+   "path": "Gates_explosion/Triggers/OpeningTriggers/Switch/SwitchBoard",
+   "cocc": 0,
+   "active": true,
+   "fields": {
+    "m_Enabled": 1,
+    "_random": 1535307049
+   }
+  },
+  {
+   "cls": "Switch",
+   "path": "Gates_explosion/Triggers/OpeningTriggers/Switch/SwitchBoard",
+   "cocc": 0,
+   "active": true,
+   "unparsed": true
+  },
+  {
+   "cls": "HandlerGameObjectState",
+   "path": "Gates_explosion/Triggers/OpeningTriggers/StartTriggers/TwoPlayerOpening",
+   "cocc": 0,
+   "active": true,
+   "fields": {
+    "m_Enabled": 1,
+    "_triggerId": "gates_opened_duo_confirmed_3037225082",
+    "_controlledGameObjects": [
+     {
+      "$ref": {
+       "kind": "go",
+       "path": "Gates_explosion/Triggers/OpeningTriggers/Switch"
+      }
+     },
+     {
+      "$ref": {
+       "kind": "go",
+       "path": "Gates_explosion/Triggers/ExpoldeTriggers/Switch_bomb"
+      }
+     }
+    ],
+    "_targetState": 0,
+    "_resetStateOnAwake": 0
+   }
+  },
+  {
+   "cls": "HandlerInteractable",
+   "path": "Gates_explosion/Triggers/OpeningTriggers/StartTriggers/TwoPlayerOpening",
+   "cocc": 0,
+   "active": true,
+   "fields": {
+    "m_Enabled": 1,
+    "_triggerId": "wait_open_gates_duo_3037225082",
+    "_interactable": {
+     "$ref": {
+      "kind": "comp",
+      "cls": "Switch",
+      "path": "Gates_explosion/Triggers/OpeningTriggers/Switch/SwitchBoard",
+      "cocc": 0
+     }
+    },
+    "_interactableId": "gates_switch_1_194088584",
+    "_interactionType": 1
+   }
+  },
+  {
+   "cls": "HandlerGOState",
+   "path": "Gates_explosion/Triggers/OpeningTriggers/StartTriggers/TwoPlayerOpening",
+   "cocc": 0,
+   "active": true,
+   "fields": {
+    "m_Enabled": 1,
+    "_triggerIdEnable": "dropped_opening_gates_duo_3037225082",
+    "_triggerIdDisable": "start_open_gates_duo_3037225082",
+    "_target": {
+     "$ref": {
+      "kind": "go",
+      "path": "Gates_explosion/Triggers/OpeningTriggers/StartTriggers/SoloOpeningTrigger"
+     }
+    }
+   }
+  },
+  {
+   "cls": "HandlerContinuousGroupRequirement",
+   "path": "Gates_explosion/Triggers/OpeningTriggers/StartTriggers/TwoPlayerOpening",
+   "cocc": 0,
+   "active": true,
+   "unparsed": true
+  },
+  {
+   "cls": "HandlerPlantAction",
+   "path": "Gates_explosion/Triggers/OpeningTriggers/StartTriggers/TwoPlayerOpening",
+   "cocc": 0,
+   "active": true,
+   "unparsed": true
+  },
+  {
+   "cls": "HandlerContinuousGroupRequirement",
+   "path": "Gates_explosion/Triggers/OpeningTriggers/StartTriggers/TwoPlayerOpening",
+   "cocc": 1,
+   "active": true,
+   "unparsed": true
+  },
+  {
+   "cls": "HandlerPlantAction",
+   "path": "Gates_explosion/Triggers/OpeningTriggers/StartTriggers/TwoPlayerOpening",
+   "cocc": 1,
+   "active": true,
+   "unparsed": true
+  },
+  {
+   "cls": "GameObjectStateSync",
+   "path": "Gates_explosion/Triggers/OpeningTriggers/StartTriggers/TwoPlayerOpening",
+   "cocc": 0,
+   "active": true,
+   "fields": {
+    "m_Enabled": 1,
+    "_random": 1089205961
+   }
+  },
+  {
+   "cls": "HandlerPlayerNotification",
+   "path": "Gates_explosion/Triggers/OpeningTriggers/StartTriggers/TwoPlayerOpening",
+   "cocc": 0,
+   "active": true,
+   "unparsed": true
+  },
+  {
+   "cls": "HandlerPlaySoundAdvanced",
+   "path": "Gates_explosion/Triggers/OpeningTriggers/StartTriggers/TwoPlayerOpening",
+   "cocc": 0,
+   "active": true,
+   "unparsed": true
+  },
+  {
+   "cls": "HandlerInteractable",
+   "path": "Gates_explosion/Triggers/OpeningTriggers/StartTriggers/SoloOpeningTrigger",
+   "cocc": 0,
+   "active": true,
+   "fields": {
+    "m_Enabled": 1,
+    "_triggerId": "drop_open_gates_solo_3037225082",
+    "_interactable": {
+     "$ref": {
+      "kind": "comp",
+      "cls": "Switch",
+      "path": "Gates_explosion/Triggers/OpeningTriggers/Switch/SwitchBoard",
+      "cocc": 0
+     }
+    },
+    "_interactableId": "gates_switch_1_194088584",
+    "_interactionType": 1
+   }
+  },
+  {
+   "cls": "HandlerGameObjectState",
+   "path": "Gates_explosion/Triggers/OpeningTriggers/StartTriggers/SoloOpeningTrigger",
+   "cocc": 0,
+   "active": true,
+   "fields": {
+    "m_Enabled": 1,
+    "_triggerId": "gates_opened_solo_3037225082",
+    "_controlledGameObjects": [
+     {
+      "$ref": {
+       "kind": "go",
+       "path": "Gates_explosion/Triggers/OpeningTriggers/Switch"
+      }
+     },
+     {
+      "$ref": {
+       "kind": "go",
+       "path": "Gates_explosion/Triggers/ExpoldeTriggers/Switch_bomb"
+      }
+     }
+    ],
+    "_targetState": 0,
+    "_resetStateOnAwake": 0
+   }
+  },
+  {
+   "cls": "HandlerGOState",
+   "path": "Gates_explosion/Triggers/OpeningTriggers/StartTriggers/SoloOpeningTrigger",
+   "cocc": 0,
+   "active": true,
+   "fields": {
+    "m_Enabled": 1,
+    "_triggerIdEnable": "drop_open_gates_solo_3037225082",
+    "_triggerIdDisable": "start_open_gates_solo_3037225082",
+    "_target": {
+     "$ref": {
+      "kind": "go",
+      "path": "Gates_explosion/Triggers/OpeningTriggers/StartTriggers/TwoPlayerOpening"
+     }
+    }
+   }
+  },
+  {
+   "cls": "HandlerPlantAction",
+   "path": "Gates_explosion/Triggers/OpeningTriggers/StartTriggers/SoloOpeningTrigger",
+   "cocc": 0,
+   "active": true,
+   "unparsed": true
+  },
+  {
+   "cls": "GameObjectStateSync",
+   "path": "Gates_explosion/Triggers/OpeningTriggers/StartTriggers/SoloOpeningTrigger",
+   "cocc": 0,
+   "active": true,
+   "fields": {
+    "m_Enabled": 1,
+    "_random": 2569650447
+   }
+  },
+  {
+   "cls": "HandlerPlaySoundAdvanced",
+   "path": "Gates_explosion/Triggers/OpeningTriggers/StartTriggers/SoloOpeningTrigger",
+   "cocc": 0,
+   "active": true,
+   "unparsed": true
+  },
+  {
+   "cls": "PreserveTopology",
+   "path": "Gates_explosion/Terminal_gates_01",
+   "cocc": 0,
+   "active": true,
+   "fields": {
+    "m_Enabled": 1
+   }
+  },
+  {
+   "cls": "GameObjectStateSync",
+   "path": "Gates_explosion/Terminal_gates_01/Terminal_gates_01_gate",
+   "cocc": 0,
+   "active": true,
+   "fields": {
+    "m_Enabled": 1,
+    "_random": 3993263799
+   }
+  },
+  {
+   "cls": "PreserveTopology",
+   "path": "Gates_explosion/Terminal_gates_01/Terminal_gates_01_gate",
+   "cocc": 0,
+   "active": true,
+   "fields": {
+    "m_Enabled": 1
+   }
+  },
+  {
+   "cls": "BallisticCollider",
+   "path": "Gates_explosion/Terminal_gates_01/Terminal_gates_01_gate/Terminal_gates_01_gate_BALLISTIC_metalthin",
+   "cocc": 0,
+   "active": true,
+   "fields": {
+    "m_Enabled": 1,
+    "SurfaceSound": 0,
+    "_presetId": -900,
+    "NetId": 0,
+    "HitType": 0,
+    "_typeOfMaterial": 16,
+    "PenetrationLevel": 4.0,
+    "PenetrationChance": 0.5799999833106995,
+    "RicochetChance": 0.20999999344348907,
+    "FragmentationChance": 0.07000000029802322,
+    "TrajectoryDeviationChance": 0.18000000715255737,
+    "TrajectoryDeviation": 0.03099999949336052
+   }
+  },
+  {
+   "cls": "PreserveTopology",
+   "path": "Gates_explosion/Terminal_gates_01/Terminal_gates_01_frame",
+   "cocc": 0,
+   "active": true,
+   "fields": {
+    "m_Enabled": 1
+   }
+  },
+  {
+   "cls": "BallisticCollider",
+   "path": "Gates_explosion/Terminal_gates_01/Terminal_gates_01_frame/Terminal_gates_01_frame_BALLISTIC_metalthin",
+   "cocc": 0,
+   "active": true,
+   "fields": {
+    "m_Enabled": 1,
+    "SurfaceSound": 0,
+    "_presetId": -900,
+    "NetId": 0,
+    "HitType": 0,
+    "_typeOfMaterial": 16,
+    "PenetrationLevel": 4.0,
+    "PenetrationChance": 0.5799999833106995,
+    "RicochetChance": 0.20999999344348907,
+    "FragmentationChance": 0.07000000029802322,
+    "TrajectoryDeviationChance": 0.18000000715255737,
+    "TrajectoryDeviation": 0.03099999949336052
+   }
+  },
+  {
+   "cls": "GameObjectStateSync",
+   "path": "Gates_explosion/Terminal_gates_door_01",
+   "cocc": 0,
+   "active": true,
+   "fields": {
+    "m_Enabled": 1,
+    "_random": 3221041302
+   }
+  },
+  {
+   "cls": "StaticDeferredDecal",
+   "path": "Gates_explosion/Terminal_gates_door_01/Explosion_trail",
+   "cocc": 0,
+   "active": true,
+   "fields": {
+    "m_Enabled": 1,
+    "LowerLeftPixel": {
+     "x": 0.0,
+     "y": 0.0
+    },
+    "UpperRightPixel": {
+     "x": 511.0,
+     "y": 511.0
+    },
+    "_material": {
+     "$ext": true
+    },
+    "_decalQueue": 0,
+    "_normalClip": 0.38999998569488525,
+    "_normalAlphaFadeoff": 2.640000104904175,
+    "_edgeClip": 0.0,
+    "_edgeAlphaFadeoff": 1.0,
+    "_tint": {
+     "r": 1.0,
+     "g": 1.0,
+     "b": 1.0,
+     "a": 1.0
+    },
+    "LastTexSize": {
+     "x": 512.0,
+     "y": 512.0
+    }
+   }
+  },
+  {
+   "cls": "PreserveTopology",
+   "path": "Gates_explosion/Terminal_gates_door_01/Terminal_gates_door_01_frame",
+   "cocc": 0,
+   "active": true,
+   "fields": {
+    "m_Enabled": 1
+   }
+  },
+  {
+   "cls": "BallisticCollider",
+   "path": "Gates_explosion/Terminal_gates_door_01/Terminal_gates_door_01_frame/Terminal_gates_door_01_frame_BALLISTIC_metalthick",
+   "cocc": 0,
+   "active": true,
+   "fields": {
+    "m_Enabled": 1,
+    "SurfaceSound": 0,
+    "_presetId": 17,
+    "NetId": 0,
+    "HitType": 0,
+    "_typeOfMaterial": 17,
+    "PenetrationLevel": 69.0,
+    "PenetrationChance": 0.44999998807907104,
+    "RicochetChance": 0.3400000035762787,
+    "FragmentationChance": 0.12999999523162842,
+    "TrajectoryDeviationChance": 0.2199999988079071,
+    "TrajectoryDeviation": 0.03099999949336052
+   }
+  },
+  {
+   "cls": "PreserveTopology",
+   "path": "Gates_explosion/Terminal_gates_door_01/Terminal_gates_door_01_leaf",
+   "cocc": 0,
+   "active": true,
+   "fields": {
+    "m_Enabled": 1
+   }
+  },
+  {
+   "cls": "BallisticCollider",
+   "path": "Gates_explosion/Terminal_gates_door_01/Terminal_gates_door_01_leaf/Terminal_gates_door_01_leaf_BALLISTIC_metalthick",
+   "cocc": 0,
+   "active": true,
+   "fields": {
+    "m_Enabled": 1,
+    "SurfaceSound": 0,
+    "_presetId": 17,
+    "NetId": 0,
+    "HitType": 0,
+    "_typeOfMaterial": 17,
+    "PenetrationLevel": 69.0,
+    "PenetrationChance": 0.44999998807907104,
+    "RicochetChance": 0.3400000035762787,
+    "FragmentationChance": 0.12999999523162842,
+    "TrajectoryDeviationChance": 0.2199999988079071,
+    "TrajectoryDeviation": 0.03099999949336052
+   }
+  }
+ ]
+}

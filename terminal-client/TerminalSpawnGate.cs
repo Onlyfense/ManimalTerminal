@@ -17,6 +17,7 @@ namespace Manimal.Terminal
     internal static class TerminalSpawnGate
     {
         private static float _raidStart = -1f;
+        private static float _attackStartedAt = -1f;
         private static bool _holdLogged;
         private static readonly List<(BotsController c, BotWaveDataClass w)> _waves = new();
         private static readonly List<(BotsController c, BossLocationSpawn w)> _bosses = new();
@@ -26,10 +27,37 @@ namespace Manimal.Terminal
             get
             {
                 if (!Plugin.HoldBotsForCutscene.Value) return true;
-                if (TerminalAttackCutscene.FinishedAt > 0f) return true;
-                if (!TerminalAttackCutscene.Available) return true;
+                // 480s failsafe releases NO MATTER WHAT — caps every hold below
                 if (_raidStart > 0f && Time.realtimeSinceStartup - _raidStart > 480f) return true;
-                return false;
+                // release in the attack cutscene's FINAL stretch (2026-08-17, user
+                // design): at-end = visible pop-in after control returns; at-start
+                // = a 48s window where early firefights bleed through the combat
+                // audio path (the cutscene mute covers ambience only). the last
+                // ~10s + the fade-out cover the staggered placement with a fight
+                // window of seconds. SPACE-skip still releases instantly via
+                // FinishedAt.
+                if (TerminalAttackCutscene.PlayingNow && _attackStartedAt < 0f)
+                    _attackStartedAt = Time.realtimeSinceStartup;
+                const float AttackLen = 47.9f, ReleaseLead = 10f;
+                bool cutsceneDone = TerminalAttackCutscene.FinishedAt > 0f
+                    || !TerminalAttackCutscene.Available
+                    || (_attackStartedAt > 0f && Time.realtimeSinceStartup - _attackStartedAt > AttackLen - ReleaseLead);
+                if (!cutsceneDone) return false;
+                // ALSO wait for the preset profiles (kept from the shelved tushonka
+                // work — witness raids proved released waves die on BossSpawnerClass.
+                // method_2's FIRST line `if (!IsProfilesLoaded) return false` and
+                // crawl BSG's retry queue: the 'ruaf missing at start' symptom, and
+                // it exists on the OLD bundle too). release into a loaded spawner
+                // and the first volley actually places.
+                try
+                {
+                    var bc = Comfort.Common.Singleton<IBotGame>.Instantiated
+                        ? Comfort.Common.Singleton<IBotGame>.Instance.BotsController : null;
+                    var sp = bc != null ? bc.BotSpawner : null;
+                    if (sp != null && !sp.IsProfilesLoaded) return false;
+                }
+                catch { }
+                return true;
             }
         }
 
@@ -48,6 +76,7 @@ namespace Manimal.Terminal
             {
                 if (!TerminalGate.On) return;
                 _raidStart = Time.realtimeSinceStartup;
+                _attackStartedAt = -1f;
                 _holdLogged = false;
                 _waves.Clear();
                 _bosses.Clear();

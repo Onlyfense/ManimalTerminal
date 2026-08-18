@@ -54,10 +54,82 @@ namespace Manimal.Terminal
 
         private static Type[] _resolved;
 
+        // LEVEL-BORDER BLOCKERS (user-diagnosed 2026-08-18, UnityExplorer): the
+        // 'BLOCKERS/Cube (N)' boundary volumes ship with default-material cube
+        // RENDERERS the rip failed to strip — giant white boxes in raid. kill the
+        // renderers, keep the colliders (blocking is their job). idempotent.
+        // forceRenderingOff, NOT enabled=false: culling-managed courtyards
+        // (PerfectCulling, 885 groups in Area_02) re-ENABLE their group renderers
+        // on visibility flips, silently undoing the scrub — and at scrub time the
+        // same system holds them disabled, hiding them from an enabled-only walk.
+        private static int HideBlockers(Scene scene)
+        {
+            int blockers = 0, cubes = 0, sampleLayer = -1;
+            foreach (var root in scene.GetRootGameObjects())
+                foreach (var r in root.GetComponentsInChildren<MeshRenderer>(true))
+                {
+                    if (!r || r.forceRenderingOff) continue;
+                    bool border = LayerMask.LayerToName(r.gameObject.layer) == "LevelBorder";
+                    if (!border)
+                        for (var up = r.transform; up != null; up = up.parent)
+                            if (up.name == "BLOCKERS" || up.name == "Blockers") { border = true; break; }
+                    // a Cube on unity's builtin Default-Material is rip damage, never
+                    // content (user 2026-08-18: Area_02's cubes wear Default-Material,
+                    // LevelBorders' wear an eft material — both are blockers)
+                    if (!border && r.name.StartsWith("Cube"))
+                    {
+                        var m = r.sharedMaterial;
+                        if (m && m.name.StartsWith("Default-Material")) border = true;
+                    }
+                    if (!border && r.name.StartsWith("Cube"))
+                    {
+                        cubes++;
+                        if (sampleLayer < 0) sampleLayer = r.gameObject.layer;
+                    }
+                    if (!border) continue;
+                    r.forceRenderingOff = true;
+                    blockers++;
+                }
+            if (blockers > 0)
+                Plugin.Log.LogInfo($"[Scrub] '{scene.name}': {blockers} level-border blocker renderer(s) hidden");
+            else if (cubes > 0)
+                // the blockers matched NOTHING two raids running — name the escapees
+                Plugin.Log.LogWarning($"[Scrub] '{scene.name}': 0 blockers matched but {cubes} Cube renderer(s) present "
+                    + $"(sample layer {sampleLayer} '{LayerMask.LayerToName(sampleLayer)}')");
+            return blockers;
+        }
+
+        // belt-and-braces re-pass once the raid is up: catches scenes whose
+        // sceneLoaded processing died mid-hook and blockers activated after load
+        // (2026-08-18: Area_02's cubes survived the load-time pass with no log)
+        private static bool _lateSwept;
+
+        internal static void ResetForRaid() => _lateSwept = false;
+
+        internal static void TickLateSweep()
+        {
+            if (_lateSwept || !TerminalGate.On) return;
+            var gw = Comfort.Common.Singleton<EFT.GameWorld>.Instantiated
+                ? Comfort.Common.Singleton<EFT.GameWorld>.Instance : null;
+            if (gw == null || gw.MainPlayer == null) return;
+            _lateSwept = true;
+            int total = 0, scenes = 0;
+            for (int i = 0; i < SceneManager.sceneCount; i++)
+            {
+                var sc = SceneManager.GetSceneAt(i);
+                if (!sc.isLoaded || sc.name == null || !sc.name.StartsWith("Terminal")) continue;
+                try { total += HideBlockers(sc); scenes++; }
+                catch (Exception e) { Plugin.Log.LogWarning($"[Scrub] late sweep '{sc.name}': {e.Message}"); }
+            }
+            Plugin.Log.LogInfo($"[Scrub] late blocker sweep over {scenes} scene(s): {total} straggler renderer(s) hidden");
+        }
+
         internal static void Scrub(Scene scene)
         {
             try
             {
+                HideBlockers(scene);
+
                 if (_resolved == null)
                 {
                     var list = new List<Type>();

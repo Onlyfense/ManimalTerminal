@@ -1,0 +1,214 @@
+{
+ "bindings": [
+  {
+   "track": "Animation Track",
+   "path": "CutsceneRoot2/CutsceneRootZubrBased/CutsceneRootZubr/Actor_Player/Actor_Player_Ct1",
+   "kind": "Animator"
+  },
+  {
+   "track": "Animation Track",
+   "path": "CutsceneRoot2/CutsceneRootZubrBased/CutsceneRootZubr/Actor_Yuri/Character_Yuri_Alt",
+   "kind": "Animator"
+  },
+  {
+   "track": "Animation Track",
+   "path": "CutsceneRoot2/CutsceneRootZubrBased/CutsceneRootZubr/CameraRoot",
+   "kind": "Animator"
+  },
+  {
+   "track": "Animation Track",
+   "path": "CutsceneRoot2/CutsceneRootZubrBased",
+   "kind": "Animator"
+  },
+  {
+   "track": "Animation Track",
+   "path": "CutsceneRoot2/UI_FadeToBlack/FadeToBlackCanvas/FadeToBlackImage",
+   "kind": "Animator"
+  },
+  {
+   "track": "Animation Track",
+   "path": "CutsceneRoot2/CutsceneRootZubrBased/CutsceneRootZubr",
+   "kind": "Animator"
+  },
+  {
+   "track": "Activation Track",
+   "path": "CutsceneRoot2/CutsceneRootZubrBased/CutsceneRootZubr/Zubr_Door/Zubr_outside_damaged_part_01_door_02",
+   "kind": "GameObject"
+  },
+  {
+   "track": "Activation Track (1)",
+   "path": "CutsceneRoot2/CutsceneRootZubrBased/CutsceneRootZubr/Zubr_Door/Zubr_outside_part_01_door_02",
+   "kind": "GameObject"
+  },
+  {
+   "track": "Activation Track (2)",
+   "path": "CutsceneRoot2/CutsceneRootZubrBased/CutsceneRootZubr/Zubr_Intact",
+   "kind": "GameObject"
+  },
+  {
+   "track": "Activation Track (3)",
+   "path": "CutsceneRoot2/CutsceneRootZubrBased/CutsceneRootZubr/Zubr_Damaged",
+   "kind": "GameObject"
+  },
+  {
+   "track": "Activation Track (4)",
+   "path": "CutsceneRoot2/CutsceneRootZubrBased/CutsceneRootZubr/Zubr_Tube",
+   "kind": "GameObject"
+  },
+  {
+   "track": "Animation Track",
+   "path": "CutsceneRoot2/CutsceneRootZubrBased/CutsceneRootZubr/Actor_Marine_Turret/Actor_Sailor_Generic_03",
+   "kind": "Animator"
+  },
+  {
+   "track": "Animation Track",
+   "path": "CutsceneRoot2/CutsceneRootZubrBased/CutsceneRootZubr/Actor_Marine_Runner/Actor_Sailor_Generic_04",
+   "kind": "Animator"
+  },
+  {
+   "track": "Activation Track",
+   "path": "CutsceneRoot2/CityExplosion_01_faster_Ending_00",
+   "kind": "GameObject"
+  },
+  {
+   "track": "Activation Track (3)",
+   "path": "CutsceneRoot2/CutsceneRootZubrBased/CutsceneRootZubr/Plane_00/Plane_VFX",
+   "kind": "GameObject"
+  },
+  {
+   "track": "Activation Track (5)",
+   "path": "CutsceneRoot2/CutsceneRootZubrBased/CutsceneRootZubr/Plane_00/Plane_IK_VFX",
+   "kind": "GameObject"
+  },
+  {
+   "track": "Activation Track (7)",
+   "path": "CutsceneRoot2/Water_explosion_VFX",
+   "kind": "GameObject"
+  },
+  {
+   "track": "Activation Track (8)",
+   "path": "CutsceneRoot2/Kakersk_Explosion_VFX",
+   "kind": "GameObject"
+  },
+  {
+   "track": "Activation Track (9)",
+   "path": "CutsceneRoot2/CutsceneRootZubrBased/CutsceneRootZubr/Zubr_Tube/Damaged_tube_VFX",
+   "kind": "GameObject"
+  },
+  {
+   "track": "Animation Track (1)",
+   "path": "CutsceneRoot2/CutsceneRootZubrBased/CutsceneRootZubr/Actor_Yuri/Character_Yuri_Alt",
+   "kind": "Animator"
+  },
+  {
+   "track": "Activation Track (1)",
+   "path": "CutsceneRoot2/Kakersk_Fire_VFX",
+   "kind": "GameObject"
+  },
+  {
+   "track": "Activation Track (2)",
+   "path": "CutsceneRoot2/Kakersk_Fire_explosion_VFX",
+   "kind": "GameObject"
+  },
+  {
+   "track": "Activation Track (3)",
+   "path": "CutsceneRoot2/CityExplosion_01_faster_Flares_VFX",
+   "kind": "GameObject"
+  },
+  {
+   "track": "Activation Track (4)",
+   "path": "CutsceneRoot2/CityExplosion_01_faster_Lights_VFX",
+   "kind": "GameObject"
+  },
+  {
+   "track": "Activation Track (5)",
+   "path": "CutsceneRoot2/CutsceneRootZubrBased/CutsceneRoot/Trap",
+   "kind": "GameObject"
+  },
+  {
+   "track": "Animation Track",
+   "path": "CutsceneRoot2/CutsceneRootZubrBased/CutsceneRootZubr/Actor_AimerL/Actor_RUAF_Generic_02",
+   "kind": "Animator"
+  },
+  {
+   "track": "Animation Track",
+   "path": "CutsceneRoot2/CutsceneRootZubrBased/CutsceneRootZubr/Actor_AimerR/Actor_RUAF_Generic_05",
+   "kind": "Animator"
+  },
+  {
+   "track": "Activation Track (1)",
+   "path": "CutsceneRoot2/CutsceneRootZubrBased/CutsceneRootZubr/Zubr_Turret_00/Zubr_Turret_00_barrel/Zubr_Turret_VFX",
+   "kind": "GameObject"
+  },
+  {
+   "track": "Activation Track",
+   "path": "CutsceneRoot2/CutsceneRootZubrBased/CutsceneRootZubr/Zubr_Turret_01/Zubr_Turret_01_barrel/Zubr_Turret_VFX",
+   "kind": "GameObject"
+  },
+  {
+   "track": "Activation Track (5)",
+   "path": "CutsceneRoot2/Water_wave_Kakersk_VFX",
+   "kind": "GameObject"
+  },
+  {
+   "track": "Activation Track (6)",
+   "path": "CutsceneRoot2/Water_wave_VFX",
+   "kind": "GameObject"
+  },
+  {
+   "track": "Activation Track (10)",
+   "path": "CutsceneRoot2/CutsceneRootZubrBased/CutsceneRootZubr/Zubr_move_VFX",
+   "kind": "GameObject"
+  },
+  {
+   "track": "Activation Track",
+   "path": "CutsceneRoot2/CutsceneRootZubrBased/CutsceneRoot/Plane_01/Plane_VFX_End",
+   "kind": "GameObject"
+  },
+  {
+   "track": "Activation Track (1)",
+   "path": "CutsceneRoot2/CutsceneRootZubrBased/CutsceneRoot/Plane_01/Plane_IK_VFX_End",
+   "kind": "GameObject"
+  },
+  {
+   "track": "Activation Track",
+   "path": "CutsceneRoot2/CutsceneRootZubrBased/CutsceneRootZubr/PointSpot_CUTscene_00/Cube (2)/ShadowPlane_Circle_Low",
+   "kind": "GameObject"
+  },
+  {
+   "track": "Activation Track (1)",
+   "path": "CutsceneRoot2/CutsceneRootZubrBased/CutsceneRootZubr/PointSpot_CUTscene_00/Cube (2)/ShadowPlane_Circle_Low (1)",
+   "kind": "GameObject"
+  },
+  {
+   "track": "Activation Track",
+   "path": "CutsceneRoot2/CutsceneRootZubrBased/CutsceneRootZubr/PointSpot_CUTscene_00",
+   "kind": "GameObject"
+  },
+  {
+   "track": "Activation Track (1)",
+   "path": "CutsceneRoot2/CutsceneRootZubrBased/CutsceneRootZubr/PointSpot_CUTscene_00_Flicker",
+   "kind": "GameObject"
+  },
+  {
+   "track": "Activation Track (2)",
+   "path": "CutsceneRoot2/CutsceneRootZubrBased/CutsceneRootZubr/Zubr_Damaged/Zubr_damaged/Zubr_outside_decals_damaged_01_LOD0",
+   "kind": "GameObject"
+  },
+  {
+   "track": "Activation Track (3)",
+   "path": "CutsceneRoot2/CutsceneRootZubrBased/CutsceneRootZubr/Zubr_Damaged/Zubr_damaged/Zubr_outside_decals_damaged_01_rotate_LOD0",
+   "kind": "GameObject"
+  },
+  {
+   "track": "Activation Track (4)",
+   "path": "CutsceneRoot2/CutsceneRootZubrBased/CutsceneRootZubr/Decals_cut00",
+   "kind": "GameObject"
+  },
+  {
+   "track": "Activation Track (11)",
+   "path": "CutsceneRoot2/CutsceneRootZubrBased/CutsceneRootZubr/CameraRoot/Actor_Player_Camera/FadeOudDelayBox",
+   "kind": "GameObject"
+  }
+ ]
+}

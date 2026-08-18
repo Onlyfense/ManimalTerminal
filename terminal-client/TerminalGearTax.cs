@@ -59,9 +59,30 @@ namespace Manimal.Terminal
                 try { player.SetEmptyHands(null); } catch { }
                 yield return new WaitForSeconds(0.6f);
 
+                // the container bind can be DEFERRED behind the registry self-repair
+                // (TerminalLootBind, 2026-08-18) — wait for a bound safe instead of
+                // sampling once and losing the race
+                float bindDeadline = Time.time + 30f;
+                while (Time.time < bindDeadline && !AnyBoundValberg())
+                    yield return new WaitForSeconds(1f);
+
                 try { Confiscate(player); }
                 catch (Exception e) { Plugin.Log.LogWarning($"[GearTax] confiscation failed: {e}"); }
                 Destroy(gameObject);
+            }
+
+            private static bool AnyBoundValberg()
+            {
+                try
+                {
+                    foreach (var l in UnityEngine.Object.FindObjectsOfType<LootableContainer>())
+                        if (l != null && l.ItemOwner != null
+                            && (l.name.IndexOf("valberg", StringComparison.OrdinalIgnoreCase) >= 0
+                                || (l.transform.parent != null && l.transform.parent.name.IndexOf("valberg", StringComparison.OrdinalIgnoreCase) >= 0)))
+                            return true;
+                }
+                catch { }
+                return false;
             }
 
             private void Confiscate(Player player)

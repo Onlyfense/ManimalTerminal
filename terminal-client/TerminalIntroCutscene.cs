@@ -66,6 +66,13 @@ namespace Manimal.Terminal
             private static void Postfix()
             {
                 if (!TerminalGate.On || _playedThisRaid) return;
+                if (!Plugin.IntroCutscene.Value)
+                {
+                    _playedThisRaid = true;
+                    if (FinishedAt < 0f) FinishedAt = Time.realtimeSinceStartup; // downstream phases key off this
+                    Plugin.Log.LogInfo("[IntroCutscene] disabled by config — skipped");
+                    return;
+                }
                 if (!Available)
                 {
                     Plugin.Log.LogWarning($"[IntroCutscene] '{SceneName}' not loadable (bundle missing the scene?) — skipped");
@@ -353,8 +360,8 @@ namespace Manimal.Terminal
                                $"({_director.duration:0.0}s, unskippable)");
             yield return Fade(1f, 0f);
 
-            // unskippable: runs to the end, no input checked. hard stop only as a
-            // safety net against a director that never finishes.
+            // skippable by config (user ask 2026-08-18) — SPACE bails to the raid,
+            // same teardown path as a natural finish. hard stop stays as the net.
             double dur = _director.duration;
             float hardStop = Time.realtimeSinceStartup + (float)dur + 10f;
             while (Time.realtimeSinceStartup < hardStop)
@@ -362,6 +369,8 @@ namespace Manimal.Terminal
                 if (_director == null) break;
                 if (_director.state != PlayState.Playing) break;
                 if (_director.time >= dur - 0.05) break;
+                if (Plugin.IntroCutsceneSkippable.Value && Input.GetKeyDown(KeyCode.Space))
+                { Plugin.Log.LogInfo("[IntroCutscene] skipped by player"); break; }
                 // the timeline may animate the fade image's FULL color (white keys from
                 // the rip) — enforce black rgb per frame, alpha stays the timeline's
                 if (_fadeImage != null)

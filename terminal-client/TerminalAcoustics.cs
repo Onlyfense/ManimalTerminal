@@ -212,7 +212,7 @@ namespace Manimal.Terminal
             "AmbientSoundPlayer", "LoopAmbientSoundPlayer", "OneShotAmbientSoundPlayer",
             "WeatherRandomAmbientSoundPlayer", "AmbientSoundPlayerGroup",
             "SoundPlayerRandomPointComponent", "SoundPlayerSplineTrigger",
-            "AmbientPlayerSplineMappedEmitter", "SplineEmitterPathMover",
+            "AmbientPlayerSplineMappedEmitter", "AmbientPlayerGroupSplineEmitter", "SplineEmitterPathMover",
             "SoundAmbientZoneCalculator", "SoundPlayerRoomObserverComponent",
             "AmbientSoundPlayerGroupController", "AmbientSplineEmitterController",
             "SplineTriggerChecker", "AmbientPlayerAutoPanner",
@@ -414,6 +414,19 @@ namespace Manimal.Terminal
                     }
                 }
 
+                // the sea/waves group emitters: _configs is a list of nested
+                // {soundPlayer, spreadRange} objects neither FillFields nor WireRefs
+                // can shape — built by hand from the sidecar rows
+                int grouped = WireGroupEmitterConfigs(sound, comps);
+
+                // emitters whose players never survived the rip (season/weather rows
+                // with parse_error, authored nulls) NRE in OnAwake — and their path
+                // movers NRE right after. drop both while the root is still inactive
+                // so the healthy rest wake clean (2026-08-18: 33 dead Awakes a raid)
+                int pruned = PruneDeadSplineEmitters(comps);
+                if (grouped > 0 || pruned > 0)
+                    Plugin.Log.LogInfo($"[Ambient] spline emitters: {grouped} group emitter(s) wired (sea/waves), {pruned} dead emitter/mover(s) pruned");
+
                 // the system LAST: its Awake harvests the workers above via
                 // GetComponentsInChildren, so it must never wake into an empty tree
                 var sysType = ResolveType("AmbientAudioSystem");
@@ -512,6 +525,78 @@ namespace Manimal.Terminal
                 }
                 catch { /* drifted field — keep the class default */ }
             }
+        }
+
+        private static int WireGroupEmitterConfigs(JObject sound, Dictionary<long, Component> comps)
+        {
+            var emType = ResolveType("AmbientPlayerGroupSplineEmitter");
+            var cfgType = emType?.GetNestedType("SoundPlayerConfig",
+                System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic);
+            var cfgField = emType != null ? AccessTools.Field(emType, "_configs") : null;
+            if (cfgType == null || cfgField == null) return 0;
+            var fPlayer = AccessTools.Field(cfgType, "soundPlayer");
+            var fSpread = AccessTools.Field(cfgType, "spreadRange");
+
+            int wired = 0;
+            foreach (var row in Rows(sound, "AmbientPlayerGroupSplineEmitter"))
+            {
+                if (row["parse_error"] != null) continue;
+                if (!comps.TryGetValue(row.Value<long>("path_id"), out var comp) || comp == null) continue;
+                var list = (System.Collections.IList)Activator.CreateInstance(cfgField.FieldType);
+                foreach (var c in (row["fields"]?["_configs"] as JArray) ?? new JArray())
+                {
+                    var player = Ref(comps, c["soundPlayer"]);
+                    if (player == null) continue; // OnAwake would NRE on a null member
+                    var cfg = Activator.CreateInstance(cfgType);
+                    fPlayer.SetValue(cfg, player);
+                    var sr = c["spreadRange"];
+                    if (sr != null && fSpread != null)
+                        fSpread.SetValue(cfg, new Vector2(sr.Value<float?>("x") ?? 0f, sr.Value<float?>("y") ?? 1f));
+                    list.Add(cfg);
+                }
+                if (list.Count > 0) { cfgField.SetValue(comp, list); wired++; }
+            }
+            return wired;
+        }
+
+        private static int PruneDeadSplineEmitters(Dictionary<long, Component> comps)
+        {
+            int dropped = 0;
+            var mappedType = ResolveType("AmbientPlayerSplineMappedEmitter");
+            var groupType = ResolveType("AmbientPlayerGroupSplineEmitter");
+            var fPlayer = mappedType != null ? AccessTools.Field(mappedType, "_soundPlayer") : null;
+            var fConfigs = groupType != null ? AccessTools.Field(groupType, "_configs") : null;
+            var keys = new List<long>(comps.Keys);
+            foreach (var k in keys)
+            {
+                var comp = comps[k];
+                if (comp == null) continue;
+                bool dead = false;
+                if (mappedType != null && fPlayer != null && mappedType.IsInstanceOfType(comp))
+                    dead = !(fPlayer.GetValue(comp) as Component);
+                else if (groupType != null && fConfigs != null && groupType.IsInstanceOfType(comp))
+                {
+                    var list = fConfigs.GetValue(comp) as System.Collections.IList;
+                    dead = list == null || list.Count == 0;
+                }
+                if (dead) { UnityEngine.Object.DestroyImmediate(comp); comps[k] = null; dropped++; }
+            }
+            // movers/checkers subscribe _splineEmitter events unguarded — a dead
+            // emitter takes its driver with it
+            foreach (var cls in new[] { "SplineEmitterPathMover", "SplineTriggerChecker" })
+            {
+                var t = ResolveType(cls);
+                var fEm = t != null ? AccessTools.Field(t, "_splineEmitter") : null;
+                if (fEm == null) continue;
+                foreach (var k in keys)
+                {
+                    var comp = comps[k];
+                    if (comp == null || !t.IsInstanceOfType(comp)) continue;
+                    if (!(fEm.GetValue(comp) as Component))
+                    { UnityEngine.Object.DestroyImmediate(comp); comps[k] = null; dropped++; }
+                }
+            }
+            return dropped;
         }
 
         // the content refs: banks by extraction key, loop clips by name

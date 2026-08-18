@@ -70,6 +70,17 @@ namespace Manimal.Terminal
         internal static ConfigEntry<float> SkyNightStrength;
         internal static ConfigEntry<bool> WeatherStack;
         internal static ConfigEntry<bool> AmbientStencil;
+        internal static ConfigEntry<bool> StencilDarken;
+        internal static ConfigEntry<bool> GatesExplosion;
+        internal static ConfigEntry<bool> CraneFalling;
+        internal static ConfigEntry<bool> FinalExit;
+        internal static ConfigEntry<bool> Artillery;
+        internal static ConfigEntry<bool> PumpStation;
+        internal static ConfigEntry<bool> EndingCutscene;
+        internal static ConfigEntry<bool> IntroCutscene;
+        internal static ConfigEntry<bool> IntroCutsceneSkippable;
+        internal static ConfigEntry<float> StencilDarkenIndoor;
+        internal static ConfigEntry<float> StencilDarkenOutdoor;
         internal static ConfigEntry<bool> ForceWeather;
         internal static ConfigEntry<float> WeatherRain;
         internal static ConfigEntry<float> WeatherClouds;
@@ -83,8 +94,25 @@ namespace Manimal.Terminal
         internal static ConfigEntry<bool> SoundRig;
         internal static ConfigEntry<float> SoundRigVolume;
         internal static ConfigEntry<bool> SoundRigAlarm;
+        internal static ConfigEntry<bool> WaterPlanes;
         internal static ConfigEntry<bool> InteriorCrossCull;
         internal static ConfigEntry<float> CrossCullDistance;
+
+        private void Update()
+        {
+            TerminalStencilLite.Tick();
+            TerminalGatesExplosion.TryStage();
+            TerminalCraneFalling.TryStage();
+            TerminalFinalExit.TryStage();
+            TerminalArtillery.TryStage();
+            TerminalPumpStation.TryStage();
+            TerminalWater.TryStage();
+            TerminalDryPlanes.TryStage();
+            TerminalRainAudio.TryStage();
+            TerminalArtillery.Pump();
+            TerminalPerfWatch.Tick();
+            TerminalSceneScrub.TickLateSweep();
+        }
 
         private void Awake()
         {
@@ -178,14 +206,48 @@ namespace Manimal.Terminal
                     new AcceptableValueRange<float>(0f, 1f)));
             AmbientStencil = Config.Bind("Terminal", "AmbientStencil", true,
                 new ConfigDescription("restore retail's indoor/outdoor ambient masking: StencilShadow volumes + AnalyticSource portals feed the AmbientLight screen pass, so interiors stop receiving full sky ambient (the armory-cooking fix, done the retail way)"));
+            // stencil-lite: the KEPT piece of the shelved tushonka experiment —
+            // per-pixel indoor darkening of the flat fill using the authored
+            // stencil volume meshes + sidecar darkness values. independent of
+            // (and preferred over) the AmbientStencil retail-pass experiment.
+            StencilDarken = Config.Bind("Terminal", "StencilDarken", true,
+                new ConfigDescription("darken the flat ambient fill inside the authored stencil volumes (per-pixel, pre-lighting — indoor lamp pools untouched). outdoors stays at AmbientIntensity brightness. needs terminal_fx.bundle in the plugin folder"));
+            // split per authored group (Terminal_Stencil_Indoor / _Outdoor) — new key
+            // names on purpose so the old StencilDarkenStrength's saved value dies
+            StencilDarkenIndoor = Config.Bind("Terminal", "StencilDarkenIndoor", 1f,
+                new ConfigDescription("scale on the INDOOR stencil volumes' authored darkness alpha. 1 = authored; higher = blacker interiors. applies live",
+                    new AcceptableValueRange<float>(0f, 1.5f)));
+            StencilDarkenOutdoor = Config.Bind("Terminal", "StencilDarkenOutdoor", 1f,
+                new ConfigDescription("scale on the OUTDOOR stencil volumes' authored darkness alpha (container shadows, tower shade). applies live",
+                    new AcceptableValueRange<float>(0f, 1.5f)));
+            WaterPlanes = Config.Bind("Terminal", "WaterPlanes", true,
+                new ConfigDescription("draw the harbor/pump water planes. turn OFF for one raid as the A/B test for the port-area fps tanking — if the port runs smooth without water, the water shader is the culprit"));
+            GatesExplosion = Config.Bind("Terminal", "GatesExplosion", true,
+                new ConfigDescription("restore the authored Gates_explosion mechanic: solo open needs ELITE strength (51), or plant an SZ-1 charge (either tpl) on the bomb switch — 5s plant, 10s fuse, real blast opens the gate"));
+            CraneFalling = Config.Bind("Terminal", "CraneFalling", true,
+                new ConfigDescription("restore the authored falling-crane trap: walking under the crane triggers the collapse — crash animation, dust/fire VFX, contusion, 1000dmg kill zones under the fall path"));
+            FinalExit = Config.Bind("Terminal", "FinalExit", true,
+                new ConfigDescription("restore the retail endgame: the Zubr exfil snaps to the authored FinalExitZone box, and opening gate 3 cuts the remaining raid time to 3 minutes (the retail evac window)"));
+            Artillery = Config.Bind("Terminal", "Artillery", true,
+                new ConfigDescription("restore the authored artillery barrage: entering one of the 4 trigger areas calls in a real mortar shelling on it (native Streets shelling system — warning whistle, then run)"));
+            PumpStation = Config.Bind("Terminal", "PumpStation", true,
+                new ConfigDescription("restore the pump-station power puzzle: a random electrical cabinet spawns broken — repair it (toolkit = safe, bare hands = 10% odds + shock) to power the panel, then drain the reservoir"));
+            IntroCutscene = Config.Bind("Terminal", "IntroCutscene", true,
+                new ConfigDescription("play the arrival cutscene at raid start"));
+            IntroCutsceneSkippable = Config.Bind("Terminal", "IntroCutsceneSkippable", true,
+                new ConfigDescription("SPACE skips the intro cutscene"));
+            EndingCutscene = Config.Bind("Terminal", "EndingCutscene", true,
+                new ConfigDescription("play the retail ending cutscene when extracting at the Zubr (needs the ending scene in the bundle — Author 21B + scene rebuild). SPACE skips; the raid ends Survived either way"));
             WeatherStack = Config.Bind("Terminal", "WeatherStack", true,
                 new ConfigDescription("rebuild retail's weather components (WeatherController/RainController/RainFall/Splash/Wind/Clouds) — without these the map CANNOT render rain at all. turn off if weather misbehaves"));
             ForceWeather = Config.Bind("Terminal", "ForceWeather", true,
                 new ConfigDescription("set the raid's weather at start (retail terminal is a rainy night)"));
-            WeatherRain = Config.Bind("Terminal", "WeatherRain", 0.6f,
-                new ConfigDescription("rain amount", new AcceptableValueRange<float>(0f, 1f)));
-            WeatherClouds = Config.Bind("Terminal", "WeatherClouds", 0.5f,
-                new ConfigDescription("cloud density (-1 clear .. 1 overcast)", new AcceptableValueRange<float>(-1f, 1f)));
+            // defaults = the user's live 1.0 weather dump (2026-08-04: rain 1.0,
+            // cloud 0.682) — the retail storm
+            WeatherRain = Config.Bind("Terminal", "WeatherRain", 1.0f,
+                new ConfigDescription("rain amount (retail live: 1.0)", new AcceptableValueRange<float>(0f, 1f)));
+            WeatherClouds = Config.Bind("Terminal", "WeatherClouds", 0.682f,
+                new ConfigDescription("cloud density (-1 clear .. 1 overcast; retail live: 0.682)", new AcceptableValueRange<float>(-1f, 1f)));
             WeatherFog = Config.Bind("Terminal", "WeatherFog", 0.012f,
                 new ConfigDescription("fog density — small numbers, 0.004 is clear", new AcceptableValueRange<float>(0f, 0.1f)));
             WeatherWind = Config.Bind("Terminal", "WeatherWind", 0.3f,
@@ -324,11 +386,28 @@ namespace Manimal.Terminal
             Patch(typeof(Patch_BotsInitFirewall));
             Patch(typeof(Patch_GameStartFirewall));
             Patch(typeof(Patch_EnsureEnvBeforeAnyPlayerInit));
+            Patch(typeof(Patch_GateSwitchActions));
+            Patch(typeof(TerminalHoldLock.Patch_FreezeDuringHold));
+            Patch(typeof(TerminalFinalExit.Patch_BuildZubrExit));
+            Patch(typeof(Patch_PumpSwitchActions));
+            Patch(typeof(TerminalEndingCutscene.Patch_InterceptExtraction));
+            Patch(typeof(TerminalLootBind.Patch_DeferLootBind));
+            Patch(typeof(TerminalAudioTeardown.Patch_AmbientDisposeArmor));
+            Patch(typeof(TerminalAudioTeardown.Patch_BlendDisposeArmor));
+            Patch(typeof(TerminalTimerArmor.Patch_TimerTextArmor));
             try { Patch_NativeCullingGate.TryPatch(HarmonyInstance); }
             catch (System.Exception e) { Log.LogError($"native culling gate FAILED: {e}"); }
             // LockableDoors throws inside GetAvailableActions on our doors, which takes
             // the whole action list down — every door reads as "fake". suppressed here,
             // untouched on every other map (icebreaker shim, ported)
+            // QuestingBots takes over spawn scheduling wholesale and its PMC/PScav
+            // generators + boss-wave limiter fight terminal's event-driven wave
+            // choreography ('No valid spawn points' spam, floating invisible PMCs,
+            // suppressed boss waves). QB has no per-map disable of its own (its
+            // auto-off is a startup all-maps switch keyed to specific mods), so we
+            // gate its methods behind the terminal check — fully active elsewhere.
+            try { TerminalQuestingBotsOff.TryPatch(HarmonyInstance); }
+            catch (System.Exception e) { Log.LogWarning($"questing-bots mute failed: {e}"); }
             try { TerminalLockableDoorsOff.TryPatch(HarmonyInstance); }
             catch (System.Exception e) { Log.LogWarning($"lockable-doors shim failed: {e}"); }
 
@@ -336,19 +415,18 @@ namespace Manimal.Terminal
             // load IS that moment. gate by scene NAME, never TerminalGate.On: transit
             // preloads scenes before raid creation, so a location-gated hook is blind
             // on the shoreline transit path (transit-gate-blindness trap).
+            // capture and scrub isolated — a shared catch let a capture throw silently
+            // starve the scrub for that scene (2026-08-18: Area_02 blockers survived
+            // with zero log lines)
             UnityEngine.SceneManagement.SceneManager.sceneLoaded += (scene, mode) =>
             {
-                try
-                {
-                    if (scene.name != null && scene.name.StartsWith("Terminal", System.StringComparison.OrdinalIgnoreCase))
-                    {
-                        TerminalShaderRebind.CaptureSceneMaterials(scene);
-                        // kill the live-but-broken ripped components (TOD/weather/
-                        // ambient) before their per-frame NREs snowball
-                        TerminalSceneScrub.Scrub(scene);
-                    }
-                }
-                catch { }
+                if (scene.name == null || !scene.name.StartsWith("Terminal", System.StringComparison.OrdinalIgnoreCase)) return;
+                try { TerminalShaderRebind.CaptureSceneMaterials(scene); }
+                catch (System.Exception e) { Log.LogWarning($"[Plugin] material capture '{scene.name}' threw: {e.Message}"); }
+                // kill the live-but-broken ripped components (TOD/weather/ambient)
+                // before their per-frame NREs snowball
+                try { TerminalSceneScrub.Scrub(scene); }
+                catch (System.Exception e) { Log.LogWarning($"[Plugin] scrub '{scene.name}' threw: {e.Message}"); }
             };
 
             Log.LogInfo($"[Manimal-Terminal] {BuildInfo.Version} loaded");
