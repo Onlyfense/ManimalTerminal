@@ -29,6 +29,8 @@ namespace Manimal.Terminal
         internal static void ResetForRaid()
         {
             _staged = false;
+            _pumpUntil = -1f;
+            _stopped = true;
             // config injection persists across raids by design — the dict entry
             // survives and BaseLocalGame re-checks it every game creation
         }
@@ -75,14 +77,39 @@ namespace Manimal.Terminal
 
         // NOBODY pumps ServerShellingController.OnUpdate in the offline game path
         // (proved 2026-08-18: zones tripped, countdown ran, TargetShellingOn set —
-        // and the firing loop never executed). we are the pump.
+        // and the firing loop never executed). we are the pump — but a BOUNDED one:
+        // pumping forever left the controller grinding accumulated shelling state all
+        // raid (A/B-proved 2026-08-18: the endgame 36ms chop died with artillery off).
+        // pump only through a barrage window after a trip, then StopShelling and idle.
+        private const float BarrageWindow = 60f; // 10s whistle + the barrage; user-tuned 2026-08-18
+        private static float _pumpUntil = -1f;
+        private static bool _stopped = true;
+
         internal static void Pump()
         {
             if (!Plugin.Artillery.Value || !TerminalGate.On) return;
             try
             {
                 var gw = Singleton<GameWorld>.Instantiated ? Singleton<GameWorld>.Instance : null;
-                gw?.ServerShellingController?.OnUpdate();
+                var ctrl = gw?.ServerShellingController;
+                if (ctrl == null) return;
+                if (Time.realtimeSinceStartup < _pumpUntil)
+                {
+                    ctrl.OnUpdate();
+                    _stopped = false;
+                }
+                else if (!_stopped)
+                {
+                    _stopped = true;
+                    try { ctrl.StopShelling(); } catch { }
+                    // the bounded stop means the natural OnArtilleryEnd never fires,
+                    // and zones register with Duration -1 (never self-expire) — a
+                    // lingering ActiveZonesOnMap entry makes every nearby bot grind
+                    // cover scans vs the zone forever (2026-08-18: the 36ms endgame
+                    // chop began 45s after zone 4's window closed and never stopped)
+                    ClearLingeringZones();
+                    Plugin.Log.LogInfo("[Artillery] barrage window closed — shelling stopped, pump idle until the next zone trip");
+                }
             }
             catch (Exception e)
             {
@@ -90,6 +117,52 @@ namespace Manimal.Terminal
             }
         }
         private static bool _pumpWarned;
+
+        private static void ClearLingeringZones()
+        {
+            try
+            {
+                var dict = ActiveZonesDict();
+                if (dict == null)
+                {
+                    // reflection miss vs genuinely empty must be distinguishable —
+                    // 2026-08-19 raid: no clear line ever logged and we couldnt tell
+                    Plugin.Log.LogWarning("[Artillery] zones controller/dict not reachable — clear skipped (reflection miss?)");
+                    return;
+                }
+                int n = dict.Count;
+                if (n > 0)
+                {
+                    dict.Clear();
+                    Plugin.Log.LogInfo($"[Artillery] {n} lingering danger zone(s) cleared — bots stop scanning them");
+                }
+                else Plugin.Log.LogInfo("[Artillery] no lingering zones at window close (registry was empty)");
+            }
+            catch (Exception e) { Plugin.Log.LogWarning($"[Artillery] zone clear failed: {e.Message}"); }
+        }
+
+        // shared accessor for the client-side artillery zone registry — also used
+        // by the perf watcher to annotate spikes
+        internal static System.Collections.IDictionary ActiveZonesDict()
+        {
+            try
+            {
+                var game = Singleton<IBotGame>.Instantiated ? Singleton<IBotGame>.Instance : null;
+                var bc = game?.BotsController;
+                if (bc == null) return null;
+                var zcProp = HarmonyLib.AccessTools.Property(bc.GetType(), "ArtilleryZonesController")
+                    ?? null;
+                object zc = zcProp?.GetValue(bc)
+                    ?? HarmonyLib.AccessTools.Field(bc.GetType(), "ArtilleryZonesController")?.GetValue(bc);
+                if (zc == null) return null;
+                return (HarmonyLib.AccessTools.Property(zc.GetType(), "ActiveZonesOnMap")?.GetValue(zc)
+                    ?? HarmonyLib.AccessTools.Field(zc.GetType(), "ActiveZonesOnMap")?.GetValue(zc))
+                    as System.Collections.IDictionary;
+            }
+            catch { return null; }
+        }
+
+        internal static bool Pumping => !_stopped;
 
         internal static void TryStage()
         {
@@ -138,7 +211,8 @@ namespace Manimal.Terminal
                 var ctrl = ServerShellingControllerClass.Instance;
                 if (ctrl == null) { Plugin.Log.LogWarning("[Artillery] zone tripped but no shelling controller"); return; }
                 ctrl.StartImmediateShellingZone(zoneId);
-                Plugin.Log.LogInfo($"[Artillery] zone {zoneId} tripped — shelling called in");
+                _pumpUntil = Time.realtimeSinceStartup + BarrageWindow;
+                Plugin.Log.LogInfo($"[Artillery] zone {zoneId} tripped — shelling called in ({BarrageWindow:0}s pump window)");
             }
             catch (Exception e) { Plugin.Log.LogWarning($"[Artillery] shelling start failed: {e}"); }
         }

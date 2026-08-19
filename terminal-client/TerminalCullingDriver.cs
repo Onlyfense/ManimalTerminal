@@ -96,6 +96,21 @@ namespace Manimal.Terminal
         // GameGraphicsClass whenever the graphics menu is touched, so a one-shot write
         // silently loses the moment a player opens settings mid-raid. -1 means hands off.
         private static float _lastBiasWritten = float.NaN;
+        private static float _biasOrig = -1f;
+
+        // QualitySettings is GLOBAL engine state — it survives scene unload, and vanilla
+        // only rewrites lodBias at boot or on a settings apply. leaving the clamp set
+        // after a terminal raid gives every OTHER map our bias and its pop-ins until the
+        // player restarts (icebreaker shipped exactly this bug, field-reported 08-18).
+        // called from the !TerminalGate.On branch of Update.
+        private static void RestoreLodBias()
+        {
+            if (_biasOrig < 0f) return;
+            QualitySettings.lodBias = _biasOrig;
+            Plugin.Log.LogInfo($"[LOD] left the terminal — lodBias restored to the game's {_biasOrig:F2}");
+            _biasOrig = -1f;
+            _lastBiasWritten = float.NaN;
+        }
 
         private void TickLodClamps()
         {
@@ -104,6 +119,7 @@ namespace Manimal.Terminal
                 float want = Plugin.LodBiasClamp.Value;
                 if (want > 0f)
                 {
+                    if (_biasOrig < 0f) _biasOrig = QualitySettings.lodBias; // capture BEFORE the first write
                     // only write when it actually differs — this runs every frame
                     if (!Mathf.Approximately(QualitySettings.lodBias, want) || !Mathf.Approximately(_lastBiasWritten, want))
                     {
@@ -111,6 +127,7 @@ namespace Manimal.Terminal
                         _lastBiasWritten = want;
                     }
                 }
+                else RestoreLodBias(); // config flipped to hands-off mid-raid
                 if (CameraRef != null) TerminalLodCullFloor.Tick(CameraRef.transform.position);
                 TerminalLootBounds.Tick();
             }
@@ -124,7 +141,7 @@ namespace Manimal.Terminal
             if (UnityEngine.Input.GetKeyDown(KeyCode.F8))
                 TerminalEnvDump.Dump(TerminalGate.On ? "terminal" : "vanilla");
 
-            if (!TerminalGate.On) return;
+            if (!TerminalGate.On) { RestoreLodBias(); return; }
             _frames++;
             TickLodClamps();
             TickPcDriver();

@@ -198,10 +198,11 @@ namespace Manimal.Terminal
                 // dump 2026-08-18); siren only if the fx bundle predates it
                 try
                 {
-                    NotificationManagerClass.DisplayMessageNotification(
-                        "Loudspeaker: The enemy has broken through to the loading zone! Evacuation will end in 3 minutes!",
-                        EFT.Communications.ENotificationDurationType.Long,
-                        EFT.Communications.ENotificationIconType.Alert, Color.red);
+                    // authored 1.0 loudspeaker subtitle (locale 6924d5327d890c5d7e3ae2c9);
+                    // duration matches vsrf_evac_3min clip (7.1s) plus a small tail
+                    TerminalSubtitles.ShowStandalone(
+                        "<b>Loudspeaker:</b> The enemy has broken through to the loading zone! Evacuation will end in 3 minutes!",
+                        8.0f);
                     var clip = TerminalFxBundle.FindClip("vsrf_evac_3min");
                     if (clip == null) clip = TerminalFxBundle.FindClip("amb_terminal_siren");
                     if (clip != null)

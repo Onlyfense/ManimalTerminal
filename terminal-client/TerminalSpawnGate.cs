@@ -22,6 +22,19 @@ namespace Manimal.Terminal
         private static readonly List<(BotsController c, BotWaveDataClass w)> _waves = new();
         private static readonly List<(BotsController c, BossLocationSpawn w)> _bosses = new();
 
+        // reset at raid CREATION, not OnGameStarted: raid 2 in one session held
+        // raid 1's _raidStart through the load window, so the 480s failsafe read
+        // "raid is old, release" and early waves slipped the gate ungated
+        // (2026-08-19: bots fighting in the background during the intro)
+        internal static void ResetForRaid()
+        {
+            _raidStart = -1f;
+            _attackStartedAt = -1f;
+            _holdLogged = false;
+            _waves.Clear();
+            _bosses.Clear();
+        }
+
         internal static bool Open
         {
             get

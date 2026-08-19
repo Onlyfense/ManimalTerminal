@@ -1,0 +1,48 @@
+{
+  "type": "survivor",
+  "presetBatch": 10,
+  "isBoss": false,
+  "mustHaveUniqueName": false,
+  "durability": {
+    "armor": {
+      "maxDelta": 5,
+      "minDelta": 0,
+      "minLimitPercent": 100,
+      "lowestMaxPercent": 100,
+      "highestMaxPercent": 100
+    },
+    "weapon": {
+      "highestMax": 70,
+      "lowestMax": 40,
+      "maxDelta": 5,
+      "minDelta": 0,
+      "minLimitPercent": 40
+    }
+  },
+  "itemSpawnLimits": {},
+  "equipment": {
+    "faceShieldIsActiveChancePercent": 0,
+    "forceOnlyArmoredRigWhenNoArmor": false,
+    "forceStock": false,
+    "laserIsActiveChancePercent": 0,
+    "lightIsActiveDayChancePercent": 0,
+    "lightIsActiveNightChancePercent": 0,
+    "nvgIsActiveChanceDayPercent": 0,
+    "nvgIsActiveChanceNightPercent": 0,
+    "randomisation": []
+  },
+  "currencyStackSize": {
+    // Roubles — civilians carry pocket change
+    "5449016a4bdc2d6f028b456f": {
+      "1000": 5,
+      "2500": 3,
+      "5000": 2,
+      "10000": 1
+    },
+    // Dollars
+    "5696686a4bdc2da3298b456a": {
+      "50": 3,
+      "100": 2
+    }
+  }
+}

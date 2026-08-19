@@ -1,0 +1,29 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net471</TargetFramework>
+    <AssemblyName>ManimalTerminalPrepatch</AssemblyName>
+    <RootNamespace>Manimal.Terminal.Prepatch</RootNamespace>
+    <Nullable>disable</Nullable>
+    <LangVersion>latest</LangVersion>
+    <Configurations>Debug;Release</Configurations>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="BepInEx">
+      <HintPath>$(SPTPath)\BepInEx\core\BepInEx.dll</HintPath>
+    </Reference>
+    <Reference Include="Mono.Cecil">
+      <HintPath>$(SPTPath)\BepInEx\core\Mono.Cecil.dll</HintPath>
+    </Reference>
+    <Reference Include="MoreBotsPrepatch">
+      <HintPath>$(SPTPath)\BepInEx\patchers\MoreBotsPrepatch.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <Target Name="DevDeploy" AfterTargets="PostBuildEvent">
+    <MakeDir Directories="$(SPTPath)\BepInEx\patchers\ManimalTerminalPrepatch" />
+    <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(SPTPath)\BepInEx\patchers\ManimalTerminalPrepatch" />
+  </Target>
+
+</Project>

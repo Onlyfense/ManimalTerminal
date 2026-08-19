@@ -46,10 +46,20 @@ namespace Manimal.Terminal
         // before any mod instantiates anything, and the global pass touches only
         // those. our own runtime spawns use the scoped RebindShadersUnder instead.
         private static readonly HashSet<int> _ourMaterials = new HashSet<int>();
-        // never cleared: instance ids of unloaded materials just never match again,
-        // and clearing on new-raid would wipe transit-PRELOADED captures (transit
-        // loads scenes before raid creation — the transit-gate-blindness trap)
+        // MUST clear per raid (2026-08-19: second raid in one session rendered
+        // white map-wide) — the bundle materials SURVIVE between raids with the
+        // same instance ids, but the native shaders they were rebound to die in
+        // raid teardown. a stale done-set then skips every dead-shader material.
+        // _ourMaterials stays: same-instance persistence makes its dedup correct,
+        // and clearing it would wipe transit-preloaded captures (transit loads
+        // scenes before raid creation — the transit-gate-blindness trap).
         private static readonly HashSet<int> _rebindDone = new HashSet<int>();
+
+        internal static void ResetForRaid()
+        {
+            _rebindDone.Clear();
+            _missingShaders.Clear();
+        }
 
         // called from Plugin's sceneLoaded hook for every Terminal* scene. gate by
         // scene NAME only, never by TerminalGate.On — see the transit note above.

@@ -3,12 +3,13 @@ using UnityEngine;
 
 namespace Manimal.Terminal
 {
-    // THE BOSS ROLL (rebuilt 2026-08-18 — the original got lost somewhere along the
-    // way): retail terminal spawns exactly ONE of five bosses per raid at the
-    // container ship berths (Glukhar / Killa / Reshala / Sanitar / Tagilla, wiki-
-    // confirmed). the db ships all five rows on the same zone/trigger; at location
-    // capture we pick one and REMOVE the rest — array surgery, not chance edits,
-    // because the rows carry ForceSpawn=true which can ignore BossChance.
+    // THE BOSS ROLL (user-preferred implementation, 2026-08-18 — replaces the old
+    // parse-time PortBossPool): retail terminal spawns exactly ONE of five bosses
+    // per raid at the container ship berths (Glukhar / Killa / Reshala / Sanitar /
+    // Tagilla). the db ships all five rows on the same zone/trigger with the
+    // live-dump-verified escorts; at location capture we pick one and REMOVE the
+    // rest — array surgery, not chance edits, because the rows carry
+    // ForceSpawn=true which can ignore BossChance.
     internal static class TerminalBossRoll
     {
         private static readonly string[] Candidates =
@@ -34,7 +35,7 @@ namespace Manimal.Terminal
                     if (i == winner || !pool.Contains(i)) kept.Add(rows[i]);
                 location.BossLocationSpawn = kept.ToArray();
                 Plugin.Log.LogInfo($"[BossRoll] {pool.Count} candidates -> '{rows[winner].BossName}' "
-                    + $"(escort {rows[winner].BossEscortAmount}) spawns this raid");
+                    + $"(escort {rows[winner].BossEscortAmount}x {rows[winner].BossEscortType}) spawns this raid");
             }
             catch (System.Exception e) { Plugin.Log.LogWarning($"[BossRoll] failed: {e.Message}"); }
         }

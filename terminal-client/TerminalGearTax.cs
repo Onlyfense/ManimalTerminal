@@ -122,11 +122,13 @@ namespace Manimal.Terminal
                     taken.Add(it);
                 }
 
-                // contents-only: rig + pockets stay equipped, their cargo doesnt.
-                // pack'n'strap belt found by slot id — a modded slot, not in the enum.
+                // contents-only: rig + pockets + SECURE CONTAINER (user 2026-08-18)
+                // stay equipped, their cargo doesnt. pack'n'strap belt found by slot id
+                // — a modded slot, not in the enum.
                 var hosts = new List<CompoundItem>();
                 if (eq.GetSlot(EquipmentSlot.TacticalVest)?.ContainedItem is CompoundItem rig) hosts.Add(rig);
                 if (eq.GetSlot(EquipmentSlot.Pockets)?.ContainedItem is CompoundItem pockets) hosts.Add(pockets);
+                if (eq.GetSlot(EquipmentSlot.SecuredContainer)?.ContainedItem is CompoundItem secure) hosts.Add(secure);
                 foreach (var s in eq.GetAllSlots())
                     if ((s.ID ?? "").IndexOf("belt", StringComparison.OrdinalIgnoreCase) >= 0
                         && s.ContainedItem is CompoundItem belt && !hosts.Contains(belt))
@@ -171,6 +173,8 @@ namespace Manimal.Terminal
                 Plugin.Log.LogInfo($"[GearTax] confiscated {taken.Count} item(s) -> '{safe.name}' ({placed} placed) at {safe.transform.position}");
                 try
                 {
+                    // informational only — the MP Officer's authored lines play as
+                    // timed subtitles during the intro (TerminalSubtitles)
                     NotificationManagerClass.DisplayMessageNotification(
                         "Port security has confiscated your equipment. It is locked in one of the terminal's equipment cabinets.",
                         ENotificationDurationType.Long, ENotificationIconType.Alert, Color.yellow);

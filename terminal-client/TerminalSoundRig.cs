@@ -277,8 +277,10 @@ namespace Manimal.Terminal
                 }
 
                 var ff = spec["firefight"] as JObject;
-                if (ff != null && ff["areas"] is JArray areas && areas.Count > 0)
+                if (ff != null && ff["areas"] is JArray areas && areas.Count > 0 && Plugin.SoundRigFirefight.Value)
                     _firefight = new FirefightRunner(this, ff, _clips, _byPath);
+                else if (!Plugin.SoundRigFirefight.Value)
+                    Plugin.Log.LogInfo("[SoundRig] firefight OFF (config A/B)");
 
                 _doorOpen = spec["doorOpen"] as JObject;
             }

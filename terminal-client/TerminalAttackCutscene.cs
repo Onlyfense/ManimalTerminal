@@ -239,6 +239,7 @@ namespace Manimal.Terminal
             _director.extrapolationMode = DirectorWrapMode.Hold;
             _director.timeUpdateMode = DirectorUpdateMode.DSPClock; // see the intro's note: a hitch must not desync audio
             _director.Play();
+            TerminalSubtitles.Show("attack", _director);
             Plugin.Log.LogInfo($"[AttackCutscene] playing '{_director.playableAsset.name}' " +
                                $"({_director.duration:0.0}s{(Plugin.AttackCutsceneSkippable.Value ? ", SPACE skips" : "")})");
             yield return Fade(1f, 0f);

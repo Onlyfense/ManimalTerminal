@@ -238,6 +238,37 @@ namespace Manimal.Terminal
 
         internal static bool AmbientStaged => _ambientRoot != null;
 
+        // sea-silence forensics (user 2026-08-18: waves wired, still no ocean audio):
+        // one-shot dump of the sea group's runtime state 30s after staging
+        private static float _seaDiagAt = -1f;
+
+        internal static void TickDiagnostics()
+        {
+            if (_seaDiagAt < 0f || Time.realtimeSinceStartup < _seaDiagAt) return;
+            _seaDiagAt = -1f;
+            try
+            {
+                if (!_ambientRoot) return;
+                var me = Comfort.Common.Singleton<EFT.GameWorld>.Instantiated
+                    ? Comfort.Common.Singleton<EFT.GameWorld>.Instance?.MainPlayer : null;
+                int found = 0;
+                foreach (var t in _ambientRoot.GetComponentsInChildren<Transform>(true))
+                {
+                    if (t.name != "AmbientSplineEmitterSeaGroup") continue;
+                    foreach (var src in t.GetComponentsInChildren<AudioSource>(true))
+                    {
+                        found++;
+                        float d = me != null ? (src.transform.position - me.Position).magnitude : -1f;
+                        Plugin.Log.LogInfo($"[Ambient][sea] '{src.gameObject.name}' clip='{(src.clip ? src.clip.name : "NULL")}'"
+                            + $" playing={src.isPlaying} vol={src.volume:F2} blend={src.spatialBlend:F1}"
+                            + $" maxDist={src.maxDistance:F0} activeGO={src.gameObject.activeInHierarchy} dist={d:F0}m");
+                    }
+                }
+                if (found == 0) Plugin.Log.LogWarning("[Ambient][sea] sea group has NO AudioSources at diag time");
+            }
+            catch (Exception e) { Plugin.Log.LogWarning($"[Ambient][sea] diag failed: {e.Message}"); }
+        }
+
         // the cutscenes carry their own mixed soundtrack — retail's ambient layer must
         // not play under them (2026-08-11: "i was hearing the ambient audio during the
         // cutscene"). the sound RIG silences its own groups by phase; this is the same
@@ -424,8 +455,31 @@ namespace Manimal.Terminal
                 // movers NRE right after. drop both while the root is still inactive
                 // so the healthy rest wake clean (2026-08-18: 33 dead Awakes a raid)
                 int pruned = PruneDeadSplineEmitters(comps);
-                if (grouped > 0 || pruned > 0)
-                    Plugin.Log.LogInfo($"[Ambient] spline emitters: {grouped} group emitter(s) wired (sea/waves), {pruned} dead emitter/mover(s) pruned");
+                int woken = WakeGroupPlayers(comps);
+                if (grouped > 0 || pruned > 0 || woken > 0)
+                    Plugin.Log.LogInfo($"[Ambient] spline emitters: {grouped} group emitter(s) wired (sea/waves), {pruned} dead emitter/mover(s) pruned, {woken} loop player(s) woken");
+
+                // frame-chop A/B (2026-08-18): the periodic chop onset tracks ambient
+                // staging — this drops the whole spline mover/emitter stack for a raid
+                if (!Plugin.AmbientSplines.Value)
+                {
+                    int axed = 0;
+                    foreach (var cls in new[] { "SplineEmitterPathMover", "SplineTriggerChecker",
+                        "AmbientPlayerSplineMappedEmitter", "AmbientPlayerGroupSplineEmitter" })
+                    {
+                        var t = ResolveType(cls);
+                        if (t == null) continue;
+                        foreach (var k in new List<long>(comps.Keys))
+                        {
+                            var c = comps[k];
+                            if (c == null || !t.IsInstanceOfType(c)) continue;
+                            UnityEngine.Object.DestroyImmediate(c);
+                            comps[k] = null;
+                            axed++;
+                        }
+                    }
+                    Plugin.Log.LogWarning($"[Ambient] SPLINE STACK OFF (config A/B) — {axed} component(s) dropped");
+                }
 
                 // the system LAST: its Awake harvests the workers above via
                 // GetComponentsInChildren, so it must never wake into an empty tree
@@ -467,6 +521,7 @@ namespace Manimal.Terminal
                     + $"{_banks.Count} banks"
                     + (occupied > 0 ? $", {occupied} left to the sound rig" : "")
                     + (missing > 0 ? $", {missing} GO(s) not in the bundle" : ""));
+                _seaDiagAt = Time.realtimeSinceStartup + 30f;
                 if (_bankClipMisses.Count > 0)
                     Plugin.Log.LogWarning($"[Ambient] {_bankClipMisses.Count} bank clip(s) missing from the bundle "
                         + $"(rerun Author 26 + rebuild): {string.Join(", ", _bankClipMisses.Take(6).ToArray())}"
@@ -557,6 +612,73 @@ namespace Manimal.Terminal
                 if (list.Count > 0) { cfgField.SetValue(comp, list); wired++; }
             }
             return wired;
+        }
+
+        // GROUP EMITTER PLAYERS WAKE (2026-08-18 diag: sea AudioSources sat with
+        // clip=NULL/activeGO=False even though FindClip did resolve the sea clips —
+        // LoopAmbientSoundPlayer.Awake never ran because an ancestor
+        // (AmbientZoneEmitterSystem or a group parent) is inactive by design and
+        // expects a runtime activator we don't have offline). walk every configured
+        // soundPlayer on the wired group emitters, force-activate its GO + all
+        // parents up to the ambient root, then push the bound _loopClip onto the
+        // AudioSource and Play() — belt-and-braces so the wake stays reliable
+        // whether Awake runs cleanly or not.
+        private static int WakeGroupPlayers(Dictionary<long, Component> comps)
+        {
+            int woken = 0;
+            var groupType = ResolveType("AmbientPlayerGroupSplineEmitter");
+            var mappedType = ResolveType("AmbientPlayerSplineMappedEmitter");
+            var loopType = ResolveType("LoopAmbientSoundPlayer");
+            if (loopType == null || _ambientRoot == null) return 0;
+            var fConfigs = groupType != null ? AccessTools.Field(groupType, "_configs") : null;
+            var fMappedPlayer = mappedType != null ? AccessTools.Field(mappedType, "_soundPlayer") : null;
+            var cfgType = groupType?.GetNestedType("SoundPlayerConfig",
+                System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic);
+            var fCfgPlayer = cfgType != null ? AccessTools.Field(cfgType, "soundPlayer") : null;
+            var fLoopClip = AccessTools.Field(loopType, "_loopClip");
+            var fVolume = AccessTools.Field(loopType, "_volume");
+
+            var players = new HashSet<Component>();
+            foreach (var kv in comps)
+            {
+                var comp = kv.Value;
+                if (comp == null) continue;
+                if (groupType != null && groupType.IsInstanceOfType(comp) && fConfigs != null)
+                {
+                    var list = fConfigs.GetValue(comp) as System.Collections.IList;
+                    if (list == null) continue;
+                    foreach (var cfg in list)
+                    {
+                        var p = fCfgPlayer?.GetValue(cfg) as Component;
+                        if (p) players.Add(p);
+                    }
+                }
+                else if (mappedType != null && mappedType.IsInstanceOfType(comp) && fMappedPlayer != null)
+                {
+                    var p = fMappedPlayer.GetValue(comp) as Component;
+                    if (p) players.Add(p);
+                }
+            }
+
+            foreach (var player in players)
+            {
+                if (!loopType.IsInstanceOfType(player)) continue;
+                var clip = fLoopClip?.GetValue(player) as AudioClip;
+                if (clip == null) continue;
+                // walk parents, activate anything inactive up to the ambient root
+                for (var t = player.transform; t != null && t.gameObject != _ambientRoot; t = t.parent)
+                    if (!t.gameObject.activeSelf) t.gameObject.SetActive(true);
+                var src = player.gameObject.GetComponent<AudioSource>();
+                if (!src) src = player.gameObject.AddComponent<AudioSource>();
+                if (src.clip == null) src.clip = clip;
+                src.loop = true;
+                src.playOnAwake = false;
+                float v = fVolume != null ? (float)fVolume.GetValue(player) : 1f;
+                if (v > 0f) src.volume = v;
+                if (!src.isPlaying) src.Play();
+                woken++;
+            }
+            return woken;
         }
 
         private static int PruneDeadSplineEmitters(Dictionary<long, Component> comps)

@@ -1180,7 +1180,7 @@
     "Scattering": 1.0,
     "VisibleDistance": 1.0
   },
-  "DisabledForScav": false,
+  "DisabledForScav": true,
   "MinMaxBots": [],
   "SpawnPointParams": [
     {
@@ -4724,7 +4724,7 @@
         "regular"
       ],
       "Supports": null,
-      "Time": 540.0,
+      "Time": 950.0,
       "TriggerId": "",
       "TriggerName": ""
     },
@@ -6555,7 +6555,7 @@
       "BossDifficult": "normal",
       "BossEscortAmount": "3",
       "BossEscortDifficult": "normal",
-      "BossEscortType": "followerGluharAssault",
+      "BossEscortType": "followerGluharSecurity",
       "BossName": "bossGluhar",
       "BossZone": "Zone2ScavPort29",
       "Delay": 40.0,
@@ -6569,7 +6569,7 @@
         "regular"
       ],
       "Supports": null,
-      "Time": 5790.0,
+      "Time": 5690.0,
       "TriggerId": "T4",
       "TriggerName": "botEvent"
     },
@@ -6578,7 +6578,7 @@
       "BossDifficult": "normal",
       "BossEscortAmount": "0",
       "BossEscortDifficult": "normal",
-      "BossEscortType": "bossKilla",
+      "BossEscortType": "followerGluharSecurity",
       "BossName": "bossKilla",
       "BossZone": "Zone2ScavPort29",
       "Delay": 40.0,
@@ -6615,7 +6615,7 @@
         "regular"
       ],
       "Supports": null,
-      "Time": 5790.0,
+      "Time": 5690.0,
       "TriggerId": "T4",
       "TriggerName": "botEvent"
     },
@@ -6638,8 +6638,77 @@
         "regular"
       ],
       "Supports": null,
-      "Time": 5790.0,
+      "Time": 5690.0,
       "TriggerId": "T4",
+      "TriggerName": "botEvent"
+    },
+    {
+      "BossChance": 100.0,
+      "BossDifficult": "normal",
+      "BossEscortAmount": "1",
+      "BossEscortDifficult": "easy",
+      "BossEscortType": "civilian",
+      "BossName": "civilian",
+      "BossZone": "Zone2CivShip34",
+      "Delay": 0.0,
+      "ForceSpawn": true,
+      "IgnoreMaxBots": true,
+      "RandomTimeSpawn": false,
+      "ShowOnTarkovMap": false,
+      "ShowOnTarkovMapPvE": false,
+      "SpawnMode": [
+        "regular",
+        "pve"
+      ],
+      "Supports": null,
+      "Time": 1777.0,
+      "TriggerId": "T5",
+      "TriggerName": "botEvent"
+    },
+    {
+      "BossChance": 100.0,
+      "BossDifficult": "normal",
+      "BossEscortAmount": "1",
+      "BossEscortDifficult": "easy",
+      "BossEscortType": "civilian",
+      "BossName": "civilian",
+      "BossZone": "Zone2CivPump35",
+      "Delay": 0.0,
+      "ForceSpawn": true,
+      "IgnoreMaxBots": true,
+      "RandomTimeSpawn": false,
+      "ShowOnTarkovMap": false,
+      "ShowOnTarkovMapPvE": false,
+      "SpawnMode": [
+        "regular",
+        "pve"
+      ],
+      "Supports": null,
+      "Time": 1677.0,
+      "TriggerId": "T1",
+      "TriggerName": "botEvent"
+    },
+    {
+      "BossChance": 100.0,
+      "BossDifficult": "normal",
+      "BossEscortAmount": "1",
+      "BossEscortDifficult": "easy",
+      "BossEscortType": "civilian",
+      "BossName": "civilian",
+      "BossZone": "Zone2CivGate36",
+      "Delay": 0.0,
+      "ForceSpawn": true,
+      "IgnoreMaxBots": true,
+      "RandomTimeSpawn": false,
+      "ShowOnTarkovMap": false,
+      "ShowOnTarkovMapPvE": false,
+      "SpawnMode": [
+        "regular",
+        "pve"
+      ],
+      "Supports": null,
+      "Time": 1577.0,
+      "TriggerId": "T0",
       "TriggerName": "botEvent"
     }
   ],

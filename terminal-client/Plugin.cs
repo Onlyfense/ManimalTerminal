@@ -31,6 +31,10 @@ namespace Manimal.Terminal
         internal static ConfigEntry<bool> LampAuthored;
         internal static ConfigEntry<float> LampAuthoredScale;
         internal static ConfigEntry<float> AmbientIntensity;
+        internal static ConfigEntry<bool> AmbientColorOverride;
+        internal static ConfigEntry<float> AmbientColorR;
+        internal static ConfigEntry<float> AmbientColorG;
+        internal static ConfigEntry<float> AmbientColorB;
         internal static ConfigEntry<bool> AmbientSkyLuminance;
         internal static ConfigEntry<bool> LampShadows;
         internal static ConfigEntry<float> LightCullDistance;
@@ -65,7 +69,6 @@ namespace Manimal.Terminal
         internal static ConfigEntry<float> EnvironmentExposure;
         internal static ConfigEntry<bool> BallisticGlassPen;
         internal static ConfigEntry<float> GateAmbushTime;
-        internal static ConfigEntry<bool> PortBossPool;
         internal static ConfigEntry<float> SkyHourOffset;
         internal static ConfigEntry<float> SkyNightStrength;
         internal static ConfigEntry<bool> WeatherStack;
@@ -95,6 +98,9 @@ namespace Manimal.Terminal
         internal static ConfigEntry<float> SoundRigVolume;
         internal static ConfigEntry<bool> SoundRigAlarm;
         internal static ConfigEntry<bool> WaterPlanes;
+        internal static ConfigEntry<bool> CutsceneSubtitles;
+        internal static ConfigEntry<bool> AmbientSplines;
+        internal static ConfigEntry<bool> SoundRigFirefight;
         internal static ConfigEntry<bool> InteriorCrossCull;
         internal static ConfigEntry<float> CrossCullDistance;
 
@@ -112,6 +118,7 @@ namespace Manimal.Terminal
             TerminalArtillery.Pump();
             TerminalPerfWatch.Tick();
             TerminalSceneScrub.TickLateSweep();
+            TerminalAcoustics.TickDiagnostics();
         }
 
         private void Awake()
@@ -134,9 +141,17 @@ namespace Manimal.Terminal
                     new AcceptableValueRange<float>(0f, 12f)));
             AmbientSkyLuminance = Config.Bind("Terminal", "AmbientSkyLuminance", true,
                 new ConfigDescription("use the sky's LITERAL brightness for ambient (retail model — near-black at night, the authored lamps carry the scene). off = sky tint at a fixed playable brightness. flip live to A/B"));
-            AmbientIntensity = Config.Bind("Terminal", "AmbientIntensity", 0.8f,
+            AmbientIntensity = Config.Bind("Terminal", "AmbientIntensity", 1.8f,
                 new ConfigDescription("flat ambient fill light — lifts shadowed areas out of black (no real bounce without a bake)",
                     new AcceptableValueRange<float>(0f, 3f)));
+            AmbientColorOverride = Config.Bind("Terminal", "AmbientColorOverride", false,
+                new ConfigDescription("override the sky-sampled ambient tint with the R/G/B values below. flip live to A/B a colour"));
+            AmbientColorR = Config.Bind("Terminal", "AmbientColorR", 0.10f,
+                new ConfigDescription("ambient red (0-1) when AmbientColorOverride is on", new AcceptableValueRange<float>(0f, 1f)));
+            AmbientColorG = Config.Bind("Terminal", "AmbientColorG", 0.13f,
+                new ConfigDescription("ambient green (0-1) when AmbientColorOverride is on", new AcceptableValueRange<float>(0f, 1f)));
+            AmbientColorB = Config.Bind("Terminal", "AmbientColorB", 0.20f,
+                new ConfigDescription("ambient blue (0-1) when AmbientColorOverride is on", new AcceptableValueRange<float>(0f, 1f)));
             LampShadows = Config.Bind("Terminal", "LampShadows", false,
                 new ConfigDescription("let the revived lamps cast realtime shadows — much prettier, much heavier"));
             // LOD CULL FLOOR SET, ported from icebreaker. defaults are deliberately LOOSER
@@ -191,8 +206,6 @@ namespace Manimal.Terminal
                     new AcceptableValueRange<float>(0f, 1f)));
             // weather, set the Time&Weather-Changer way (WeatherDebug + the sliders).
             // retail terminal is a wet night port — rain by default.
-            PortBossPool = Config.Bind("Terminal", "PortBossPool", true,
-                new ConfigDescription("re-roll the container-berth (Zone2ScavPort29) boss each raid from retail's pool of 5 — gluhar/sanitar/reshala with 3 guards, killa/tagilla alone. our snapshot froze a single tagilla roll; live dumps prove the pool (gluhar x3, sanitar x2, tagilla x2, killa x1 across 8 raids)"));
             GateAmbushTime = Config.Bind("Terminal", "GateAmbushTime", 720f,
                 new ConfigDescription("raid seconds until the Zone1BDGateAmbush13 pair spawns. retail authors 950 (15:50 in) — they beat you to the gate only if you fight slow; -1 keeps the authored timer",
                     new AcceptableValueRange<float>(-1f, 1800f)));
@@ -220,6 +233,12 @@ namespace Manimal.Terminal
             StencilDarkenOutdoor = Config.Bind("Terminal", "StencilDarkenOutdoor", 1f,
                 new ConfigDescription("scale on the OUTDOOR stencil volumes' authored darkness alpha (container shadows, tower shade). applies live",
                     new AcceptableValueRange<float>(0f, 1.5f)));
+            AmbientSplines = Config.Bind("Terminal", "AmbientSplines", true,
+                new ConfigDescription("run the ambient spline emitter stack (sea/wind/rain movers). turn OFF for one raid as an A/B test for the periodic frame chop — onset correlates with ambient staging"));
+            SoundRigFirefight = Config.Bind("Terminal", "SoundRigFirefight", true,
+                new ConfigDescription("distant firefight ambience bursts. turn OFF for one raid as the other half of the frame-chop A/B"));
+            CutsceneSubtitles = Config.Bind("Terminal", "CutsceneSubtitles", true,
+                new ConfigDescription("show timed subtitles during the cutscenes (live-locale text, speech-segmented timings — edit plugin-data/terminal_subtitle_timings.json to tune)"));
             WaterPlanes = Config.Bind("Terminal", "WaterPlanes", true,
                 new ConfigDescription("draw the harbor/pump water planes. turn OFF for one raid as the A/B test for the port-area fps tanking — if the port runs smooth without water, the water shader is the culprit"));
             GatesExplosion = Config.Bind("Terminal", "GatesExplosion", true,
@@ -361,7 +380,6 @@ namespace Manimal.Terminal
             Patch(typeof(TerminalBallisticGlass.Patch_Sweep));
             Patch(typeof(TerminalGateAmbushTime.Patch_Retime));
             Patch(typeof(TerminalStageDirector.Patch_Arm));
-            Patch(typeof(TerminalPortBossPool.Patch_Roll));
             Patch(typeof(TerminalAudioFixes.Patch_DoorFoleyVolume));
             Patch(typeof(TerminalEscortFix.Patch_EscortsHonourIgnoreMaxBots));
             Patch(typeof(TerminalLights.Patch_LightsAtRaidStart));
@@ -410,6 +428,16 @@ namespace Manimal.Terminal
             catch (System.Exception e) { Log.LogWarning($"questing-bots mute failed: {e}"); }
             try { TerminalLockableDoorsOff.TryPatch(HarmonyInstance); }
             catch (System.Exception e) { Log.LogWarning($"lockable-doors shim failed: {e}"); }
+
+            // civilian brain (ported from MitsuruMod 2026-08-18, trimmed to
+            // wander+hide+flee — the retail 1.0 civilian shape). SPT ModulePatch
+            // style kept from the source; BigBrain/MoreBots are already hard deps
+            try { new Civilian.Patches.CivilianBrainInitPatch().Enable(); }
+            catch (System.Exception e) { Log.LogError($"civilian brain init failed: {e}"); }
+            try { new Civilian.Patches.GunshotHearingPatch().Enable(); }
+            catch (System.Exception e) { Log.LogError($"civilian gunshot patch failed: {e}"); }
+            try { new Civilian.Patches.CivilianKnifePatch().Enable(); }
+            catch (System.Exception e) { Log.LogError($"civilian knife patch failed: {e}"); }
 
             // material ownership capture must beat every mod's runtime spawns — scene
             // load IS that moment. gate by scene NAME, never TerminalGate.On: transit

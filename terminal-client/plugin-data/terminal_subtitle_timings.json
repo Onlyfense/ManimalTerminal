@@ -1,0 +1,258 @@
+{
+ "note": "speech-segmented voice tracks; fill text from terminal_subtitles.json locale lines",
+ "cutscenes": {
+  "intro_nocase": [
+   {
+    "start": 2.0,
+    "end": 5.32,
+    "text": "<b>MP Officer:</b> Stop! Security check!"
+   },
+   {
+    "start": 5.67,
+    "end": 8.82,
+    "text": "<b>MP Officer:</b> Where do you think you’re heading all geared up like that?"
+   },
+   {
+    "start": 9.17,
+    "end": 10.98,
+    "text": "<b>MP Officer:</b> No gear past this checkpoint."
+   },
+   {
+    "start": 11.33,
+    "end": 16.65,
+    "text": "<b>MP Officer:</b> Relax! You won’t need that on the other side."
+   },
+   {
+    "start": 17.0,
+    "end": 20.98,
+    "text": "<b>Soldier:</b> He’s clear!"
+   },
+   {
+    "start": 21.33,
+    "end": 23.98,
+    "text": "<b>MP Officer:</b> Alright, move it."
+   },
+   {
+    "start": 24.33,
+    "end": 29.65,
+    "text": "<b>MP Officer:</b> Stay close, follow my instructions precisely, unless you wanna end up in a body bag."
+   },
+   {
+    "start": 30.0,
+    "end": 33.32,
+    "text": "<b>MP Officer:</b> You’ll have to wait your turn for evac."
+   },
+   {
+    "start": 33.67,
+    "end": 37.98,
+    "text": "<b>MP Officer:</b> I think we’ve got some water over there, so you'll manage."
+   },
+   {
+    "start": 38.33,
+    "end": 39.93,
+    "text": "<b>Soldier:</b> Eyes off!"
+   },
+   {
+    "start": 39.33,
+    "end": 41.65,
+    "text": "<b>MP Officer:</b> One more violation — and you’ll end up outside the gate again!"
+   },
+   {
+    "start": 42.0,
+    "end": 46.98,
+    "text": "<b>MP Officer:</b> This is a restricted area under martial law. Keep your nose out!"
+   },
+   {
+    "start": 47.33,
+    "end": 50.82,
+    "text": "<b>MP Officer:</b> We’re going inside now. Eyes forward, don’t ask questions."
+   },
+   {
+    "start": 51.17,
+    "end": 55.98,
+    "text": "<b>MP Officer:</b> Follow the instructions to the letter. Otherwise we won’t go easy on you. "
+   },
+   {
+    "start": 56.33,
+    "end": 58.98,
+    "text": "<b>MP Officer:</b> Alright, that’s your stop. Stay here."
+   },
+   {
+    "start": 59.33,
+    "end": 64.9,
+    "text": "<b>MP Officer:</b> Relax, you’ll be fine."
+   }
+  ],
+  "intro_case": [
+   {
+    "start": 2.0,
+    "end": 5.32,
+    "text": "<b>MP Officer:</b> Stop! Security check!"
+   },
+   {
+    "start": 5.67,
+    "end": 8.82,
+    "text": "<b>MP Officer:</b> Where do you think you’re heading all geared up like that?"
+   },
+   {
+    "start": 9.17,
+    "end": 10.98,
+    "text": "<b>MP Officer:</b> No gear past this checkpoint."
+   },
+   {
+    "start": 11.33,
+    "end": 16.65,
+    "text": "<b>MP Officer:</b> Relax! You won’t need that on the other side."
+   },
+   {
+    "start": 17.0,
+    "end": 20.98,
+    "text": "<b>Soldier:</b> He’s clear!"
+   },
+   {
+    "start": 21.33,
+    "end": 23.98,
+    "text": "<b>MP Officer:</b> Alright, move it."
+   },
+   {
+    "start": 24.33,
+    "end": 29.65,
+    "text": "<b>MP Officer:</b> Stay close, follow my instructions precisely, unless you wanna end up in a body bag."
+   },
+   {
+    "start": 30.0,
+    "end": 33.32,
+    "text": "<b>MP Officer:</b> You’ll have to wait your turn for evac."
+   },
+   {
+    "start": 33.67,
+    "end": 37.98,
+    "text": "<b>MP Officer:</b> I think we’ve got some water over there, so you'll manage."
+   },
+   {
+    "start": 38.33,
+    "end": 39.93,
+    "text": "<b>Soldier:</b> Eyes off!"
+   },
+   {
+    "start": 39.33,
+    "end": 41.65,
+    "text": "<b>MP Officer:</b> One more violation — and you’ll end up outside the gate again!"
+   },
+   {
+    "start": 42.0,
+    "end": 46.98,
+    "text": "<b>MP Officer:</b> This is a restricted area under martial law. Keep your nose out!"
+   },
+   {
+    "start": 47.33,
+    "end": 50.82,
+    "text": "<b>MP Officer:</b> We’re going inside now. Eyes forward, don’t ask questions."
+   },
+   {
+    "start": 51.17,
+    "end": 55.98,
+    "text": "<b>MP Officer:</b> Follow the instructions to the letter. Otherwise we won’t go easy on you. "
+   },
+   {
+    "start": 56.33,
+    "end": 58.98,
+    "text": "<b>MP Officer:</b> Alright, that’s your stop. Stay here."
+   },
+   {
+    "start": 59.33,
+    "end": 64.9,
+    "text": "<b>MP Officer:</b> Relax, you’ll be fine."
+   }
+  ],
+  "ending_00": [
+   {
+    "start": 5.5,
+    "end": 7.15,
+    "text": "<b>MP Officer:</b> I see movement!"
+   },
+   {
+    "start": 7.5,
+    "end": 10.65,
+    "text": "<b>Soldier:</b> Over here! This way! We are leaving!"
+   },
+   {
+    "start": 11.0,
+    "end": 13.15,
+    "text": "<b>MP Officer:</b> There he is!"
+   },
+   {
+    "start": 13.5,
+    "end": 17.15,
+    "text": "<b>Soldier:</b> Looks like it’s quieted down. You can wait outside if you want."
+   },
+   {
+    "start": 17.5,
+    "end": 22.05,
+    "text": "<b>Soldier:</b> Who knows when you’ll see Tarkov again. We’re leaving in one minute."
+   },
+   {
+    "start": 22.4,
+    "end": 26.4,
+    "text": "<b>Soldier:</b> After that, head into the compartment, no roaming around the ship!"
+   },
+   {
+    "start": 40.0,
+    "end": 42.15,
+    "text": "<b>Soldier:</b> Hey! Get up!"
+   },
+   {
+    "start": 42.5,
+    "end": 45.5,
+    "text": "<b>MP Officer:</b> Incoming!"
+   }
+  ],
+  "attack": [
+   {
+    "start": 2.0,
+    "end": 7.35,
+    "text": "<b>Radio:</b> Confirmed! I confirm, the base is under attack!\n<b>MP Officer:</b> Move! Move!"
+   },
+   {
+    "start": 7.7,
+    "end": 10.85,
+    "text": "<b>MP Officer:</b> Movement outside the perimeter! Multiple!"
+   },
+   {
+    "start": 11.2,
+    "end": 14.65,
+    "text": "<b>MP Officer:</b> Pasha's down!\n<b>MP Officer:</b> Hold your positions!"
+   },
+   {
+    "start": 15.0,
+    "end": 16.15,
+    "text": "<b>MP Officer:</b> Suppressive fire!"
+   },
+   {
+    "start": 16.5,
+    "end": 17.65,
+    "text": "<b>Scav:</b> Spread out!"
+   },
+   {
+    "start": 18.0,
+    "end": 21.15,
+    "text": "<b>Scav:</b> Time to kick some ass!\n<b>Scav:</b> Let’s roll!"
+   },
+   {
+    "start": 21.5,
+    "end": 22.85,
+    "text": "<b>MP Officer:</b> They're pushing through the center!"
+   },
+   {
+    "start": 23.2,
+    "end": 27.65,
+    "text": "<b>Scav:</b> Eat this, bitch!"
+   },
+   {
+    "start": 28.0,
+    "end": 30.5,
+    "text": "<b>MP Officer:</b> I'm hit!"
+   }
+  ]
+ }
+}

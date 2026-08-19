@@ -183,6 +183,10 @@ namespace Manimal.Terminal
                     var lods = g.GetLODs();
                     if (lods == null || lods.Length == 0) continue;
                     int last = lods.Length - 1;
+                    // same SetLODs ceiling clamp as LootBounds — equal-or-greater
+                    // than the previous tier throws per call
+                    float ceil = last > 0 ? lods[last - 1].screenRelativeTransitionHeight - 0.001f : 1f;
+                    if (want > ceil) want = Mathf.Max(0f, ceil);
                     if (Mathf.Abs(lods[last].screenRelativeTransitionHeight - want) > 0.0005f)
                     {
                         lods[last].screenRelativeTransitionHeight = want;

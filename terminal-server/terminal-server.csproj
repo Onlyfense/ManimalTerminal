@@ -20,6 +20,10 @@
     <PackageReference Include="SPTarkov.Common" Version="4.0.13" />
     <PackageReference Include="SPTarkov.DI" Version="4.0.13" />
     <PackageReference Include="SPTarkov.Server.Core" Version="4.0.13" />
+    <Reference Include="MoreBotsServer">
+      <Private>false</Private>
+      <HintPath>$(SPTPath)\SPT\user\mods\MoreBotsServer\MoreBotsServer.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
   <!--

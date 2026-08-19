@@ -59,6 +59,11 @@ namespace Manimal.Terminal
                 TerminalHoldLock.ResetForRaid();
                 TerminalPerfWatch.ResetForRaid();
                 TerminalSceneScrub.ResetForRaid();
+                Civilian.CivilianFleeState.ClearAll();
+                Civilian.CivilianUnstickHelper.ClearAll();
+                Civilian.CivilianMeleeEnforcer.ClearAll();
+                TerminalShaderRebind.ResetForRaid();
+                TerminalSpawnGate.ResetForRaid();
                 if (PendingLocationId == "Terminal")
                 {
                     TerminalArtillery.InjectConfig();

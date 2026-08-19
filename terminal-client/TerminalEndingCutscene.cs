@@ -179,34 +179,11 @@ namespace Manimal.Terminal
             }
             Plugin.Log.LogInfo($"[Ending] anti-cull: {anims} animator(s) AlwaysAnimate, {smrs} skinned mesh(es) updateWhenOffscreen");
 
-            // the cast's clips are HUMANOID mocap — no avatar, no motion (probe
-            // 2026-08-18: the one avatared animator moved 1.04m, all 12 avatar-less
-            // stood still; the editor scene itself ships 12 null m_Avatar refs).
-            // every actor rides the same EFT skeleton, so the one surviving avatar
-            // retargets the lot
-            Avatar donor = null;
-            foreach (var rgo in _scene.GetRootGameObjects())
-            {
-                foreach (var a in rgo.GetComponentsInChildren<Animator>(true))
-                    if (a.avatar) { donor = a.avatar; break; }
-                if (donor) break;
-            }
-            int retargeted = 0;
-            if (donor)
-                foreach (var rgo in _scene.GetRootGameObjects())
-                    foreach (var a in rgo.GetComponentsInChildren<Animator>(true))
-                    {
-                        if (a.avatar) continue;
-                        // human rigs only — camera/fade/zubr roots animate generic
-                        bool human = false;
-                        foreach (var t in a.GetComponentsInChildren<Transform>(true))
-                            if (t.name == "Base HumanPelvis") { human = true; break; }
-                        if (!human) continue;
-                        a.avatar = donor;
-                        a.Rebind();
-                        retargeted++;
-                    }
-            Plugin.Log.LogInfo($"[Ending] avatar donor '{(donor ? donor.name : "NONE FOUND")}' -> {retargeted} actor(s) retargeted");
+            // NO runtime avatar donor (removed 2026-08-18): the 'has a human pelvis
+            // descendant' test also matched the Zubr/scenery ROOT animators (the cast
+            // nests under them) — an avatar on those flips them humanoid and kills
+            // their generic prop tracks (the Zubr door + pry tube stopped animating).
+            // the actor avatars are authored in the editor scene now.
 
             ApplyVariantMutes();
             RepairBindings();
@@ -300,12 +277,14 @@ namespace Manimal.Terminal
                 }
 
             Camera.onPreCull += DriveCamera;
+            StartCoroutine(RehideSweep());
             _driving = true;
 
             _director.extrapolationMode = DirectorWrapMode.Hold;
             _director.timeUpdateMode = DirectorUpdateMode.DSPClock; // hitches cost frames, not sync
             TerminalAcoustics.SetAmbientSilenced(true);
             _director.Play();
+            TerminalSubtitles.Show("ending_00", _director);
             Plugin.Log.LogInfo($"[Ending] playing '{_director.playableAsset.name}' ({_director.duration:0.0}s, SPACE skips)");
             StartCoroutine(BindingProbe());
             yield return Fade(1f, 0f, 0.8f);
@@ -498,8 +477,13 @@ namespace Manimal.Terminal
                 dst.bones = mapped;
                 if (src.rootBone && boneByName.TryGetValue(src.rootBone.name, out var rb)) dst.rootBone = rb;
                 dst.localBounds = src.localBounds;
+                // freeze forensics: which rig did the bones land on
+                int onAnim = 0;
+                for (int i = 0; i < mapped.Length; i++)
+                    if (mapped[i] && mapped[i].IsChildOf(skelRoot)) onAnim++;
                 Plugin.Log.LogInfo($"[Ending] actor wears the player's {part}: '{src.sharedMesh.name}' "
-                    + $"({srcBones.Length} bones remapped, {src.sharedMaterials.Length} material(s))");
+                    + $"({srcBones.Length} bones remapped, {onAnim} on the animated rig '{skelRoot.name}', "
+                    + $"{src.sharedMaterials.Length} material(s))");
             }
             catch (Exception e) { Plugin.Log.LogWarning($"[Ending] {actorGoName} swap failed: {e.Message}"); }
         }
@@ -626,6 +610,24 @@ namespace Manimal.Terminal
             }
             catch (Exception e) { Plugin.Log.LogWarning($"[Ending][probe] setup failed: {e.Message}"); yield break; }
 
+            // the swapped gear itself — the one body the 2026-08-18 video shows frozen
+            try
+            {
+                foreach (var nm in new[] { "Actor_Top", "Actor_Pants" })
+                    foreach (var rgo in _scene.GetRootGameObjects())
+                    {
+                        var t = FindDeep(rgo.transform, nm);
+                        var smr = t ? t.GetComponentInChildren<SkinnedMeshRenderer>(true) : null;
+                        if (!smr || smr.bones == null || smr.bones.Length == 0 || !smr.bones[0]) continue;
+                        var b = smr.bones[0];
+                        names.Add("swap:" + nm); probes.Add(b); starts.Add(b.position);
+                        Plugin.Log.LogInfo($"[Ending][probe] swap '{nm}' mesh='{(smr.sharedMesh ? smr.sharedMesh.name : "null")}'"
+                            + $" bone0='{b.name}' visible={smr.isVisible} enabled={smr.enabled}");
+                        break;
+                    }
+            }
+            catch (Exception e) { Plugin.Log.LogWarning($"[Ending][probe] swap probe failed: {e.Message}"); }
+
             yield return new WaitForSecondsRealtime(2f);
             try
             {
@@ -640,6 +642,56 @@ namespace Manimal.Terminal
                     Plugin.Log.LogInfo($"[Ending][probe] director time={_director.time:F2} state={_director.state}");
             }
             catch (Exception e) { Plugin.Log.LogWarning($"[Ending][probe] readback failed: {e.Message}"); }
+        }
+
+        // the one-shot hide misses what the extract-era churn re-enables — the
+        // third-person rifle floats at the exfil through the opening shots
+        // (2026-08-18). re-sweep players, camera children and the weapon root for
+        // the first seconds of the take.
+        private IEnumerator RehideSweep()
+        {
+            for (int i = 0; i < 10; i++)
+            {
+                yield return new WaitForSecondsRealtime(0.5f);
+                if (_released) yield break;
+                try
+                {
+                    var gw = Singleton<GameWorld>.Instance;
+                    if (gw != null && gw.AllAlivePlayersList != null)
+                        foreach (var pl in gw.AllAlivePlayersList)
+                        {
+                            if (pl == null) continue;
+                            foreach (var r in pl.gameObject.GetComponentsInChildren<Renderer>(true))
+                                if (r != null && r.enabled) { r.enabled = false; _hiddenRenderers.Add(r); }
+                            var hc = pl.HandsController;
+                            var wr = hc != null
+                                ? HarmonyLib.AccessTools.Property(hc.GetType(), "WeaponRoot")?.GetValue(hc) as Transform
+                                : null;
+                            if (wr)
+                                foreach (var r in wr.GetComponentsInChildren<Renderer>(true))
+                                    if (r != null && r.enabled) { r.enabled = false; _hiddenRenderers.Add(r); }
+                        }
+                    if (_realCam)
+                        foreach (var r in _realCam.GetComponentsInChildren<Renderer>(true))
+                            if (r != null && r.enabled) { r.enabled = false; _hiddenRenderers.Add(r); }
+
+                    // tactical lasers draw a PROCEDURAL mesh (LaserBeam builds its
+                    // own — no Renderer to disable; user 2026-08-18: green beam
+                    // haunting the exfil). kill the behaviours; flashlight Lights
+                    // under players go with them. restored on release via _pausedFx.
+                    foreach (var lb in UnityEngine.Object.FindObjectsOfType<LaserBeam>())
+                        if (lb != null && lb.enabled) { lb.enabled = false; _pausedFx.Add(lb); }
+                    var gw3 = Singleton<GameWorld>.Instance;
+                    if (gw3 != null && gw3.AllAlivePlayersList != null)
+                        foreach (var pl in gw3.AllAlivePlayersList)
+                        {
+                            if (pl == null) continue;
+                            foreach (var li in pl.gameObject.GetComponentsInChildren<Light>(true))
+                                if (li != null && li.enabled) { li.enabled = false; _pausedFx.Add(li); }
+                        }
+                }
+                catch { }
+            }
         }
 
         private void DriveCamera(Camera cam)

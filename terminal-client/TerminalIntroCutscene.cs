@@ -327,24 +327,61 @@ namespace Manimal.Terminal
             Camera.onPreCull += DriveCamera;
             _driving = true;
 
-            // STAGING BARRIER (2026-08-15: "huge stutter at raid start freezes the
-            // cutscene" — the log convicts us: AMBIENT LAYER STAGED (1105 components,
-            // one frame) lands AFTER 'playing ...' every raid, plus the weather stack
-            // and the 7585-row lamp table, all in the cutscene's opening seconds).
-            // the screen is already black here — burn that cost invisibly before the
-            // first frame of picture instead of on-camera. capped so a broken staging
-            // path can't hold the intro hostage; staging keeps retrying on its own
-            // cadence during the wait.
+            // STAGING BARRIER (2026-08-15 + expanded 2026-08-19: user reports
+            // ambient popping in, FOV zoom, huge stutters, bot spawn hitches at
+            // playback start — all symptoms of the map still loading in). we wait
+            // for every known raid-start staging phase to complete AND for the
+            // bot count to stabilize AND for the sky's TOD_Sky to be initialized,
+            // then do a shader warmup by evaluating the director at t=0 for a
+            // couple of frames so all shaders on the first shot compile off-camera.
+            // capped hard so a broken stage cant hold the intro hostage.
             {
-                float barrier = Time.realtimeSinceStartup + 12f;
-                while (Time.realtimeSinceStartup < barrier
-                       && !(TerminalAcoustics.AmbientStaged && TerminalWeather.Staged))
+                float barrier = Time.realtimeSinceStartup + 30f;
+                var gw = Singleton<GameWorld>.Instance;
+                int lastBotCount = -1;
+                float botsStableAt = Time.realtimeSinceStartup;
+                const float BotStableFor = 3f;
+                bool AmbientReady() => TerminalAcoustics.AmbientStaged;
+                bool WeatherReady() => TerminalWeather.Staged;
+                bool SkyReady() { try { var s = UnityEngine.Object.FindObjectOfType<TOD_Sky>(); return s != null && s.Initialized; } catch { return false; } }
+                bool BotsReady()
+                {
+                    int n = 0;
+                    try
+                    {
+                        var w = Singleton<GameWorld>.Instance;
+                        if (w?.AllAlivePlayersList != null) n = w.AllAlivePlayersList.Count;
+                    }
+                    catch { }
+                    if (n != lastBotCount) { lastBotCount = n; botsStableAt = Time.realtimeSinceStartup; return false; }
+                    return Time.realtimeSinceStartup - botsStableAt >= BotStableFor;
+                }
+                while (Time.realtimeSinceStartup < barrier)
+                {
+                    if (AmbientReady() && WeatherReady() && SkyReady() && BotsReady()) break;
                     yield return null;
-                // settle frames: let the reactivation Awakes finish off-camera
+                }
+                // pre-apply lights so ambient is already correct on the first drawn
+                // frame instead of popping in on the next 30-frame tick
+                try { TerminalLights.ApplyAmbient(); } catch { }
+                // sync the real camera to the rig up-front so the FOV matches even
+                // before the first onPreCull fires — no snap-in on frame 1
+                try
+                {
+                    float wantFov = _rigCam.fieldOfView;
+                    if (wantFov > 1f && wantFov < 179f) _realCam.fieldOfView = wantFov;
+                    _realCam.transform.SetPositionAndRotation(_rigCam.transform.position, _rigCam.transform.rotation);
+                }
+                catch { }
+                // shader warmup: evaluate the director at t=0 so every material on
+                // the opening frame compiles now (offscreen, we havent Play()d yet)
+                try { _director.time = 0.001; _director.Evaluate(); } catch { }
+                yield return null;
                 yield return null;
                 yield return null;
                 Plugin.Log.LogInfo($"[IntroCutscene] staging barrier released — ambient={TerminalAcoustics.AmbientStaged} "
-                    + $"weather={TerminalWeather.Staged} (waited {(12f - (barrier - Time.realtimeSinceStartup)):0.0}s)");
+                    + $"weather={TerminalWeather.Staged} sky={SkyReady()} bots={lastBotCount} "
+                    + $"(waited {(30f - (barrier - Time.realtimeSinceStartup)):0.0}s)");
             }
 
             _director.extrapolationMode = DirectorWrapMode.Hold; // no loop surprises
@@ -356,6 +393,7 @@ namespace Manimal.Terminal
             _director.timeUpdateMode = DirectorUpdateMode.DSPClock;
             TerminalAcoustics.SetAmbientSilenced(true); // the timeline owns these seconds
             _director.Play();
+            TerminalSubtitles.Show("intro_nocase", _director);
             Plugin.Log.LogInfo($"[IntroCutscene] playing '{_director.playableAsset.name}' " +
                                $"({_director.duration:0.0}s, unskippable)");
             yield return Fade(1f, 0f);
@@ -458,6 +496,7 @@ namespace Manimal.Terminal
         {
             if (_restored) return;
             _restored = true;
+            TerminalSubtitles.Hide();
             if (FinishedAt < 0f) FinishedAt = Time.realtimeSinceStartup;
             if (_driving) { Camera.onPreCull -= DriveCamera; _driving = false; }
             _lastFov = -1f;

@@ -107,8 +107,12 @@ namespace Manimal.Terminal
                     var lods = g.GetLODs();
                     if (lods == null || lods.Length == 0) continue;
                     int last = lods.Length - 1;
-                    if (lods[last].screenRelativeTransitionHeight <= LootCullHeight) continue;
-                    lods[last].screenRelativeTransitionHeight = LootCullHeight;
+                    // clamp under the previous tier — equal-or-greater heights make
+                    // SetLODs throw a doubly-logged error per call (endgame chop hunt)
+                    float ceil = last > 0 ? lods[last - 1].screenRelativeTransitionHeight - 0.001f : 1f;
+                    float want = Mathf.Clamp(LootCullHeight, 0f, Mathf.Max(0f, ceil));
+                    if (lods[last].screenRelativeTransitionHeight <= want) continue;
+                    lods[last].screenRelativeTransitionHeight = want;
                     g.SetLODs(lods);
                     _lodFixed++;
                 }

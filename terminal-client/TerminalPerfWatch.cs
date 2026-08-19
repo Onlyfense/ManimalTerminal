@@ -41,9 +41,12 @@ namespace Manimal.Terminal
             if (_water != null)
                 foreach (var r in _water)
                     if (r && r.isVisible) waterVis++;
+            int artyZones = -1;
+            try { artyZones = TerminalArtillery.ActiveZonesDict()?.Count ?? -1; } catch { }
             Plugin.Log.LogWarning($"[Perf] {dt * 1000f:F0}ms frame (spike #{_spikes})"
                 + $" at {(p != null ? p.Position.ToString() : "?")}, {alive} alive"
-                + $", water visible: {waterVis}");
+                + $", water visible: {waterVis}"
+                + $", artyZones={artyZones} pump={(TerminalArtillery.Pumping ? "on" : "off")}");
         }
     }
 }

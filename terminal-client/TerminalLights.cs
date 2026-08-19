@@ -185,7 +185,11 @@ namespace Manimal.Terminal
     				{
     					ApplyLamps();
     				}
-    				if (Plugin.AmbientIntensity.Value != _lastAmbient)
+    				if (Plugin.AmbientIntensity.Value != _lastAmbient
+    					|| Plugin.AmbientColorOverride.Value != _lastColorOverride
+    					|| Plugin.AmbientColorR.Value != _lastColorR
+    					|| Plugin.AmbientColorG.Value != _lastColorG
+    					|| Plugin.AmbientColorB.Value != _lastColorB)
     				{
     					ApplyAmbient();
     				}
@@ -198,6 +202,14 @@ namespace Manimal.Terminal
     	private static float _lastLamp = -1f;
 
     	private static float _lastAmbient = -1f;
+
+    	private static bool _lastColorOverride;
+
+    	private static float _lastColorR = -1f;
+
+    	private static float _lastColorG = -1f;
+
+    	private static float _lastColorB = -1f;
 
     	private static float _lastLightCull = -1f;
 
@@ -889,9 +901,18 @@ namespace Manimal.Terminal
     		//IL_00c2: Unknown result type (might be due to invalid IL or missing references)
     		//IL_00c7: Unknown result type (might be due to invalid IL or missing references)
     		float num = (_lastAmbient = Plugin.AmbientIntensity.Value);
+    		_lastColorOverride = Plugin.AmbientColorOverride.Value;
+    		_lastColorR = Plugin.AmbientColorR.Value;
+    		_lastColorG = Plugin.AmbientColorG.Value;
+    		_lastColorB = Plugin.AmbientColorB.Value;
     		float num2 = 0.16f * num;
     		Color val2 = default(Color);
-    		if ((bool)_sky && _sky.Initialized)
+    		if (_lastColorOverride)
+    		{
+    			// user-picked tint (F12 sliders), scaled by intensity like the sky path
+    			val2 = new Color(_lastColorR * num, _lastColorG * num, _lastColorB * num, 1f);
+    		}
+    		else if ((bool)_sky && _sky.Initialized)
     		{
     			try
     			{
