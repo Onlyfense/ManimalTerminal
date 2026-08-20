@@ -107,7 +107,6 @@ namespace Manimal.Terminal
         private void Update()
         {
             TerminalPerfWatch.OursBegin();
-            TerminalStencilLite.Tick();
             TerminalGatesExplosion.TryStage();
             TerminalCraneFalling.TryStage();
             TerminalFinalExit.TryStage();
