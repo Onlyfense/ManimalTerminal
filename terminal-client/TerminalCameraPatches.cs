@@ -125,17 +125,61 @@ namespace Manimal.Terminal
 
     // Cam2 ships neither RainScreenDrops nor ScreenWater and RainController's camera
     // hookup NREs on them, aborting the whole raid init through
-    // PlayerCameraController.Create. every later use of the pair is null-guarded
-    // (verified on icebreaker), so the only loss is raindrops-on-visor.
+    // PlayerCameraController.Create. the swallow saves the raid — but the rain
+    // never re-hooks and the raid runs rainless with broken half-init droplets
+    // (2026-08-19, post-icebreaker session: the fallback cam path fired on the
+    // MAIN raid camera). so: swallow AND retry the hookup once the real camera
+    // with the rain components exists.
     [HarmonyPatch(typeof(RainController), "method_0")]
     internal static class Patch_RainScreenOnCam2
     {
-        private static Exception Finalizer(Exception __exception)
+        private static Exception Finalizer(RainController __instance, Exception __exception)
         {
             if (__exception == null) return null;
             if (!TerminalGate.On) return __exception;
-            Plugin.Log.LogWarning($"[RaidFix] RainController camera hookup failed on fallback cam (visor drops off): {__exception.Message}");
+            Plugin.Log.LogWarning($"[RaidFix] RainController camera hookup failed (visor drops off): {__exception.Message} — retry armed");
+            try
+            {
+                var go = new GameObject("Terminal_RainRehook");
+                go.AddComponent<RainRehookHost>().Rain = __instance;
+            }
+            catch { }
             return null;
+        }
+    }
+
+    internal class RainRehookHost : MonoBehaviour
+    {
+        public RainController Rain;
+        private float _deadline;
+
+        private void Start() => _deadline = Time.realtimeSinceStartup + 30f;
+
+        private void Update()
+        {
+            if (!Rain || Time.realtimeSinceStartup > _deadline) { Done(false); return; }
+            var cam = CameraClass.Instance?.Camera;
+            if (cam == null) return;
+            // the real FPS camera ships the rain screen components — retry only
+            // once they exist so method_0 has something to hook
+            if (cam.GetComponent<RainScreenDrops>() == null) return;
+            try
+            {
+                HarmonyLib.AccessTools.Method(typeof(RainController), "method_0")?.Invoke(Rain, null);
+                Plugin.Log.LogInfo("[RaidFix] RainController re-hooked to the real camera — rain restored");
+                Done(true);
+            }
+            catch (Exception e)
+            {
+                Plugin.Log.LogWarning($"[RaidFix] rain re-hook failed: {e.InnerException?.Message ?? e.Message}");
+                Done(false);
+            }
+        }
+
+        private void Done(bool ok)
+        {
+            if (!ok && Rain) Plugin.Log.LogWarning("[RaidFix] rain re-hook gave up — raid stays rainless");
+            Destroy(gameObject);
         }
     }
 

@@ -106,6 +106,7 @@ namespace Manimal.Terminal
 
         private void Update()
         {
+            TerminalPerfWatch.OursBegin();
             TerminalStencilLite.Tick();
             TerminalGatesExplosion.TryStage();
             TerminalCraneFalling.TryStage();
@@ -116,6 +117,7 @@ namespace Manimal.Terminal
             TerminalDryPlanes.TryStage();
             TerminalRainAudio.TryStage();
             TerminalArtillery.Pump();
+            TerminalPerfWatch.OursEnd();
             TerminalPerfWatch.Tick();
             TerminalSceneScrub.TickLateSweep();
             TerminalAcoustics.TickDiagnostics();
