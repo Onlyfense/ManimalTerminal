@@ -127,7 +127,6 @@ namespace Manimal.Terminal
     			{
     				TerminalWeather.TryStage();
     				TerminalWeather.TickProbe();
-					TerminalStencils.TryStage();
     			}
     			TickNightSky();
     			if (Plugin.SpatialAudio.Value)
@@ -916,19 +915,13 @@ namespace Manimal.Terminal
     		{
     			try
     			{
+    				// sky HUE only, luminance normalized out — the sky-luminance
+    				// variant was removed 2026-08-19 (double-counted the darkness)
     				Color val = _sky.SampleEquatorColor();
-    				if (Plugin.AmbientSkyLuminance.Value)
-    				{
-    					val2 = val * num;
-    					val2.a = 1f;
-    				}
-    				else
-    				{
-    					float num3 = Mathf.Max(val.r, Mathf.Max(val.g, val.b));
-    					Color val3 = (Color)((num3 > 0.005f) ? (val / num3) : new Color(0.85f, 0.85f, 1f));
-    					val2 = val3 * num2;
-    					val2.a = 1f;
-    				}
+    				float num3 = Mathf.Max(val.r, Mathf.Max(val.g, val.b));
+    				Color val3 = (Color)((num3 > 0.005f) ? (val / num3) : new Color(0.85f, 0.85f, 1f));
+    				val2 = val3 * num2;
+    				val2.a = 1f;
     			}
     			catch
     			{

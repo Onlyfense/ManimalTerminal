@@ -184,8 +184,6 @@ namespace Manimal.Terminal
                         // has all its retail inputs — the cel-shading raid ran it with
                         // Tonemapping stacked on top and NO stencils. those two stay
                         // forced off.
-                        if (tn == "AmbientLight" && Plugin.AmbientStencil.Value) { }
-                        else
                         {
                             b.enabled = false;
                             disabled++;
