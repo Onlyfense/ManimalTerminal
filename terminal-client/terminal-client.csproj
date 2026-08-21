@@ -73,6 +73,12 @@
     <Reference Include="UnityEngine.ImageConversionModule">
       <HintPath>$(SPTPath)\EscapeFromTarkov_Data\Managed\UnityEngine.ImageConversionModule.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEngine.UnityWebRequestModule">
+      <HintPath>$(SPTPath)\EscapeFromTarkov_Data\Managed\UnityEngine.UnityWebRequestModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UnityWebRequestAudioModule">
+      <HintPath>$(SPTPath)\EscapeFromTarkov_Data\Managed\UnityEngine.UnityWebRequestAudioModule.dll</HintPath>
+    </Reference>
     <Reference Include="Sirenix.Serialization">
       <HintPath>$(SPTPath)\EscapeFromTarkov_Data\Managed\Sirenix.Serialization.dll</HintPath>
     </Reference>
@@ -132,9 +138,17 @@
     <Copy SourceFiles="$(ProjectDir)lib\PerfectCullingRuntime.dll" DestinationFolder="$(SPTPath)\BepInEx\plugins\ManimalTerminal" Condition="Exists('$(ProjectDir)lib\PerfectCullingRuntime.dll')" />
     <!-- data sidecars ride next to the dll — load paths are assembly-relative -->
     <Copy SourceFiles="@(PluginDataFiles)" DestinationFiles="@(PluginDataFiles->'$(SPTPath)\BepInEx\plugins\ManimalTerminal\plugin-data\%(RecursiveDir)%(Filename)%(Extension)')" />
-    <!-- keep the fika coop-test install's dll current too (payload/bundles mirrored by hand) -->
-    <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(FikaPath)\BepInEx\plugins\ManimalTerminal" Condition="Exists('$(FikaPath)')" />
-    <Copy SourceFiles="@(PluginDataFiles)" DestinationFiles="@(PluginDataFiles->'$(FikaPath)\BepInEx\plugins\ManimalTerminal\plugin-data\%(RecursiveDir)%(Filename)%(Extension)')" Condition="Exists('$(FikaPath)')" />
+    <!-- mirror the build to every non-fika SPT install so testers on any of
+         them get the same DLL + plugin-data in one build. fika install is
+         skipped by design — its client is co-op-only, needs a hand mirror
+         with its own bundles. each block conditions on the install existing
+         AND being different from $(SPTPath) (already handled above). -->
+    <Copy SourceFiles="$(TargetPath)"                     DestinationFolder="D:\SPTDev\BepInEx\plugins\ManimalTerminal"        Condition="Exists('D:\SPTDev') And '$(SPTPath)' != 'D:\SPTDev'" />
+    <Copy SourceFiles="@(PluginDataFiles)" DestinationFiles="@(PluginDataFiles->'D:\SPTDev\BepInEx\plugins\ManimalTerminal\plugin-data\%(RecursiveDir)%(Filename)%(Extension)')"        Condition="Exists('D:\SPTDev') And '$(SPTPath)' != 'D:\SPTDev'" />
+    <Copy SourceFiles="$(TargetPath)"                     DestinationFolder="D:\SPTDevSonic\BepInEx\plugins\ManimalTerminal"    Condition="Exists('D:\SPTDevSonic') And '$(SPTPath)' != 'D:\SPTDevSonic'" />
+    <Copy SourceFiles="@(PluginDataFiles)" DestinationFiles="@(PluginDataFiles->'D:\SPTDevSonic\BepInEx\plugins\ManimalTerminal\plugin-data\%(RecursiveDir)%(Filename)%(Extension)')"    Condition="Exists('D:\SPTDevSonic') And '$(SPTPath)' != 'D:\SPTDevSonic'" />
+    <Copy SourceFiles="$(TargetPath)"                     DestinationFolder="D:\SPTFreshDev\BepInEx\plugins\ManimalTerminal"    Condition="Exists('D:\SPTFreshDev') And '$(SPTPath)' != 'D:\SPTFreshDev'" />
+    <Copy SourceFiles="@(PluginDataFiles)" DestinationFiles="@(PluginDataFiles->'D:\SPTFreshDev\BepInEx\plugins\ManimalTerminal\plugin-data\%(RecursiveDir)%(Filename)%(Extension)')"    Condition="Exists('D:\SPTFreshDev') And '$(SPTPath)' != 'D:\SPTFreshDev'" />
   </Target>
 
   <!-- per-build: DLL-ONLY update zip, for testers who already have the full install.

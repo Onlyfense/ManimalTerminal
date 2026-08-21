@@ -35,15 +35,10 @@ namespace Manimal.Terminal
         internal static ConfigEntry<float> AmbientColorR;
         internal static ConfigEntry<float> AmbientColorG;
         internal static ConfigEntry<float> AmbientColorB;
-        internal static ConfigEntry<bool> AmbientSkyLuminance;
         internal static ConfigEntry<bool> LampShadows;
         internal static ConfigEntry<float> LightCullDistance;
-        internal static ConfigEntry<float> LodBiasClamp;
-        internal static ConfigEntry<float> LodCullFloor;
-        internal static ConfigEntry<float> LodCullNearFloor;
-        internal static ConfigEntry<float> LodCullNearRadius;
-        internal static ConfigEntry<float> LodCullNearRadiusIndoor;
-        internal static ConfigEntry<float> LodCellSize;
+        // LOD bias/cull config entries removed (2026-08-20) — terminal now
+        // inherits the player's own LOD settings verbatim, no clamp or sweep
         internal static ConfigEntry<float> LootCullRadius;
         internal static ConfigEntry<string> CamDonorSkip;
         internal static ConfigEntry<bool> DevMode;
@@ -72,18 +67,16 @@ namespace Manimal.Terminal
         internal static ConfigEntry<float> SkyHourOffset;
         internal static ConfigEntry<float> SkyNightStrength;
         internal static ConfigEntry<bool> WeatherStack;
-        internal static ConfigEntry<bool> AmbientStencil;
-        internal static ConfigEntry<bool> StencilDarken;
         internal static ConfigEntry<bool> GatesExplosion;
         internal static ConfigEntry<bool> CraneFalling;
         internal static ConfigEntry<bool> FinalExit;
         internal static ConfigEntry<bool> Artillery;
         internal static ConfigEntry<bool> PumpStation;
         internal static ConfigEntry<bool> EndingCutscene;
+        internal static ConfigEntry<bool> Epilogue;
+        internal static ConfigEntry<bool> EpilogueTestMode;
         internal static ConfigEntry<bool> IntroCutscene;
         internal static ConfigEntry<bool> IntroCutsceneSkippable;
-        internal static ConfigEntry<float> StencilDarkenIndoor;
-        internal static ConfigEntry<float> StencilDarkenOutdoor;
         internal static ConfigEntry<bool> ForceWeather;
         internal static ConfigEntry<float> WeatherRain;
         internal static ConfigEntry<float> WeatherClouds;
@@ -127,6 +120,11 @@ namespace Manimal.Terminal
             Log = Logger;
             HarmonyInstance = new Harmony(BuildInfo.ModGuid);
 
+            // finalizer guard on Class308.LocalRaidStarted for the 2026-08-20
+            // NRE at raid start — see TerminalCrashGuard.cs comments. runs
+            // before the config binds so any resolution failure logs early.
+            TerminalCrashGuard.TryPatch(HarmonyInstance);
+
             // lamps serialize at intensity 0 because the runtime lamp SYSTEM drives
             // them (LampController/SceneLights) and its controllers rip dead — tarkov
             // has no baked lighting (user correction 2026-08-15; earlier "lightmaps"
@@ -140,9 +138,7 @@ namespace Manimal.Terminal
             LampIntensity = Config.Bind("Terminal", "LampIntensity", 2.0f,
                 new ConfigDescription("brightness of the revived lamp lights (0 = lights fully OFF — a big GPU win, emissives carry the look)",
                     new AcceptableValueRange<float>(0f, 12f)));
-            AmbientSkyLuminance = Config.Bind("Terminal", "AmbientSkyLuminance", true,
-                new ConfigDescription("use the sky's LITERAL brightness for ambient (retail model — near-black at night, the authored lamps carry the scene). off = sky tint at a fixed playable brightness. flip live to A/B"));
-            AmbientIntensity = Config.Bind("Terminal", "AmbientIntensity", 1.8f,
+            AmbientIntensity = Config.Bind("Terminal", "AmbientIntensity", 1.6f,
                 new ConfigDescription("flat ambient fill light — lifts shadowed areas out of black (no real bounce without a bake)",
                     new AcceptableValueRange<float>(0f, 3f)));
             AmbientColorOverride = Config.Bind("Terminal", "AmbientColorOverride", false,
@@ -155,30 +151,15 @@ namespace Manimal.Terminal
                 new ConfigDescription("ambient blue (0-1) when AmbientColorOverride is on", new AcceptableValueRange<float>(0f, 1f)));
             LampShadows = Config.Bind("Terminal", "LampShadows", false,
                 new ConfigDescription("let the revived lamps cast realtime shadows — much prettier, much heavier"));
-            // LOD CULL FLOOR SET, ported from icebreaker. defaults are deliberately LOOSER
-            // than the ship's: terminal is a big open map, so the near bubble has to cover
-            // real sightlines rather than a corridor, and the cells are coarser to keep the
-            // re-tier sweep cheap over that area. all live except LodCellSize.
-            LodBiasClamp = Config.Bind("Terminal", "LodBiasClamp", 1.0f,
-                new ConfigDescription("caps unity's global LOD bias (LIVE). EFT's own slider floors at 2.0, which on a ripped map means props render at full detail far past where they matter. lower = more fps and earlier mesh swaps, higher = retail look. -1 = leave the game's value alone. NOTE this also shrinks every LOD CULL distance, which is what the floors below exist to compensate for",
-                    new AcceptableValueRange<float>(-1f, 4f)));
-            LodCullFloor = Config.Bind("Terminal", "LodCullFloor", 0.05f,
-                new ConfigDescription("FAR-tier cull cap (LIVE): past LodCullNearRadius, props stop rendering below this screen fraction. higher = culls more = more fps but more visible popping at distance. -1 = retail heights",
-                    new AcceptableValueRange<float>(-1f, 0.2f)));
-            LodCullNearFloor = Config.Bind("Terminal", "LodCullNearFloor", 0.006f,
-                new ConfigDescription("NEAR-tier cull cap (LIVE): inside the near radius, props only vanish below this screen fraction — the anti-dither guarantee for scenery around you. -1 = retail heights near you",
-                    new AcceptableValueRange<float>(-1f, 0.05f)));
-            LodCullNearRadius = Config.Bind("Terminal", "LodCullNearRadius", 80f,
-                new ConfigDescription("meters around the camera that count as the near tier while OUTDOORS (LIVE). terminal's open sightlines need far more than a ship corridor, so this starts high — lower it for fps, raise it if scenery pops in ahead of you",
-                    new AcceptableValueRange<float>(5f, 250f)));
-            LodCullNearRadiusIndoor = Config.Bind("Terminal", "LodCullNearRadiusIndoor", 35f,
-                new ConfigDescription("same, but while the camera is INDOORS (LIVE) — interiors have short sightlines, so a tighter bubble lets the far tier eat everything outside the room. drives off retail's EnvironmentManager/IndoorTriggers",
-                    new AcceptableValueRange<float>(5f, 250f)));
-            LodCellSize = Config.Bind("Terminal", "LodCellSize", 30f,
-                new ConfigDescription("size in meters of the cells the map is bucketed into for tiering. bigger = fewer cells and a cheaper re-tier sweep, but coarser granularity at the radius edge. terminal defaults double the ship's 15m. NEEDS A RAID RESTART — cells are quantized around this at build",
-                    new AcceptableValueRange<float>(10f, 100f)));
-            LootCullRadius = Config.Bind("Terminal", "LootCullRadius", 40f,
-                new ConfigDescription("meters at which loose LOOT stops rendering (LIVE). loot is exempted from the LOD cull entirely and culled by this radius instead, so it is visible at EVERY range inside it and simply gone outside — no fading, no dithering, no pop-in as you walk. LodBiasClamp shrinks every loot cull distance, which is what this compensates for. a hard cutoff is CHEAPER than hundreds of loot models rendering to subpixel size. 0 = off (loot follows the global LOD bias again)",
+            // LOD bias-clamp + cull-floor + cell tiering entries were removed
+            // 2026-08-20 — icebreaker's setup expected sub-2 bias with cull
+            // floors compensating, but on terminal's harbor the per-cell
+            // re-tier sweep spiked the GPU periodically without measurable
+            // fps benefit at retail bias. now inherits the player's own LOD
+            // settings verbatim. LootCullRadius stays — it's a hard cutoff,
+            // not a tiering system, and still helps with hundreds of props.
+            LootCullRadius = Config.Bind("Terminal", "LootCullRadius", 60f,
+                new ConfigDescription("meters at which loose LOOT stops rendering (LIVE). a hard cutoff — loot is visible at EVERY range inside it and simply gone outside, no fading. cheaper than hundreds of loot models rendering to subpixel size. 0 = off (loot follows the global LOD bias again)",
                     new AcceptableValueRange<float>(0f, 250f)));
             LightCullDistance = Config.Bind("Terminal", "LightCullDistance", 25f,
                 new ConfigDescription("meters at which lamp lights finish fading to zero (live, lowering only — raising needs a raid restart). tightens bsg's native 50-80m fade window; lower = more fps + darker distance, 80 = authored retail look",
@@ -218,22 +199,9 @@ namespace Manimal.Terminal
             SkyNightStrength = Config.Bind("Terminal", "SkyNightStrength", 1f,
                 new ConfigDescription("how hard to pin the sky to NIGHT between 21:00-06:00. the game's own ToDController (which normally darkens the atmosphere as the sun sets) lives on the scrubbed WeatherController, so without this the sky keeps the scene's authored daytime constants. 0 = leave the sky to the authored values",
                     new AcceptableValueRange<float>(0f, 1f)));
-            AmbientStencil = Config.Bind("Terminal", "AmbientStencil", true,
-                new ConfigDescription("restore retail's indoor/outdoor ambient masking: StencilShadow volumes + AnalyticSource portals feed the AmbientLight screen pass, so interiors stop receiving full sky ambient (the armory-cooking fix, done the retail way)"));
-            // stencil-lite: the KEPT piece of the shelved tushonka experiment —
-            // per-pixel indoor darkening of the flat fill using the authored
-            // stencil volume meshes + sidecar darkness values. independent of
-            // (and preferred over) the AmbientStencil retail-pass experiment.
-            StencilDarken = Config.Bind("Terminal", "StencilDarken", true,
-                new ConfigDescription("darken the flat ambient fill inside the authored stencil volumes (per-pixel, pre-lighting — indoor lamp pools untouched). outdoors stays at AmbientIntensity brightness. needs terminal_fx.bundle in the plugin folder"));
-            // split per authored group (Terminal_Stencil_Indoor / _Outdoor) — new key
-            // names on purpose so the old StencilDarkenStrength's saved value dies
-            StencilDarkenIndoor = Config.Bind("Terminal", "StencilDarkenIndoor", 1f,
-                new ConfigDescription("scale on the INDOOR stencil volumes' authored darkness alpha. 1 = authored; higher = blacker interiors. applies live",
-                    new AcceptableValueRange<float>(0f, 1.5f)));
-            StencilDarkenOutdoor = Config.Bind("Terminal", "StencilDarkenOutdoor", 1f,
-                new ConfigDescription("scale on the OUTDOOR stencil volumes' authored darkness alpha (container shadows, tower shade). applies live",
-                    new AcceptableValueRange<float>(0f, 1.5f)));
+            // stencil ambient masking + darken bindings removed (2026-08-20) —
+            // the underlying system was ripped in the "remove stencilslop"
+            // commit, PR #1 briefly re-added the config surface only
             AmbientSplines = Config.Bind("Terminal", "AmbientSplines", true,
                 new ConfigDescription("run the ambient spline emitter stack (sea/wind/rain movers). turn OFF for one raid as an A/B test for the periodic frame chop — onset correlates with ambient staging"));
             SoundRigFirefight = Config.Bind("Terminal", "SoundRigFirefight", true,
@@ -258,6 +226,10 @@ namespace Manimal.Terminal
                 new ConfigDescription("SPACE skips the intro cutscene"));
             EndingCutscene = Config.Bind("Terminal", "EndingCutscene", true,
                 new ConfigDescription("play the retail ending cutscene when extracting at the Zubr (needs the ending scene in the bundle — Author 21B + scene rebuild). SPACE skips; the raid ends Survived either way"));
+            Epilogue = Config.Bind("Terminal", "Epilogue", true,
+                new ConfigDescription("after the ending cutscene + survived jingle, play the retail 6-slide epilogue screen (medal + narrative + stats + achievements + rewards + killfeed + thanks) layered over the normal results screen. off = go straight to the normal results"));
+            EpilogueTestMode = Config.Bind("Terminal", "EpilogueTestMode", false,
+                new ConfigDescription("DEV: arm the epilogue screen on ANY survived extract (Factory works). skips the ending cutscene entirely — just extract, epilogue fires. turn OFF for normal play or every raid ends in the completion-results screen"));
             WeatherStack = Config.Bind("Terminal", "WeatherStack", true,
                 new ConfigDescription("rebuild retail's weather components (WeatherController/RainController/RainFall/Splash/Wind/Clouds) — without these the map CANNOT render rain at all. turn off if weather misbehaves"));
             ForceWeather = Config.Bind("Terminal", "ForceWeather", true,
@@ -286,8 +258,8 @@ namespace Manimal.Terminal
                 new ConfigDescription("dump every audibly-playing source near the player to the log (the what-is-that-noise button)"));
             GearConfiscation = Config.Bind("Terminal", "GearConfiscation", true,
                 new ConfigDescription("port security takes your headgear, weapons, backpack and carried items at raid start — locked in one random equipment cabinet (rig/armor/belt stay on, secured container untouched)"));
-            NvgAmbient = Config.Bind("Terminal", "NvgAmbient", 2.5f,
-                new ConfigDescription("night-vision ambient boost multiplier (x the flat ambient fill) — retail authors the NVG hemisphere at 0/black and relied on lightmaps we dont have",
+            NvgAmbient = Config.Bind("Terminal", "NvgAmbient", 1.0f,
+                new ConfigDescription("MULTIPLIER on AmbientIntensity while NVGs are on (1.0 = no boost, matches day-time ambient; 2.0 = twice as bright under NVGs; etc). retail authors the NVG hemisphere at 0/black and relied on lightmaps we dont have — this scales our flat fill for the NVG-on frames only",
                     new AcceptableValueRange<float>(0.5f, 8f)));
             BdHangarSquad = Config.Bind("Terminal", "BdHangarSquad", 4,
                 new ConfigDescription("total black division holding the keycard hangar — the TB8 wave under-delivers past the zone's 2 born positions, the topper force-spawns the shortfall",
@@ -410,6 +382,8 @@ namespace Manimal.Terminal
             Patch(typeof(TerminalFinalExit.Patch_BuildZubrExit));
             Patch(typeof(Patch_PumpSwitchActions));
             Patch(typeof(TerminalEndingCutscene.Patch_InterceptExtraction));
+            Patch(typeof(TerminalEpilogueScreen.Patch_HijackExitStatus));
+            Patch(typeof(TerminalEpilogueScreen.Patch_TestArmOnAnyExit));
             Patch(typeof(TerminalLootBind.Patch_DeferLootBind));
             Patch(typeof(TerminalAudioTeardown.Patch_AmbientDisposeArmor));
             Patch(typeof(TerminalAudioTeardown.Patch_BlendDisposeArmor));
