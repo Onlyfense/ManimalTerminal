@@ -86,52 +86,17 @@ namespace Manimal.Terminal
             // loot tracking is per-raid state — a stale list from the last raid would hold
             // destroyed renderers and a stale hidden flag
             TerminalLootBounds.ResetForRaid();
-            // the LODGroup census is its own multi-frame sweep (it yields every 4ms),
-            // so it runs after the culling attach rather than racing it
-            yield return Instance.StartCoroutine(TerminalLodCullFloor.Apply());
+            // LOD cull-floor + bias-clamp system removed (user call 2026-08-20):
+            // with bias unclamped there's nothing to compensate for, and the
+            // per-cell re-tier sweep was the source of the periodic GPU spikes
+            // on the harbor. terminal now inherits the player's own LOD
+            // settings verbatim. loot bounds still culls (hard-cutoff, no tiers).
         }
 
-        // LOD BIAS + CULL FLOORS (ported from icebreaker). the bias is re-asserted every
-        // frame on purpose: EFT's own settings apply writes QualitySettings.lodBias from
-        // GameGraphicsClass whenever the graphics menu is touched, so a one-shot write
-        // silently loses the moment a player opens settings mid-raid. -1 means hands off.
-        private static float _lastBiasWritten = float.NaN;
-        private static float _biasOrig = -1f;
-
-        // QualitySettings is GLOBAL engine state — it survives scene unload, and vanilla
-        // only rewrites lodBias at boot or on a settings apply. leaving the clamp set
-        // after a terminal raid gives every OTHER map our bias and its pop-ins until the
-        // player restarts (icebreaker shipped exactly this bug, field-reported 08-18).
-        // called from the !TerminalGate.On branch of Update.
-        private static void RestoreLodBias()
+        private void TickLootBounds()
         {
-            if (_biasOrig < 0f) return;
-            QualitySettings.lodBias = _biasOrig;
-            Plugin.Log.LogInfo($"[LOD] left the terminal — lodBias restored to the game's {_biasOrig:F2}");
-            _biasOrig = -1f;
-            _lastBiasWritten = float.NaN;
-        }
-
-        private void TickLodClamps()
-        {
-            try
-            {
-                float want = Plugin.LodBiasClamp.Value;
-                if (want > 0f)
-                {
-                    if (_biasOrig < 0f) _biasOrig = QualitySettings.lodBias; // capture BEFORE the first write
-                    // only write when it actually differs — this runs every frame
-                    if (!Mathf.Approximately(QualitySettings.lodBias, want) || !Mathf.Approximately(_lastBiasWritten, want))
-                    {
-                        QualitySettings.lodBias = want;
-                        _lastBiasWritten = want;
-                    }
-                }
-                else RestoreLodBias(); // config flipped to hands-off mid-raid
-                if (CameraRef != null) TerminalLodCullFloor.Tick(CameraRef.transform.position);
-                TerminalLootBounds.Tick();
-            }
-            catch (Exception e) { Plugin.Log.LogWarning($"[LodCullFloor] tick failed: {e.Message}"); }
+            try { TerminalLootBounds.Tick(); }
+            catch (Exception e) { Plugin.Log.LogWarning($"[LootBounds] tick failed: {e.Message}"); }
         }
 
         private void Update()
@@ -141,9 +106,9 @@ namespace Manimal.Terminal
             if (UnityEngine.Input.GetKeyDown(KeyCode.F8))
                 TerminalEnvDump.Dump(TerminalGate.On ? "terminal" : "vanilla");
 
-            if (!TerminalGate.On) { RestoreLodBias(); return; }
+            if (!TerminalGate.On) return;
             _frames++;
-            TickLodClamps();
+            TickLootBounds();
             TickPcDriver();
             DrainPcGroupToggles();
             DrainPcToggles();

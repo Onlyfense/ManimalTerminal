@@ -52,6 +52,7 @@ namespace Manimal.Terminal
                 TerminalArtillery.ResetForRaid();
                 TerminalPumpStation.ResetForRaid();
                 TerminalEndingCutscene.ResetForRaid();
+                TerminalEpilogueScreen.ResetForRaid();
                 TerminalWater.ResetForRaid();
                 TerminalLootBind.ResetForRaid();
                 TerminalDryPlanes.ResetForRaid();

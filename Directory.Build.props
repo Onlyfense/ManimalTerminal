@@ -1,11 +1,11 @@
 <Project>
   <!-- single source of truth for version + identity, per manimal mod conventions -->
   <PropertyGroup>
-    <ModVersion>0.1.0</ModVersion>
+    <ModVersion>0.1.1</ModVersion>
     <ModGuid>com.manimal.terminal</ModGuid>
     <ModUsername>Manimal</ModUsername>
     <ModDisplayName>Terminal</ModDisplayName>
-    <SPTPath>D:\SPTDev</SPTPath>
+    <SPTPath>D:\SPTFreshDev</SPTPath>
     <FikaPath>D:\SPTDevFika</FikaPath>
   </PropertyGroup>
 </Project>

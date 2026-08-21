@@ -750,6 +750,11 @@ namespace Manimal.Terminal
                 Plugin.Log.LogInfo($"[Ending] raid end released ({how})");
             }
             catch (Exception e) { Plugin.Log.LogError($"[Ending] releasing Stop FAILED ({how}): {e}"); }
+            // arm the epilogue overlay — it'll wait for the survived jingle, then
+            // layer over the results screen. DontDestroyOnLoad'd, so it survives
+            // this GO being torn down with the raid scene.
+            try { TerminalEpilogueScreen.ArmAfterExtract(); }
+            catch (Exception e) { Plugin.Log.LogWarning($"[Ending] epilogue arm failed: {e.Message}"); }
             Destroy(gameObject, 1f); // keep our black fade up while the end screen arrives
         }
 

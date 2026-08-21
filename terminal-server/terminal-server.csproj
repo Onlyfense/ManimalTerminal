@@ -24,6 +24,10 @@
       <Private>false</Private>
       <HintPath>$(SPTPath)\SPT\user\mods\MoreBotsServer\MoreBotsServer.dll</HintPath>
     </Reference>
+    <Reference Include="WTT-ServerCommonLib">
+      <Private>false</Private>
+      <HintPath>$(SPTPath)\SPT\user\mods\WTT-ServerCommonLib\WTT-ServerCommonLib.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
   <!--
@@ -42,6 +46,17 @@
     <Copy SourceFiles="@(DbFiles)" DestinationFiles="@(DbFiles->'$(DevModDir)\db\%(RecursiveDir)%(Filename)%(Extension)')" />
     <Copy SourceFiles="$(ProjectDir)bundles.json" DestinationFolder="$(DevModDir)" />
     <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(DevModDir)" />
+    <!-- mirror to every other non-fika install so any of them can run.
+         fika install is skipped by design (co-op only, hand-mirrored). -->
+    <Copy SourceFiles="@(DbFiles)"                   DestinationFiles="@(DbFiles->'D:\SPTDev\SPT\user\mods\ManimalTerminal\db\%(RecursiveDir)%(Filename)%(Extension)')"        Condition="Exists('D:\SPTDev') And '$(SPTPath)' != 'D:\SPTDev'" />
+    <Copy SourceFiles="$(ProjectDir)bundles.json"    DestinationFolder="D:\SPTDev\SPT\user\mods\ManimalTerminal"                                                                Condition="Exists('D:\SPTDev') And '$(SPTPath)' != 'D:\SPTDev'" />
+    <Copy SourceFiles="$(TargetPath)"                DestinationFolder="D:\SPTDev\SPT\user\mods\ManimalTerminal"                                                                Condition="Exists('D:\SPTDev') And '$(SPTPath)' != 'D:\SPTDev'" />
+    <Copy SourceFiles="@(DbFiles)"                   DestinationFiles="@(DbFiles->'D:\SPTDevSonic\SPT\user\mods\ManimalTerminal\db\%(RecursiveDir)%(Filename)%(Extension)')"    Condition="Exists('D:\SPTDevSonic') And '$(SPTPath)' != 'D:\SPTDevSonic'" />
+    <Copy SourceFiles="$(ProjectDir)bundles.json"    DestinationFolder="D:\SPTDevSonic\SPT\user\mods\ManimalTerminal"                                                            Condition="Exists('D:\SPTDevSonic') And '$(SPTPath)' != 'D:\SPTDevSonic'" />
+    <Copy SourceFiles="$(TargetPath)"                DestinationFolder="D:\SPTDevSonic\SPT\user\mods\ManimalTerminal"                                                            Condition="Exists('D:\SPTDevSonic') And '$(SPTPath)' != 'D:\SPTDevSonic'" />
+    <Copy SourceFiles="@(DbFiles)"                   DestinationFiles="@(DbFiles->'D:\SPTFreshDev\SPT\user\mods\ManimalTerminal\db\%(RecursiveDir)%(Filename)%(Extension)')"    Condition="Exists('D:\SPTFreshDev') And '$(SPTPath)' != 'D:\SPTFreshDev'" />
+    <Copy SourceFiles="$(ProjectDir)bundles.json"    DestinationFolder="D:\SPTFreshDev\SPT\user\mods\ManimalTerminal"                                                            Condition="Exists('D:\SPTFreshDev') And '$(SPTPath)' != 'D:\SPTFreshDev'" />
+    <Copy SourceFiles="$(TargetPath)"                DestinationFolder="D:\SPTFreshDev\SPT\user\mods\ManimalTerminal"                                                            Condition="Exists('D:\SPTFreshDev') And '$(SPTPath)' != 'D:\SPTFreshDev'" />
   </Target>
 
 </Project>

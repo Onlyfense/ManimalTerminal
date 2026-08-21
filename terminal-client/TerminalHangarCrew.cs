@@ -109,9 +109,14 @@ namespace Manimal.Terminal
             catch (Exception e) { Plugin.Log.LogWarning($"[HangarCrew] top-up failed: {e.Message}"); }
         }
 
-        // living blackdiv ANYWHERE, not just in the hold box — a wave escort still
-        // pathing toward the hangar is delivered, and counting him out is exactly the
-        // over-spawn. exemplar preference still goes to a bot inside the box.
+        // count blackdiv toward the squad in TWO ways:
+        //   - LIVING blackdiv anywhere on the map (a wave escort still pathing
+        //     toward the hangar is delivered — counting him out is over-spawn)
+        //   - DEAD blackdiv INSIDE the expanded hangar hold (a corpse in the
+        //     hangar is proof the wave landed; the player clearing them before
+        //     the 20s confirmation window shouldn't buy a second squad — bug
+        //     reported 2026-08-20: killed the initial 3, confirmation counted
+        //     0 living → topped up 4 → total 7 arrived)
         private int CountShortfall(out BotOwner exemplar)
         {
             exemplar = null;
@@ -122,11 +127,17 @@ namespace Manimal.Terminal
             int present = 0;
             foreach (var b in FindObjectsOfType<BotOwner>())
             {
-                if (!b || b.IsDead) continue;
+                if (!b) continue;
                 var role = b.Profile?.Info?.Settings?.Role.ToString() ?? "";
                 if (role.IndexOf("blackdiv", StringComparison.OrdinalIgnoreCase) < 0) continue;
+
+                bool alive = !b.IsDead;
+                bool deadInHold = b.IsDead && hold != null && bounds.Contains(b.Position);
+                if (!alive && !deadInHold) continue;
+
                 present++;
-                if (!exemplar || (hold != null && bounds.Contains(b.Position))) exemplar = b;
+                if (!exemplar && alive) exemplar = b;
+                else if (alive && hold != null && bounds.Contains(b.Position)) exemplar = b;
             }
             return Plugin.BdHangarSquad.Value - present;
         }

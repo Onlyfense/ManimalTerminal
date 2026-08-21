@@ -1,0 +1,104 @@
+[
+  {
+    "id": "68a67d00000000000000a501",
+    "imageUrl": "/files/achievement/terminal_survivor.png",
+    "assetPath": "",
+    "rewards": [
+      {
+        "id": "68a67d0000000000000005a1",
+        "unknown": false,
+        "gameMode": [],
+        "availableInGameEditions": [],
+        "illustrationConfig": null,
+        "isHidden": false,
+        "target": "68df9aa45d4e135b130392d0",
+        "type": "CustomizationDirect"
+      },
+      {
+        "id": "68a67d0000000000000005a2",
+        "unknown": false,
+        "gameMode": [],
+        "availableInGameEditions": [],
+        "illustrationConfig": null,
+        "isHidden": false,
+        "target": "68d41e65a706eba9a204ed27",
+        "type": "CustomizationDirect"
+      },
+      {
+        "id": "68a67d0000000000000005a3",
+        "unknown": false,
+        "gameMode": [],
+        "availableInGameEditions": [],
+        "illustrationConfig": null,
+        "isHidden": false,
+        "target": "68df9a925d4e135b130392ce",
+        "type": "CustomizationDirect"
+      },
+      {
+        "id": "68a67d0000000000000005a4",
+        "unknown": false,
+        "gameMode": [],
+        "availableInGameEditions": [],
+        "illustrationConfig": null,
+        "isHidden": false,
+        "target": "68df9abc5d4e135b130392d2",
+        "type": "CustomizationDirect"
+      },
+      {
+        "id": "68a67d0000000000000005a5",
+        "unknown": false,
+        "gameMode": [],
+        "availableInGameEditions": [],
+        "illustrationConfig": null,
+        "isHidden": false,
+        "target": "68df9a053772634bf40f4f18",
+        "type": "CustomizationDirect"
+      },
+      {
+        "id": "68a67d0000000000000005a6",
+        "unknown": false,
+        "gameMode": [],
+        "availableInGameEditions": [],
+        "illustrationConfig": null,
+        "isHidden": false,
+        "target": "68fb638ebe7aff394b016818",
+        "type": "CustomizationDirect"
+      },
+      {
+        "id": "68a67d0000000000000005a7",
+        "unknown": false,
+        "gameMode": [],
+        "availableInGameEditions": [],
+        "illustrationConfig": null,
+        "isHidden": false,
+        "target": "68df97725d4e135b130392c8",
+        "type": "Item",
+        "value": 1
+      }
+    ],
+    "conditions": {
+      "availableForFinish": [
+        {
+          "id": "68a67d0000000000000005b0",
+          "index": 0,
+          "dynamicLocale": false,
+          "visibilityConditions": [],
+          "globalQuestCounterId": "",
+          "parentId": "",
+          "conditionType": "Block"
+        }
+      ],
+      "fail": []
+    },
+    "instantComplete": true,
+    "showNotificationsInGame": true,
+    "showProgress": false,
+    "prefab": "",
+    "rarity": "Legendary",
+    "hidden": false,
+    "showConditions": false,
+    "progressBarEnabled": true,
+    "side": "Pmc",
+    "index": 68501
+  }
+]

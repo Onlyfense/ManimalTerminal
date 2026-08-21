@@ -1,0 +1,73 @@
+{
+  "_comment": "the Terminal AS (Escaped and Survived) epilogue. slides 0-1 are full-screen narrative pages (typewriter text, NEXT hidden until fully typed). slide 2 is the medal-center transition slide (medal in middle, verdict + boxed body + endings-achieved). slides 3-7 use the standard left-panel + right-content layout — the medal + verdict + body are lifted from left_panel across all those slides so the transition from slide 2 to 3 reads as the medal moving into the left panel. text transcribed from streamer screenshots of the retail 1.0 sequence.",
+
+  "background": "background.png",
+  "medal": "EscapedFromTarkovAndSurvived.png",
+  "music": "music.ogg",
+
+  "typewriter_chars_per_second": 45,
+
+  "left_panel": {
+    "verdict_line1": "ESCAPED FROM TARKOV",
+    "verdict_line2": "AND SURVIVED",
+    "body": "You ran, hoping to escape. It seemed like it would all end outside Tarkov — but hell erupted behind you. You didn't know you were part of the chain that destroyed the city. While the ashes were still warm, TerraGroup was reborn — and the world fell at its feet. You survived. But at what cost.",
+    "footer": "Endings Achieved: 1/1"
+  },
+
+  "slides": [
+    {
+      "kind": "narrative_full",
+      "text": "You ran for the sake of survival. You chose the path of a runaway, not a seeker of truth. You thought all would end once you left the cursed city. But behind you, Tarkov erupted in flames.\n\nYou never saw the whole picture. Never realized that your step was a link in the chain that doomed the city."
+    },
+    {
+      "kind": "narrative_full",
+      "text": "And in that moment, while the ashes had yet to settle, TerraGroup rose from the ruins — as if they had awaited this very hour. The world fell to its knees before them, and you were left with nothing. Alive, yet hollow. Saved, yet branded by guilt.\n\nYou survived. But at what cost?"
+    },
+    {
+      "kind": "medal_center",
+      "title": "COMPLETION RESULTS",
+      "subtitle": "REACHED ENDING"
+    },
+    {
+      "kind": "stats",
+      "title": "COMPLETION RESULTS",
+      "subtitle": "REACHED ENDING"
+    },
+    {
+      "kind": "achievements",
+      "title": "COMPLETION RESULTS",
+      "subtitle": "REACHED ENDING"
+    },
+    {
+      "kind": "rewards",
+      "title": "COMPLETION RESULTS",
+      "subtitle": "REACHED ENDING"
+    },
+    {
+      "kind": "killfeed",
+      "title": "COMPLETION RESULTS",
+      "subtitle": "REACHED ENDING"
+    },
+    {
+      "kind": "thanks",
+      "title": "COMPLETION RESULTS",
+      "subtitle": "REACHED ENDING",
+      "body": "Congratulations! You have successfully completed the final trial. The story has been recorded, and the world has returned to the state it was in before the events at the port terminal.\n\nIf you wish to see a different outcome, start again from a clean slate. To do this, you will need to fully reset your profile or obtain Prestige.\n\nIt has been a long and challenging journey. Thank you for seeing it through to the end with us.\n\nAnd a special thank you from Manimal for playing my mod.\n\n;)",
+      "button": "OK"
+    }
+  ],
+
+  "rewards": {
+    "_comment": "each card mirrors the retail PrestigeRewardView layout — icon on the left, kind + name text top-right. `sprite` is a PNG at plugin-data/epilogue/rewards/<file>.png (drop them there). `big` = true makes the card span 2 grid columns (like retail's main-menu-bg cards).",
+    "achievement_id": "68a67d00000000000000a501",
+    "items": [
+      { "id": "68df9abc5d4e135b130392d2", "kind": "Hideout customization", "label": "Survivor's walls",   "sprite": "walls.png",   "big": true },
+      { "id": "68df9a925d4e135b130392ce", "kind": "Hideout customization", "label": "Survivor's ceiling", "sprite": "ceiling.png", "big": true },
+      { "id": "68df9aa45d4e135b130392d0", "kind": "Dogtag",                "label": "Dogtag (Survivor)", "sprite": "dogtag.png" },
+      { "id": "68df9a053772634bf40f4f18", "kind": "Hideout customization", "label": "Survivor's floor",   "sprite": "floor.png",   "big": true },
+      { "id": "68df97725d4e135b130392c8", "kind": "Item",                  "label": "Survivor poster",   "sprite": "poster.png" },
+      { "id": "68fb638ebe7aff394b016818", "kind": "Main menu background",  "label": "\"Bleak Horizon\"", "sprite": "bleak_horizon.png", "big": true },
+      { "id": "68d41e65a706eba9a204ed27", "kind": "Item",                  "label": "Armband (Survivor)","sprite": "armband.png" }
+    ]
+  }
+}
