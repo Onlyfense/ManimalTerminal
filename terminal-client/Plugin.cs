@@ -199,6 +199,9 @@ namespace Manimal.Terminal
             SkyNightStrength = Config.Bind("Terminal", "SkyNightStrength", 1f,
                 new ConfigDescription("how hard to pin the sky to NIGHT between 21:00-06:00. the game's own ToDController (which normally darkens the atmosphere as the sun sets) lives on the scrubbed WeatherController, so without this the sky keeps the scene's authored daytime constants. 0 = leave the sky to the authored values",
                     new AcceptableValueRange<float>(0f, 1f)));
+            // stencil ambient masking + darken bindings removed (2026-08-20) —
+            // the underlying system was ripped in the "remove stencilslop"
+            // commit, PR #1 briefly re-added the config surface only
             AmbientSplines = Config.Bind("Terminal", "AmbientSplines", true,
                 new ConfigDescription("run the ambient spline emitter stack (sea/wind/rain movers). turn OFF for one raid as an A/B test for the periodic frame chop — onset correlates with ambient staging"));
             SoundRigFirefight = Config.Bind("Terminal", "SoundRigFirefight", true,
@@ -400,6 +403,11 @@ namespace Manimal.Terminal
             catch (System.Exception e) { Log.LogWarning($"questing-bots mute failed: {e}"); }
             try { TerminalLockableDoorsOff.TryPatch(HarmonyInstance); }
             catch (System.Exception e) { Log.LogWarning($"lockable-doors shim failed: {e}"); }
+
+            // safety-net for the 2026-08-20 raid-start NRE (Class304.method_3 /
+            // Class308.LocalRaidStarted) — see TerminalCrashGuard.cs for the full story
+            try { TerminalCrashGuard.TryPatch(HarmonyInstance); }
+            catch (System.Exception e) { Log.LogError($"crash guard failed: {e}"); }
 
             // civilian brain (ported from MitsuruMod 2026-08-18, trimmed to
             // wander+hide+flee — the retail 1.0 civilian shape). SPT ModulePatch
