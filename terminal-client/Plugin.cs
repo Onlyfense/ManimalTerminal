@@ -35,6 +35,7 @@ namespace Manimal.Terminal
         internal static ConfigEntry<float> AmbientColorR;
         internal static ConfigEntry<float> AmbientColorG;
         internal static ConfigEntry<float> AmbientColorB;
+        internal static ConfigEntry<bool> AmbientSkyLuminance;
         internal static ConfigEntry<bool> LampShadows;
         internal static ConfigEntry<float> LightCullDistance;
         internal static ConfigEntry<float> LodBiasClamp;
@@ -71,6 +72,8 @@ namespace Manimal.Terminal
         internal static ConfigEntry<float> SkyHourOffset;
         internal static ConfigEntry<float> SkyNightStrength;
         internal static ConfigEntry<bool> WeatherStack;
+        internal static ConfigEntry<bool> AmbientStencil;
+        internal static ConfigEntry<bool> StencilDarken;
         internal static ConfigEntry<bool> GatesExplosion;
         internal static ConfigEntry<bool> CraneFalling;
         internal static ConfigEntry<bool> FinalExit;
@@ -79,6 +82,8 @@ namespace Manimal.Terminal
         internal static ConfigEntry<bool> EndingCutscene;
         internal static ConfigEntry<bool> IntroCutscene;
         internal static ConfigEntry<bool> IntroCutsceneSkippable;
+        internal static ConfigEntry<float> StencilDarkenIndoor;
+        internal static ConfigEntry<float> StencilDarkenOutdoor;
         internal static ConfigEntry<bool> ForceWeather;
         internal static ConfigEntry<float> WeatherRain;
         internal static ConfigEntry<float> WeatherClouds;
@@ -135,6 +140,8 @@ namespace Manimal.Terminal
             LampIntensity = Config.Bind("Terminal", "LampIntensity", 2.0f,
                 new ConfigDescription("brightness of the revived lamp lights (0 = lights fully OFF — a big GPU win, emissives carry the look)",
                     new AcceptableValueRange<float>(0f, 12f)));
+            AmbientSkyLuminance = Config.Bind("Terminal", "AmbientSkyLuminance", true,
+                new ConfigDescription("use the sky's LITERAL brightness for ambient (retail model — near-black at night, the authored lamps carry the scene). off = sky tint at a fixed playable brightness. flip live to A/B"));
             AmbientIntensity = Config.Bind("Terminal", "AmbientIntensity", 1.8f,
                 new ConfigDescription("flat ambient fill light — lifts shadowed areas out of black (no real bounce without a bake)",
                     new AcceptableValueRange<float>(0f, 3f)));
@@ -211,6 +218,22 @@ namespace Manimal.Terminal
             SkyNightStrength = Config.Bind("Terminal", "SkyNightStrength", 1f,
                 new ConfigDescription("how hard to pin the sky to NIGHT between 21:00-06:00. the game's own ToDController (which normally darkens the atmosphere as the sun sets) lives on the scrubbed WeatherController, so without this the sky keeps the scene's authored daytime constants. 0 = leave the sky to the authored values",
                     new AcceptableValueRange<float>(0f, 1f)));
+            AmbientStencil = Config.Bind("Terminal", "AmbientStencil", true,
+                new ConfigDescription("restore retail's indoor/outdoor ambient masking: StencilShadow volumes + AnalyticSource portals feed the AmbientLight screen pass, so interiors stop receiving full sky ambient (the armory-cooking fix, done the retail way)"));
+            // stencil-lite: the KEPT piece of the shelved tushonka experiment —
+            // per-pixel indoor darkening of the flat fill using the authored
+            // stencil volume meshes + sidecar darkness values. independent of
+            // (and preferred over) the AmbientStencil retail-pass experiment.
+            StencilDarken = Config.Bind("Terminal", "StencilDarken", true,
+                new ConfigDescription("darken the flat ambient fill inside the authored stencil volumes (per-pixel, pre-lighting — indoor lamp pools untouched). outdoors stays at AmbientIntensity brightness. needs terminal_fx.bundle in the plugin folder"));
+            // split per authored group (Terminal_Stencil_Indoor / _Outdoor) — new key
+            // names on purpose so the old StencilDarkenStrength's saved value dies
+            StencilDarkenIndoor = Config.Bind("Terminal", "StencilDarkenIndoor", 1f,
+                new ConfigDescription("scale on the INDOOR stencil volumes' authored darkness alpha. 1 = authored; higher = blacker interiors. applies live",
+                    new AcceptableValueRange<float>(0f, 1.5f)));
+            StencilDarkenOutdoor = Config.Bind("Terminal", "StencilDarkenOutdoor", 1f,
+                new ConfigDescription("scale on the OUTDOOR stencil volumes' authored darkness alpha (container shadows, tower shade). applies live",
+                    new AcceptableValueRange<float>(0f, 1.5f)));
             AmbientSplines = Config.Bind("Terminal", "AmbientSplines", true,
                 new ConfigDescription("run the ambient spline emitter stack (sea/wind/rain movers). turn OFF for one raid as an A/B test for the periodic frame chop — onset correlates with ambient staging"));
             SoundRigFirefight = Config.Bind("Terminal", "SoundRigFirefight", true,
@@ -406,6 +429,11 @@ namespace Manimal.Terminal
             catch (System.Exception e) { Log.LogWarning($"questing-bots mute failed: {e}"); }
             try { TerminalLockableDoorsOff.TryPatch(HarmonyInstance); }
             catch (System.Exception e) { Log.LogWarning($"lockable-doors shim failed: {e}"); }
+
+            // safety-net for the 2026-08-20 raid-start NRE (Class304.method_3 /
+            // Class308.LocalRaidStarted) — see TerminalCrashGuard.cs for the full story
+            try { TerminalCrashGuard.TryPatch(HarmonyInstance); }
+            catch (System.Exception e) { Log.LogError($"crash guard failed: {e}"); }
 
             // civilian brain (ported from MitsuruMod 2026-08-18, trimmed to
             // wander+hide+flee — the retail 1.0 civilian shape). SPT ModulePatch
